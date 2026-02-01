@@ -485,6 +485,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
                 GrowButtonControls btnUp = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() - 150f, BouncingPowerBar.mBackGround.getY() + 75f, GamePlayers.mBtnUp) {
 
+
                     @Override
                     public void onClickDown() {
                         mTurretMovingUp = true;
