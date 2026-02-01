@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_detailsApp">This game was created and designed by Facundo Javier Immerso. By using this game, you agree that Tanto CCX Game Studio and Facundo Javier Immerso are not responsible of any damage that your device may suffer. We will never request any personal data or data that could harm the integrity of the person.</string>
+    <string name="app_productions">Production team</string>
+    <string name="app_contactinformation">CONTACT INFORMATION</string>
+    <string name="app_nino">BOY</string>
+    <string name="app_nina">GIRL</string>
+    <string name="app_defaultnameplayer">PLAYER</string>
+</resources>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Master Mini Golf</string>
+    <string name="app_loading">CARGANDO...</string>
+    <string name="app_play">JUGAR</string>
+    <string name="app_desafio">DESAFÍO</string>
+    <string name="app_contrareloj">COTRARELOJ</string>
+    <string name="app_pratica">PRÁTICA</string>
+    <string name="app_areyousure">¿ESTÁS SEGURO?</string>
+    <string name="app_exitgame">¿SALIR DEL JUEGO?</string>
+    <string name="app_exit">SALIR</string>
+    <string name="app_back">CERRAR</string>
+    <string name="app_detailsApp">Este juego fue creado y diseñado por Facundo Javier Immerso. Al utilizar este juego, aceptas que Tanto CCX Game Studio y Facundo Javier Immerso no son responsables de ningún daño que pueda sufrir tu dispositivo. Nosotros jamás vamos a solicitarte ningún dato personal y tampoco datos que puedan dañar la integrdad de la persona.</string>
+    <string name="app_productions">Equipo de producción</string>
+    <string name="app_contactinformation">Información de contacto</string>
+    <string name="app_nino">NIÑO</string>
+    <string name="app_nina">NIÑA</string>
+    <string name="app_defaultnameplayer">JUGADOR</string>
+</resources>

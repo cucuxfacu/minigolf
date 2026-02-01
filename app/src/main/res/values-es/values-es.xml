@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Master Mini Golf</string>
+    <string name="app_loading">CARGANDO...</string>
+    <string name="app_play">JUGAR</string>
+    <string name="app_desafio">DESAFÍO</string>
+    <string name="app_contrareloj">COTRARELOJ</string>
+    <string name="app_pratica">PRÁTICA</string>
+    <string name="app_areyousure">¿ESTÁS SEGURO?</string>
+    <string name="app_exitgame">¿SALIR DEL JUEGO?</string>
+    <string name="app_exit">SALIR</string>
+    <string name="app_back">CERRAR</string>
+</resources>
