@@ -36,8 +36,8 @@ public class BouncingPowerBar extends Entity {
 	// CONSTRUCTOR
 	// ====================================================
 	private BouncingPowerBar() {
-        float mBACKGROUND_POSITION_X = ResourceManager.getInstance().cameraWidth - GamePlayers.mPowerBarBackground.getWidth();
-        float mBACKGROUND_POSITION_Y = ResourceManager.getInstance().cameraHeight / 2f - GamePlayers.mPowerBarBackground.getHeight();
+        float mBACKGROUND_POSITION_X = ResourceManager.getInstance().cameraWidth - GamePlayers.mPowerBarBackground.getWidth() - 190f;
+        float mBACKGROUND_POSITION_Y = (ResourceManager.getInstance().cameraHeight / 2f - GamePlayers.mPowerBarBackground.getHeight()) + 100f;
 
         mBackGround = new Sprite(mBACKGROUND_POSITION_X ,  mBACKGROUND_POSITION_Y ,  GamePlayers.mPowerBarBackground, ResourceManager.getActivity().getVertexBufferObjectManager());
         mBackGround.setAlpha(0.8f);

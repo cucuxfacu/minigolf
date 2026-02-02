@@ -19,7 +19,6 @@ import org.andengine.util.math.MathUtils;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
-import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
@@ -36,6 +35,8 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 	private static final float mCRATE_FRICTION = 0.95f;
 	private static final int mMAX_SOUNDS_PER_SECOND = 5;
 	private static final float mMINIMUM_SECONDS_BETWEEN_SOUNDS = 1f / mMAX_SOUNDS_PER_SECOND;
+	private static final float mScaleBall = 0.08f;
+
 	// ====================================================
 	// VARIABLES
 	// ====================================================
@@ -63,32 +64,26 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 		this.mBallSprite = new Sprite(pX, pY, mBallCreation, ResourceManager.getActivity().getVertexBufferObjectManager()) {
 			protected void onManagedUpdate(final float pSecondsElapsed) {
                 super.onManagedUpdate(pSecondsElapsed);
-                float rotation = MathUtils.radToDeg((float) Math.atan2(-MagneticCrate.this.mBody.getLinearVelocity().y, MagneticCrate.this.mBody.getLinearVelocity().x));
-                this.setRotation(rotation);
-
                 if (MagneticCrate.this.mBody != null) {
-                   // MagneticCrate.this.mGameLevel.reportBaseBodySpeed(MagneticCrate.this.mBody.getLinearVelocity().len2());
+                    MagneticCrate.this.mGameLevel.reportBaseBodySpeed(MagneticCrate.this.mBody.getLinearVelocity().len2());
                 }
             }
 		};
+        mBallSprite.setScale(mScaleBall);
+        mBallSprite.setPosition( pLocationTorret.x * 32,pLocationTorret.y * 32);
 
-        mBallSprite.setPosition(pLocationTorret.x * 32.0f, pLocationTorret.y * 32.0f);
-		final FixtureDef mCRATE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mCRATE_DENSITY, mCRATE_ELASTICITY, mCRATE_FRICTION);
-		crateBody = PhysicsFactory.createCircleBody(this.mGameLevel.mPhysicsWorld, mBallSprite.getX(), mBallSprite.getY(), 60, BodyType.DynamicBody, mCRATE_FIXTURE_DEF);
-
+        final FixtureDef mCRATE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mCRATE_DENSITY, mCRATE_ELASTICITY, mCRATE_FRICTION);
+		crateBody = PhysicsFactory.createCircleBody(this.mGameLevel.mPhysicsWorld, mBallSprite, BodyType.DynamicBody, mCRATE_FIXTURE_DEF);
         final PhysicsConnector physConnector = new PhysicsConnector(mBallSprite, crateBody);
 		this.mGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnector);
-
         crateBody.setAngularDamping(mCRATE_ANGULAR_DAMPING);
-
 		this.set(crateBody, mBallSprite, physConnector, this.mGameLevel);
-
-		//this.mGameLevel.mMagneticObjects.add(this);
-		this.mIsGrabbed = true;
+		this.mGameLevel.mMagneticObjects.add(this);
 
         this.mGameLevel.mCrateLayer.attachChild(mBallSprite);
 
-		this.mEntity.setScale(1.25f);
+		this.mEntity.setScale(mScaleBall);
+        this.mIsGrabbed = true;
 		this.mBody.setActive(false);
 	}
 
@@ -99,26 +94,29 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
         super.onUpdate(pSecondsElapsed);
-        if (this.mEntity.getScaleX() < 1f) {
-            this.mEntity.setScale(1f);
+        if(!mHasImpacted) {
+            final Sprite lastTrailingDot = mGameLevel.getLastTrailingDot();
+            if(MathUtils.distance(lastTrailingDot.getX(), lastTrailingDot.getY(), MagneticCrate.this.mEntity.getX(), MagneticCrate.this.mEntity.getY()) > GameLevel.mTRAILING_DOTS_SPACING) {
+                mGameLevel.setNextTrailingDot(MagneticCrate.this.mEntity.getX(), MagneticCrate.this.mEntity.getY());
+            }
+        }
+        if (this.mEntity.getScaleX() < mScaleBall) {
+            this.mEntity.setScale(mScaleBall);
         } else if (!this.mBody.isActive()) {
-
             this.mBody.setActive(true);
-            mGameLevel.mPlayer.mTurretMagnetOn = true;
 
         } else if (this.mEntity.getY() < -350 && !mHasImpacted) {
             mHasImpacted = true;
 
-//            if (SplashWater.getInstance().waterContact) {
+//          if (SplashWater.getInstance().waterContact) {
 //				SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getHeight() - 200f, false, true, mGameLevel);
 //			}
 
-            //((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
+            ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
 
-            ResourceManager.getActivity().runOnUpdateThread(() -> mGameLevel.mPlayer.equipNextCrate(false));
-
-            //this.mGameLevel.activeCrates--;
             this.destroy();
+            mGameLevel.mPlayer.mTurretMagnetOn = true;
+            mGameLevel.mPlayer.mBall.setVisible(true);
         }
         mBodySpeed = 0f;
         if (secondsSinceLastSound < mMINIMUM_SECONDS_BETWEEN_SOUNDS)
@@ -136,12 +134,12 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         if (!this.mIsGrabbed) {
             if (this.mEntity != null) {
                 if (pMaxImpulse > 2f) {
-                    //this.mGameLevel.mMagneticObjects.remove(this);
+                    this.mGameLevel.mMagneticObjects.remove(this);
 
                     if (this.mGameLevel.mPlayer.mGrabbedMagneticObject == this)
                         this.mGameLevel.mPlayer.mGrabbedMagneticObject = null;
 
-                    this.destroy();
+                    //this.destroy();
 
                 }
             }
@@ -155,7 +153,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 				if (!mHasImpacted) {
 					mHasImpacted = true;
 					((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToBaseForSeconds(0.5f);
-                      ResourceManager.getActivity().runOnUpdateThread(() -> mGameLevel.mPlayer.equipNextCrate(false));
+                      //ResourceManager.getActivity().runOnUpdateThread(() -> mGameLevel.mPlayer.equipNextCrate(false));
 				}
 			}
         }

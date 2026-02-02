@@ -19,6 +19,7 @@ public class GamePlayers {
     public static TextureRegion mTrailingDotTR;
     public static TextureRegion mBtnUp;
     public static TextureRegion mBtnDown;
+    public static TextureRegion mBtnShoot;
     public static TextureRegion mPowerBarBackground;
     public static TextureRegion mPowerBarLine;
     public static TiledTextureRegion mAnimPlayers;
@@ -63,6 +64,7 @@ public class GamePlayers {
         if (mPowerBarLine == null) mPowerBarLine = ResourceManager.getInstance().getLimitableTR("PowerBarLine.png", mTransparentTextureOption);
         if (mBtnUp == null) mBtnUp = ResourceManager.getInstance().getLimitableTR("buttonup.png", mTransparentTextureOption);
         if (mBtnDown == null) mBtnDown = ResourceManager.getInstance().getLimitableTR("buttondown.png", mTransparentTextureOption);
+        if (mBtnShoot == null) mBtnShoot = ResourceManager.getInstance().getLimitableTR("buttonshoot.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePathHud);
     }

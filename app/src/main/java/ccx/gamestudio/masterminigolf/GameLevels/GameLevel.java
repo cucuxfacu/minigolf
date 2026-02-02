@@ -20,12 +20,15 @@ import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.adt.pool.GenericPool;
 import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
 import android.hardware.SensorManager;
+
+import androidx.annotation.NonNull;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -62,11 +65,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	private static final float mPHYSICS_WORLD_GRAVITY = -SensorManager.GRAVITY_EARTH * 4f;
 	private static final int mPHYSICS_WORLD_POSITION_ITERATIONS = 20;
 	private static final int mPHYSICS_WORLD_VELOCITY_ITERATIONS = 20;
-	private static final float mCAMERA_ZOOM = 0.777f;
+	private static final float mCAMERA_ZOOM = 0.88f;
 	private static final float mSECONDS_FOR_LEVEL_TO_SETTLE = 1f;
 	private static final float mBASE_MOVEMENT_SPEED_THRESHOLD = 1f;
 	private static final float mBASE_MOVEMENT_TIME_THRESHOLD = 0.75f;
-	private static final int mNUMBER_TRAILING_DOTS = 25;
+	private static final int mNUMBER_TRAILING_DOTS = 92;
 	
 	private static final String mLOADING_STEP_STRING_1 = "";
 	private static final String mLOADING_STEP_STRING_2 = "";
@@ -109,7 +112,13 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	private GroundLevelOne mGroundLevelOne;
     private boolean mTurretMovingUp = false;
     private boolean mTurretMovingDown = false;
-	// ====================================================
+    private  GrowButtonControls btnUp;
+    private  GrowButtonControls btnDown;
+
+    public ArrayList<MagneticPhysObject<?>> mMagneticObjects = new ArrayList<>();
+
+
+    // ====================================================
 	// UPDATE HANDLERS
 	// ====================================================
 	public IUpdateHandler SettleHandlerUpdateHandler = new IUpdateHandler() {
@@ -120,7 +129,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 			this.mTotalElapsedTime += pSecondsElapsed;
 			if(this.mTotalElapsedTime >= mSECONDS_FOR_LEVEL_TO_SETTLE) {
 				GameLevel.this.mIsLevelSettled = true;
-				//GameLevel.this.mPlayer.equipNextCrate(true);
+				GameLevel.this.mPlayer.createBall();
 				GameLevel.this.unregisterUpdateHandler(this);
 			}
 		}
@@ -319,8 +328,8 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		
 		this.mPhysicsWorld = new FixedStepPhysicsWorld(ResourceManager.getEngine().mStepsPerSecond, new Vector2(0f, mPHYSICS_WORLD_GRAVITY), true, mPHYSICS_WORLD_VELOCITY_ITERATIONS, mPHYSICS_WORLD_POSITION_ITERATIONS);
 		this.registerUpdateHandler(this.mPhysicsWorld);
-		
-		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_1, this) {
+
+        this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_1, this) {
 			@Override
 			public void onLoad() {
 
@@ -340,14 +349,12 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
                 final Sprite Sky = new Sprite(0f, 0f, mBackGroundTR, ResourceManager.getActivity().getVertexBufferObjectManager());
 				Sky.setAnchorCenter(0f, 0f);
-                //Sky.setScale(0.5f);
-                BGParallaxLayer.attachParallaxEntity(new ParallaxEntity(0.25f, Sky, true));
+                BGParallaxLayer.attachParallaxEntity(new ParallaxEntity(0.5f, Sky, true));
 
-				
 				final ParallaxLayer CloudParallaxLayer = new ParallaxLayer(GameLevel.this.mCamera, true);
 				CloudParallaxLayer.setParallaxChangePerSecond(-200f);
 
-                cameraScene.attachChild(Sky);
+                cameraScene.attachChild(BGParallaxLayer);
                 cameraScene.setScale(Math.max(ResourceManager.getInstance().cameraWidth / 2400, ResourceManager.getInstance().cameraHeight / 1080));
 			}
 		});
@@ -418,7 +425,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 				GameLevel.this.mCamera.getHUD().setTouchAreaBindingOnActionMoveEnabled(true);
 			}
 		});
-		
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_4, this) {
 			@Override
 			public void onLoad() {
@@ -471,47 +477,22 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 //				}
 //				GameLevel.this.TotalScorePossible -= GameLevel.this.mLevelDef.mExpectedNumberCratesToCompleteLevel * mCRATE_POINT_VALUE;
 //
-//				GameLevel.this.attachChild(GameLevel.this.mCrateLayer);
-				
+
+
 //				GameLevel.this.mRemainingCratesBar = new RemainingCratesBar(GameLevel.this);
 			}
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_6, this) {
 			@Override
 			public void onLoad() {
-				GameLevel.this.mPlayer = new Players(-100f, 240f, GameLevel.this);
+				GameLevel.this.mPlayer = new Players(-50f, 240f, GameLevel.this);
 				GameLevel.this.mCamera.setPlayerEntity(GameLevel.this.mPlayer);
 				BouncingPowerBar.attachInstanceToHud(GameLevel.this.mCamera.getHUD());
 
-                GrowButtonControls btnUp = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() - 150f, BouncingPowerBar.mBackGround.getY() + 75f, GamePlayers.mBtnUp) {
-
-
-                    @Override
-                    public void onClickDown() {
-                        mTurretMovingUp = true;
-                    }
-                    @Override
-                    public void onClickUp() {
-                        mTurretMovingUp = false;
-                    }
-                };
-                btnUp.setScales(0.75f,0.85f);
-                GameLevel.this.mCamera.getHUD().registerTouchArea(btnUp);
-                GameLevel.this.mCamera.getHUD().attachChild(btnUp);
-
-                GrowButtonControls btnDown = new GrowButtonControls(btnUp.getX(), btnUp.getY() - 150f, GamePlayers.mBtnDown) {
-                    @Override
-                    public void onClickDown() {
-                        mTurretMovingDown = true;
-                    }
-                    @Override
-                    public void onClickUp() {
-                        mTurretMovingDown = false;
-                    }
-                };
-                btnDown.setScales(0.75f,0.85f);;
-                GameLevel.this.mCamera.getHUD().registerTouchArea(btnDown);
-                GameLevel.this.mCamera.getHUD().attachChild(btnDown);
+                CreateBtnUp();
+                CreateBtnDown();
+                CreateBtnShoot();
+                GameLevel.this.attachChild(GameLevel.this.mCrateLayer);
 			}
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_7, this) {
@@ -533,8 +514,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 				GameLevel.this.registerUpdateHandler(GameLevel.this.SettleHandlerUpdateHandler);
 			}
 		});
-		
-		// delegate contact listeners to their respective
+
 		this.mPhysicsWorld.setContactListener(PhysObject.PHYS_OBJECT_CONTACT_LISTENER);
 		
 		this.setBackgroundEnabled(true);
@@ -543,12 +523,60 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
         this.registerUpdateHandler(turretUpdateHandler);
 		this.registerUpdateHandler(this.mMovementReportingTimer);
+
 	}
-	
-	@Override
+
+    private void CreateBtnUp() {
+        btnUp = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 150f, BouncingPowerBar.mBackGround.getY() + 75f, GamePlayers.mBtnUp) {
+            @Override
+            public void onClickDown() {
+                mTurretMovingUp = true;
+            }
+            @Override
+            public void onClickUp() {
+                mTurretMovingUp = false;
+            }
+        };
+        btnUp.setScales(0.75f,0.85f);
+        GameLevel.this.mCamera.getHUD().registerTouchArea(btnUp);
+        GameLevel.this.mCamera.getHUD().attachChild(btnUp);;
+    }
+    private void CreateBtnDown() {
+        btnDown  = new GrowButtonControls(btnUp.getX(), btnUp.getY() - 150f, GamePlayers.mBtnDown) {
+            @Override
+            public void onClickDown() {
+                mTurretMovingDown = true;
+            }
+            @Override
+            public void onClickUp() {
+                mTurretMovingDown = false;
+            }
+        };
+        btnDown.setScales(0.75f,0.85f);
+        GameLevel.this.mCamera.getHUD().registerTouchArea(btnDown);
+        GameLevel.this.mCamera.getHUD().attachChild(btnDown);
+    }
+
+    private void CreateBtnShoot() {
+        btnDown  = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 80f, btnDown.getY() - 140f, GamePlayers.mBtnShoot) {
+            @Override
+            public void onClickDown() {
+
+                mPlayer.requestShoot();
+            }
+            @Override
+            public void onClickUp() {
+
+            }
+        };
+        btnDown.setScales(0.70f,0.80f);
+        GameLevel.this.mCamera.getHUD().registerTouchArea(btnDown);
+        GameLevel.this.mCamera.getHUD().attachChild(btnDown);
+    }
+    @Override
 	public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
 		this.mPlayer.onMagneTankTouchEvent(pScene, pSceneTouchEvent);
-		return true;
+        return true;
 	}
 	
 	public void reportBaseBodySpeed(final float pSpeed) {
