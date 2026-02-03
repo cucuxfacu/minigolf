@@ -22,6 +22,7 @@ import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
+import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 
 
@@ -112,6 +113,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
             if (SplashWater.getInstance().waterContact) {
                 SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
+                SFXManager.playCrowdClap(1,0.25f);
             }
 
             ResourceManager.getActivity().runOnUpdateThread(() -> {

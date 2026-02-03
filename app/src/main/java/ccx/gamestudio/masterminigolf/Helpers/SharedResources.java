@@ -114,7 +114,9 @@ public class SharedResources {
         String htmlMessage =  ResourceManager.getContext().getText(R.string.app_detailsApp) +
                 "<br><br><b>" + ResourceManager.getContext().getText(R.string.app_productions) + "</b><br>Facundo Javier Immerso." +
                 "<br><br><b><u>" + ResourceManager.getContext().getText(R.string.app_contactinformation) + "</u></b>" +
-                "<br><a href=\"mailto:facuimmerso@gmail.com\">Email CCX Game Studio</a>";
+                "<br><a href=\"mailto:facuimmerso@gmail.com\">Email CCX Game Studio</a>" +
+                "<br><br><b><u>" + ResourceManager.getContext().getText(R.string.app_sound_title) + "</u></b><br>" + ResourceManager.getContext().getText(R.string.app_sound) +"<br>"+
+                "Crowd clapping.mp3 by CosminPa <a href=\"https://freesound.org/s/445284/\">clapping</a> -- License: Creative Commons 0";
 
         return Html.fromHtml(htmlMessage, Html.FROM_HTML_MODE_LEGACY);
     }

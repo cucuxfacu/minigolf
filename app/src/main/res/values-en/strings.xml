@@ -6,4 +6,6 @@
     <string name="app_nino">BOY</string>
     <string name="app_nina">GIRL</string>
     <string name="app_defaultnameplayer">PLAYER</string>
+    <string name="app_sound">Golf ball hit.wav by jittels -- https://freesound.org/s/366596/ -- License: Attribution NonCommercial 3.0</string>
+    <string name="app_sound_title">Contribution</string>
 </resources>

@@ -22,7 +22,7 @@ public class SFXManager
 	private static Sound mClick;
 	private static Sound mClose;
 	private static Sound mCrate;
-	private static Sound mExplosion;
+	private static Sound mCrowdClapping;
 	private static Sound mShoot;
 	private static Sound mWood;
 	private static Sound mTankEngine;
@@ -72,11 +72,11 @@ public class SFXManager
 		} catch (final IOException e) { Debug.e(e); }
 
 		try {
-			mExplosion = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "explosion.mp3");
+			mCrowdClapping = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "crowdclapping.mp3");
 		} catch (final IOException e) { Debug.e(e); }
 
 		try {
-			mShoot = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "cannon.mp3");
+			mShoot = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "golfballhit.mp3");
 		} catch (final IOException e) { Debug.e(e); }
 
 		try {
@@ -109,7 +109,7 @@ public class SFXManager
 	private static void setVolumeForAllSounds(final float pVolume) {
 		mClick.setVolume(pVolume);
 		mCrate.setVolume(pVolume);
-		mExplosion.setVolume(pVolume);
+        mCrowdClapping.setVolume(pVolume);
 		mShoot.setVolume(pVolume);
 		mWood.setVolume(pVolume);
 		mTankEngine.setVolume(pVolume);
@@ -227,8 +227,8 @@ public class SFXManager
 		playSound(mCrate,pRate,pVolume);
 	}
 	
-	public static void playExplosion(final float pRate, final float pVolume) {
-		playSound(mExplosion,pRate,pVolume);
+	public static void playCrowdClap(final float pRate, final float pVolume) {
+		playSound(mCrowdClapping,pRate,pVolume);
 	}
 	
 	public static void playShoot(final float pRate, final float pVolume) {

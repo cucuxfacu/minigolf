@@ -147,7 +147,7 @@ public class Players implements IUpdateHandler  {
         this.mGameLevel.attachChild(this.mPlayer);
         this.mGameLevel.attachChild(this.mSensorShoot);
 
-        this.mPlayerBody = PhysicsFactory.createBoxBody(this.mGameLevel.mPhysicsWorld, this.mPlayer.getX(), this.mPlayer.getY(), this.mPlayer.getWidth()-100f, this.mPlayer.getHeight()-100f, BodyType.StaticBody, mVEHICLE_FIXTURE_DEF);
+        this.mPlayerBody = PhysicsFactory.createBoxBody(this.mGameLevel.mPhysicsWorld, this.mPlayer.getX(), this.mPlayer.getY(), this.mPlayer.getWidth()-150f, this.mPlayer.getHeight()-250f, BodyType.StaticBody, mVEHICLE_FIXTURE_DEF);
         this.mGameLevel.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(this.mPlayer, this.mPlayerBody));
 
         mTURRET_FIXTURE_DEF.isSensor = true;
@@ -225,43 +225,40 @@ public class Players implements IUpdateHandler  {
 	
 	public void requestShoot() {
         mGameLevel.btnShoot.mIsEnabled = false;
-        AnimationSwing();
+        if (mTurretMagnetOn) {
+            mTurretMagnetOn = false;
+            AnimationSwing();
+        }
     }
 	private void AnimationSwing() {
-        AnimatedSprite animPlayer = new AnimatedSprite(this.mCHARACTER_START_X + 27.5f, this.mCHARACTER_START_Y + 23, GamePlayers.mLisPlayer.get(0), ResourceManager.getActivity().getVertexBufferObjectManager());
+        AnimatedSprite animPlayer = new AnimatedSprite(this.mCHARACTER_START_X - 10f, this.mCHARACTER_START_Y + 23f, GamePlayers.mLisPlayer.get(0), ResourceManager.getActivity().getVertexBufferObjectManager());
         animPlayer.setZIndex(999);
-
-        animPlayer.animate( 160, new AnimatedSprite.IAnimationListener() {
+        animPlayer.animate(new long[]{240,240,240}, 1,3,true, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
             }
             @Override
             public void onAnimationFrameChanged(final AnimatedSprite pAnimatedSprite, final int pOldFrameIndex, final int pNewFrameIndex) {
                 if (pNewFrameIndex == 2) {
-                    if (mTurretMagnetOn) {
-                        mTurretMagnetOn = false;
+                    SFXManager.playShoot(1f, 2f);
+                    equipNextBall();
+                    if (mGrabbedMagneticObject != null) {
                         mBall.setVisible(false);
+                        mGrabbedMagneticObject.release();
+                        mGrabbedMagneticObject.mIsShot = true;
+                        ResourceManager.getCamera().setChaseEntity(mGrabbedMagneticObject.mEntity);
 
-                        equipNextBall();
-                        if (mGrabbedMagneticObject != null) {
-                            mGrabbedMagneticObject.release();
-                            mGrabbedMagneticObject.mIsShot = true;
-                            ResourceManager.getCamera().setChaseEntity(mGrabbedMagneticObject.mEntity);
+                        mGrabbedMagneticObject.mBody.setLinearVelocity(0f, 0f);
+                        final float vPower = ((MathUtils.distance(mSensorBody.getWorldCenter().x, mSensorBody.getWorldCenter().y, mGrabbedMagneticObject.mBody.getWorldCenter().x, mGrabbedMagneticObject.mBody.getWorldCenter().y) < mTURRET_SHOOT_GRABBED_OBJECT_IF_WITHIN_RANGE) ? mShootingPower : 0f);
+                        final float vAng = (float) Math.atan2(mGrabbedMagneticObject.mBody.getWorldCenter().y - mSensorBody.getWorldCenter().y, mGrabbedMagneticObject.mBody.getWorldCenter().x - mSensorBody.getWorldCenter().x);
 
-                            mGrabbedMagneticObject.mBody.setLinearVelocity(0f, 0f);
+                        mGrabbedMagneticObject.mBody.applyLinearImpulse((float) Math.cos(vAng) * vPower * mGrabbedMagneticObject.mBody.getMass(), (float) Math.sin(vAng) * vPower * mGrabbedMagneticObject.mBody.getMass(), mGrabbedMagneticObject.mBody.getWorldCenter().x, mGrabbedMagneticObject.mBody.getWorldCenter().y);
+                        mGrabbedMagneticObject = null;
+                        mGameLevel.resetTrailingDots();
 
-                            final float vAng = (float) Math.atan2(mGrabbedMagneticObject.mBody.getWorldCenter().y - mSensorBody.getWorldCenter().y, mGrabbedMagneticObject.mBody.getWorldCenter().x - mSensorBody.getWorldCenter().x);
-                            final float vPower = ((MathUtils.distance(mSensorBody.getWorldCenter().x, mSensorBody.getWorldCenter().y, mGrabbedMagneticObject.mBody.getWorldCenter().x, mGrabbedMagneticObject.mBody.getWorldCenter().y) < mTURRET_SHOOT_GRABBED_OBJECT_IF_WITHIN_RANGE) ? mShootingPower : 0f);
-
-                            mGrabbedMagneticObject.mBody.applyLinearImpulse((float) Math.cos(vAng) * vPower * mGrabbedMagneticObject.mBody.getMass(), (float) Math.sin(vAng) * vPower * mGrabbedMagneticObject.mBody.getMass(), mGrabbedMagneticObject.mBody.getWorldCenter().x, mGrabbedMagneticObject.mBody.getWorldCenter().y);
-                            mGrabbedMagneticObject = null;
-                            mGameLevel.resetTrailingDots();
-
-                            //SFXManager.playShoot(1f, 1f);
-
-                        }
                     }
                 }
+
             }
             @Override
             public void onAnimationLoopFinished(final AnimatedSprite pAnimatedSprite, final int pRemainingLoopCount, final int pInitialLoopCount) {

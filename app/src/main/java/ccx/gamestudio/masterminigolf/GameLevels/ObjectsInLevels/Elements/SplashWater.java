@@ -50,7 +50,7 @@ public class SplashWater {
 
             @Override
             public void onAnimationStarted(final AnimatedSprite pAnimatedSprite, final int pInitialLoopCount) {
-                SFXManager.playWaterSplash(0.75f, 0.5f);
+                SFXManager.playWaterSplash(1f, 0.1f);
                 getInstance().waterContact = false;
             }
         });
