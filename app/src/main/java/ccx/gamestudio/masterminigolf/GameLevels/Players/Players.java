@@ -136,7 +136,6 @@ public class Players implements IUpdateHandler  {
         };
 
         mSensorShoot = new Sprite(this.mPlayer.getX() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_X, this.mPlayer.getY() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_Y, GamePlayers.mSensorShoot, ResourceManager.getActivity().getVertexBufferObjectManager());
-       // mSensorShoot.setScale(0.3f);
         mSensorShoot.setWidth(0.05f);
         mSensorShoot.setAlpha(0f);
 

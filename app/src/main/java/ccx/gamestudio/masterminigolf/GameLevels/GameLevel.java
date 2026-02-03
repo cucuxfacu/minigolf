@@ -3,6 +3,7 @@ package ccx.gamestudio.masterminigolf.GameLevels;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
@@ -21,6 +22,7 @@ import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.PinchZoomDetector;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.adt.pool.GenericPool;
 import org.andengine.util.math.MathUtils;
@@ -34,7 +36,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Water;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.Players.Players;
 import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GroundLevelOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
@@ -116,7 +121,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     private  GrowButtonControls btnDown;
 
     public ArrayList<MagneticPhysObject<?>> mMagneticObjects = new ArrayList<>();
-
+    public Water mWater;
 
     // ====================================================
 	// UPDATE HANDLERS
@@ -428,58 +433,25 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_4, this) {
 			@Override
 			public void onLoad() {
-				
-//				for(final BeamsInLevelDef curBeam : GameLevel.this.mLevelDef.mBeams) {
-//					switch (curBeam.mBeamType) {
-//						case MetalDynamic:
-//							new MetalBeamDynamic(curBeam.mX, curBeam.mY, curBeam.mLength, curBeam.mRotation, GameLevel.this);
-//							break;
-//						case MetalStatic:
-//							new MetalBeamStatic(curBeam.mX, curBeam.mY, curBeam.mLength, curBeam.mRotation, GameLevel.this);
-//							break;
-//						case WoodenDynamic:
-//							new WoodenBeamDynamic(curBeam.mX, curBeam.mY, curBeam.mLength, curBeam.mRotation, GameLevel.this);
-//							break;
-//					}
-//				}
-//				for(final EnemiesInLevelDef curEnemy : GameLevel.this.mLevelDef.mEnemies) {
-//					switch (curEnemy.mEnemyType) {
-//						case Normal:
-//							new MechRat(curEnemy.mX, curEnemy.mY, GameLevel.this);
-//							break;
-//					}
-//				}
-				
-//				float baseMinX = Float.MAX_VALUE;
-//				float baseMinY = Float.MAX_VALUE;
-//				float baseMaxX = Float.MIN_VALUE;
-//				float baseMaxY = Float.MIN_VALUE;
-//				for(int i = 1; i < GameLevel.this.mBasePositions.size(); i++) {
-//					baseMinX = Math.min(baseMinX, GameLevel.this.mBasePositions.get(i)[0]);
-//					baseMinY = Math.min(baseMinY, GameLevel.this.mBasePositions.get(i)[1]);
-//					baseMaxX = Math.max(baseMinX, GameLevel.this.mBasePositions.get(i)[0]);
-//					baseMaxY = Math.max(baseMinY, GameLevel.this.mBasePositions.get(i)[1]);
-//				}
-//				GameLevel.this.mBasePositionX = (baseMinX + baseMaxX) / 2f;
-//				GameLevel.this.mBasePositionY = (baseMinY + baseMaxY) / 2f;
-//				GameLevel.this.mCamera.setBasePosition(GameLevel.this.mBasePositionX, GameLevel.this.mBasePositionY);
-				
+
+                ITextureRegion waterType = null;
+
+                SplashWater.getInstance().waterContact = false;
+
+
+                for (final WaterInLevelDef curWater : GameLevel.this.mLevelDef.mWater) {
+                    if (Objects.requireNonNull(curWater.mWaterType) == WaterInLevelDef.WaterType.water) {
+                        mWater = new Water(curWater.mX, curWater.mY, GameLevel.this);
+                        SplashWater.getInstance().waterContact = true;
+                    }
+                }
+
 			}
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_5, this) {
 			@Override
 			public void onLoad() {
 				GameLevel.this.resetTrailingDots();
-//				final MagneticCrateDef[] SetCrates = GameLevel.this.mLevelDef.mCrates;
-//				for(final MagneticCrateDef curDef : SetCrates) {
-//					GameLevel.this.mCratesLeft.add(curDef);
-//					GameLevel.this.TotalScorePossible += mCRATE_POINT_VALUE;
-//				}
-//				GameLevel.this.TotalScorePossible -= GameLevel.this.mLevelDef.mExpectedNumberCratesToCompleteLevel * mCRATE_POINT_VALUE;
-//
-
-
-//				GameLevel.this.mRemainingCratesBar = new RemainingCratesBar(GameLevel.this);
 			}
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_6, this) {
@@ -594,11 +566,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 				this.attachChild(this.mTrailingDotSprites[i]);
 			}
 		}
-		for(int i = 0; i < this.mTrailingDotSprites.length; i++) {
-			this.mTrailingDotSprites[i].setPosition(-10000, -10000);
-			this.mTrailingDotSprites[i].setAlpha(1f);
-			this.mTrailingDotSprites[i].setScale(1f);
-		}
+        for (Sprite mTrailingDotSprite : this.mTrailingDotSprites) {
+            mTrailingDotSprite.setPosition(-10000, -10000);
+            mTrailingDotSprite.setAlpha(1f);
+            mTrailingDotSprite.setScale(1f);
+        }
 		this.mTrailingDotCounter = 0;
 	}
 	

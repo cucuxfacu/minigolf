@@ -19,6 +19,7 @@ import org.andengine.util.math.MathUtils;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
@@ -105,12 +106,12 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         } else if (!this.mBody.isActive()) {
             this.mBody.setActive(true);
 
-        } else if (this.mEntity.getY() < -350 && !mHasImpacted) {
+        } else if (this.mEntity.getY() < -20 && !mHasImpacted) {
             mHasImpacted = true;
 
-//          if (SplashWater.getInstance().waterContact) {
-//				SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getHeight() - 200f, false, true, mGameLevel);
-//			}
+          if (SplashWater.getInstance().waterContact) {
+				SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
+			}
 
             ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
 
