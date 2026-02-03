@@ -36,8 +36,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Bushes;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Mushroom;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Sign;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Trees;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Water;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.Players.Players;
@@ -119,7 +124,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     private boolean mTurretMovingDown = false;
     private  GrowButtonControls btnUp;
     private  GrowButtonControls btnDown;
-
+    public GrowButtonControls btnShoot;
     public ArrayList<MagneticPhysObject<?>> mMagneticObjects = new ArrayList<>();
     public Water mWater;
 
@@ -393,35 +398,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 				};
                 PauseButton.setAlpha(0.75f);
                 PauseButton.setScales(0.75f, 0.80f);
-//				final GrowToggleButton MusicToggleButton = new GrowToggleButton(PauseButton.getX() + 200f, PauseButton.getY(), MenuResourceManager.btnMusicTTR, !SFXManager.isMusicMuted()) {
-//					@Override
-//					public boolean checkState() {
-//						return !SFXManager.isMusicMuted();
-//					}
-//
-//					@Override
-//					public void onClick() {
-//						SFXManager.toggleMusicMuted();
-//					}
-//				};
-//				final GrowToggleButton SoundToggleButton = new GrowToggleButton(MusicToggleButton.getX() + 200f, MusicToggleButton.getY(), MenuResourceManager.btnSoundTTR, !SFXManager.isSoundMuted()) {
-//					@Override
-//					public boolean checkState() {
-//						return !SFXManager.isSoundMuted();
-//					}
-//
-//					@Override
-//					public void onClick() {
-//						SFXManager.toggleSoundMuted();
-//					}
-//				};
+
 				GameLevel.this.mCamera.getHUD().attachChild(GameLevel.this.ScoreText);
 				GameLevel.this.mCamera.getHUD().attachChild(PauseButton);
-//				GameLevel.this.mCamera.getHUD().attachChild(MusicToggleButton);
-//				GameLevel.this.mCamera.getHUD().attachChild(SoundToggleButton);
 				GameLevel.this.mCamera.getHUD().registerTouchArea(PauseButton);
-//				GameLevel.this.mCamera.getHUD().registerTouchArea(MusicToggleButton);
-//				GameLevel.this.mCamera.getHUD().registerTouchArea(SoundToggleButton);
 				final Text LevelIndexText = new Text(GameLevel.this.mCamera.getWidth() / 2f, GameLevel.this.mCamera.getHeight() / 2f, ResourceManager.fontDefault48, mLEVEL_NUMBER_PRETEXT, ResourceManager.getActivity().getVertexBufferObjectManager());
 				LevelIndexText.setAlpha(0.85f);
 				LevelIndexText.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(1.5f), new MoveModifier(2f, GameLevel.this.mCamera.getWidth() / 2f, GameLevel.this.mCamera.getHeight() / 2f, GameLevel.this.mCamera.getWidth() - (LevelIndexText.getWidth() * 0.6f), GameLevel.this.mCamera.getHeight() - (LevelIndexText.getHeight() * 0.6f), EaseElasticOut.getInstance())));
@@ -433,12 +413,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_4, this) {
 			@Override
 			public void onLoad() {
-
-                ITextureRegion waterType = null;
-
                 SplashWater.getInstance().waterContact = false;
-
-
                 for (final WaterInLevelDef curWater : GameLevel.this.mLevelDef.mWater) {
                     if (Objects.requireNonNull(curWater.mWaterType) == WaterInLevelDef.WaterType.water) {
                         mWater = new Water(curWater.mX, curWater.mY, GameLevel.this);
@@ -446,6 +421,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                     }
                 }
 
+                createObjetsInLevel();
 			}
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_5, this) {
@@ -457,7 +433,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_6, this) {
 			@Override
 			public void onLoad() {
-				GameLevel.this.mPlayer = new Players(-50f, 240f, GameLevel.this);
+				GameLevel.this.mPlayer = new Players(0f, 250f, GameLevel.this);
 				GameLevel.this.mCamera.setPlayerEntity(GameLevel.this.mPlayer);
 				BouncingPowerBar.attachInstanceToHud(GameLevel.this.mCamera.getHUD());
 
@@ -498,6 +474,41 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
 	}
 
+    private void createObjetsInLevel() {
+        for (final ObjectsInLevelDef curBeam : GameLevel.this.mLevelDef.mObjects) {
+            switch (curBeam.mObjectsType) {
+                case Bush:
+                    new Bushes(curBeam.mX, curBeam.mY, GameLevel.this, 0);
+                    break;
+                case BushOne:
+                    new Bushes(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+                case BushTwo:
+                    new Bushes(curBeam.mX, curBeam.mY, GameLevel.this, 2);
+                    break;
+                case BushThree:
+                    new Bushes(curBeam.mX, curBeam.mY, GameLevel.this, 3);
+                    break;
+                case TreeOne:
+                    new Trees(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+                case Sign:
+                    new Sign(curBeam.mX, curBeam.mY, GameLevel.this, 0);
+                    break;
+                case SignOne:
+                    new Sign(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+                case Mushroom:
+                    new Mushroom(curBeam.mX, curBeam.mY, GameLevel.this, 0);
+                    break;
+                case MushroomOne:
+                    new Mushroom(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+
+            }
+        }
+    }
+
     private void CreateBtnUp() {
         btnUp = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 150f, BouncingPowerBar.mBackGround.getY() + 75f, GamePlayers.mBtnUp) {
             @Override
@@ -530,7 +541,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     }
 
     private void CreateBtnShoot() {
-        btnDown  = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 80f, btnDown.getY() - 140f, GamePlayers.mBtnShoot) {
+        btnShoot  = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 80f, btnDown.getY() - 140f, GamePlayers.mBtnShoot) {
             @Override
             public void onClickDown() {
 
@@ -541,9 +552,9 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
             }
         };
-        btnDown.setScales(0.70f,0.80f);
-        GameLevel.this.mCamera.getHUD().registerTouchArea(btnDown);
-        GameLevel.this.mCamera.getHUD().attachChild(btnDown);
+        btnShoot.setScales(0.70f,0.80f);
+        GameLevel.this.mCamera.getHUD().registerTouchArea(btnShoot);
+        GameLevel.this.mCamera.getHUD().attachChild(btnShoot);
     }
     @Override
 	public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {

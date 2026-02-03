@@ -117,7 +117,7 @@ public class MenuResourceManager {
 
         mPlayers = new ArrayList<>();
         for (int i = 0; i < mSelectablePlayers; i++) {
-            BitmapTextureAtlas mPlayersTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 129, 245, mTransparentTextureOption);
+            BitmapTextureAtlas mPlayersTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 140, 265, mTransparentTextureOption);
             mPlayeresTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mPlayersTextureAtlas, ResourceManager.getActivity(), "player" + i + ".png", 0, 0);
             mPlayersTextureAtlas.load();
             mPlayers.add(mPlayeresTextureRegion);

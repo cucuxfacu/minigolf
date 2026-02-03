@@ -20,6 +20,7 @@ public class GamePlayers {
     public static TextureRegion mBtnUp;
     public static TextureRegion mBtnDown;
     public static TextureRegion mBtnShoot;
+    public static TextureRegion mArrowShoot;
     public static TextureRegion mPowerBarBackground;
     public static TextureRegion mPowerBarLine;
     public static TiledTextureRegion mAnimPlayers;
@@ -65,6 +66,7 @@ public class GamePlayers {
         if (mBtnUp == null) mBtnUp = ResourceManager.getInstance().getLimitableTR("buttonup.png", mTransparentTextureOption);
         if (mBtnDown == null) mBtnDown = ResourceManager.getInstance().getLimitableTR("buttondown.png", mTransparentTextureOption);
         if (mBtnShoot == null) mBtnShoot = ResourceManager.getInstance().getLimitableTR("buttonshoot.png", mTransparentTextureOption);
+        if (mArrowShoot == null) mArrowShoot = ResourceManager.getInstance().getLimitableTR("ArrowShoot.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePathHud);
     }

@@ -11,8 +11,6 @@ public class LevelDef {
     public final int mWorldIndex;
     public final int mLevelIndex;
     public final CoinInLevelDef[] mCoin;
-    public final TreeInLevelDef[] mTree;
-    public final RocksInLevelDef[] mRock;
     public final ObjectsInLevelDef[] mObjects;
     public final GroundInLevelDef[] mGround;
     public final WaterInLevelDef[] mWater;
@@ -21,8 +19,6 @@ public class LevelDef {
     public LevelDef(final int pWorldIndex,
                     final int pLevelIndex,
                     final CoinInLevelDef[] pCoin,
-                    final TreeInLevelDef[] pTree,
-                    final RocksInLevelDef[] pRock,
                     final ObjectsInLevelDef[] pObjects,
                     final GroundInLevelDef[] pGround,
                     final WaterInLevelDef[] pWater) {
@@ -30,8 +26,6 @@ public class LevelDef {
         mWorldIndex = pWorldIndex;
         mLevelIndex = pLevelIndex;
         mCoin = pCoin;
-        mTree = pTree;
-        mRock = pRock;
         mObjects = pObjects;
         mGround = pGround;
         mWater =pWater;

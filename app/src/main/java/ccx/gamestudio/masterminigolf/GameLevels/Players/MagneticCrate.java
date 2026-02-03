@@ -70,6 +70,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                 }
             }
 		};
+
         mBallSprite.setScale(mScaleBall);
         mBallSprite.setPosition( pLocationTorret.x * 32,pLocationTorret.y * 32);
 
@@ -95,9 +96,9 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
         super.onUpdate(pSecondsElapsed);
-        if(!mHasImpacted) {
+        if (!mHasImpacted) {
             final Sprite lastTrailingDot = mGameLevel.getLastTrailingDot();
-            if(MathUtils.distance(lastTrailingDot.getX(), lastTrailingDot.getY(), MagneticCrate.this.mEntity.getX(), MagneticCrate.this.mEntity.getY()) > GameLevel.mTRAILING_DOTS_SPACING) {
+            if (MathUtils.distance(lastTrailingDot.getX(), lastTrailingDot.getY(), MagneticCrate.this.mEntity.getX(), MagneticCrate.this.mEntity.getY()) > GameLevel.mTRAILING_DOTS_SPACING) {
                 mGameLevel.setNextTrailingDot(MagneticCrate.this.mEntity.getX(), MagneticCrate.this.mEntity.getY());
             }
         }
@@ -109,15 +110,19 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         } else if (this.mEntity.getY() < -20 && !mHasImpacted) {
             mHasImpacted = true;
 
-          if (SplashWater.getInstance().waterContact) {
-				SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
-			}
+            if (SplashWater.getInstance().waterContact) {
+                SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
+            }
 
-            ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
+            ResourceManager.getActivity().runOnUpdateThread(() -> {
 
-            this.destroy();
+            });
             mGameLevel.mPlayer.mTurretMagnetOn = true;
             mGameLevel.mPlayer.mBall.setVisible(true);
+            mGameLevel.btnShoot.mIsEnabled = true;
+            MagneticCrate.this.destroy();
+
+            ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
         }
         mBodySpeed = 0f;
         if (secondsSinceLastSound < mMINIMUM_SECONDS_BETWEEN_SOUNDS)

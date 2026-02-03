@@ -27,10 +27,14 @@ public class GroundLevelOne {
     private static final FixtureDef mGROUND_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mGROUND_DENSITY, mGROUND_ELASTICITY, mGROUND_FRICTION);
     public  Body mGroundBody;
     public Sprite mGround;
+    public Sprite mGround02;
     // ===============================================================================================
     // CONSTRUCTOR
     // ===============================================================================================
     public GroundLevelOne(float pX, float pY, final GameLevel pGameLevel) {
+
+        mGround02 = new Sprite(pX-200, pY + 150, GameObjectsGreenGround.mGround02, ResourceManager.getActivity().getVertexBufferObjectManager());
+        pGameLevel.attachChild(mGround02);
 
         mGround = new Sprite(pX, pY, GameObjectsGreenGround.mGround01, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGround);
@@ -46,6 +50,7 @@ public class GroundLevelOne {
         };
         mGroundBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGround, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mGround, mGroundBody));
+
 
     }
 }

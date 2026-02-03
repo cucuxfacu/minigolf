@@ -29,7 +29,7 @@ public class SplashWater {
         getInstance().mWaterSplash  = new AnimatedSprite(pX, pY -5f, GameObjectsBackGround.gameWaterSplashTTR, ResourceManager.getActivity().getVertexBufferObjectManager());
         getInstance().mWaterSplash.setScale(2.5f);
         getInstance().mWaterSplash.setZIndex(999);
-        getInstance(). mWaterSplash.animate(30, new AnimatedSprite.IAnimationListener() {
+        getInstance().mWaterSplash.animate(30, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
             }

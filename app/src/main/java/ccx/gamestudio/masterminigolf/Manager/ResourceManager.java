@@ -89,10 +89,6 @@ public class ResourceManager {
 		getInstance().cameraScaleFactorY = pCameraScaleY;
 	}
 
-	// Loads all game resources.
-
-
-	// Loads all menu resources
 	public static void loadMenuResources() {
 		getInstance().LoadFonts();
 		MenuResourceManager.getInstance().LoadImgMenu();
