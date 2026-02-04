@@ -36,10 +36,12 @@ public class GreenLevelOne extends PhysObject<Sprite> {
         final float height = mGroundGreen.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
 
         final Vector2[] verticeGround = {
-                new Vector2(-0.27656f*width, -0.40344f*height),
-                new Vector2(+0.25766f*width, -0.39223f*height),
-                new Vector2(+0.48844f*width, +0.40172f*height),
-                new Vector2(-0.49031f*width, +0.40172f*height),
+                new Vector2(-0.25100f*width, -0.46383f*height),
+                new Vector2(+0.25525f*width, -0.45092f*height),
+                new Vector2(+0.46775f*width, -0.01221f*height),
+                new Vector2(+0.48650f*width, +0.36198f*height),
+                new Vector2(-0.49787f*width, +0.36198f*height),
+                new Vector2(-0.46037f*width, +0.01359f*height),
 
         };
 

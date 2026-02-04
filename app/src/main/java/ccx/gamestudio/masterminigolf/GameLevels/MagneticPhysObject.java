@@ -6,6 +6,9 @@ import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+
+import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 
 public abstract class MagneticPhysObject<T extends IShape> extends PhysObject<T> {
@@ -67,4 +70,7 @@ public abstract class MagneticPhysObject<T extends IShape> extends PhysObject<T>
 			this.setLinearDamping(mNORMAL_LINEAR_DAMPING);
 		}
 	}
+
+    public void freezeForHole() {
+    }
 }

@@ -10,8 +10,10 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
-import org.andengine.entity.modifier.IEntityModifier;
+
 import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -22,17 +24,13 @@ import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.input.touch.detector.PinchZoomDetector;
-import org.andengine.opengl.texture.region.ITextureRegion;
+
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.adt.pool.GenericPool;
 import org.andengine.util.math.MathUtils;
-import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.ease.EaseElasticOut;
-
 import android.hardware.SensorManager;
-
-import androidx.annotation.NonNull;
+import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -78,7 +76,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	private static final float mPHYSICS_WORLD_GRAVITY = -SensorManager.GRAVITY_EARTH * 4f;
 	private static final int mPHYSICS_WORLD_POSITION_ITERATIONS = 20;
 	private static final int mPHYSICS_WORLD_VELOCITY_ITERATIONS = 20;
-	private static final float mCAMERA_ZOOM = 0.88f;
+	private static final float mCAMERA_ZOOM = 0.8888f;
 	private static final float mSECONDS_FOR_LEVEL_TO_SETTLE = 1f;
 	private static final float mBASE_MOVEMENT_SPEED_THRESHOLD = 1f;
 	private static final float mBASE_MOVEMENT_TIME_THRESHOLD = 0.75f;
@@ -209,13 +207,12 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         public void onUpdate(float pSecondsElapsed) {
             if (ballEnteredHole) {
                 holeTimer += pSecondsElapsed;
-
                 if (holeTimer >= HOLE_DELAY) {
                     // Reset
                     ballEnteredHole = false;
                     holeTimer = 0f;
+                    animateBallIntoHole();
 
-                    // Ejecutar lógica segura
                     onBallInHoleSafe();
                 }
             }
@@ -358,9 +355,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     public void spawnGreenAndHole() {
         float randomX = MathUtils.random(margin, 2400f - margin);
         float randomY = MathUtils.random(margin, 1080f -margin);
-
         currentGreen = new GreenLevelOne(randomX, randomY, this);
-
         currentHole = new Hole(randomX, randomY, this);
     }
 
@@ -656,8 +651,26 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
             currentHole = null;
         }
 
-        // crear nuevos green + hole
         spawnGreenAndHole();
+    }
 
+    public void animateBallIntoHole() {
+        Log.v("Ball", "Entre animateBallIntoHole");
+        if (mPlayer.mGrabbedMagneticObject == null)
+            return;
+
+        final Sprite ballSprite = (Sprite) mPlayer.mGrabbedMagneticObject.mEntity;
+        final float holeX = currentHole.mEntity.getX();
+        final float holeY = currentHole.mEntity.getY();
+
+        // Movimiento hacia el centro del hoyo
+        MoveModifier move = new MoveModifier( 0.6f, ballSprite.getX(), holeX, ballSprite.getY(), holeY );
+
+        // Reducción de escala (efecto de hundimiento)
+        ScaleModifier scale = new ScaleModifier(0.6f,ballSprite.getScaleX(),0f // desaparece
+        );
+
+        // Ejecutar ambas animaciones juntas
+        ballSprite.registerEntityModifier( new ParallelEntityModifier(move, scale));
     }
 }
