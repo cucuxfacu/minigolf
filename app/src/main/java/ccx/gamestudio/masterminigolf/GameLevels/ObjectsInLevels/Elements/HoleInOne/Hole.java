@@ -26,7 +26,7 @@ public class Hole extends PhysObject<Sprite> {
         holeSprite.setScale(0.1f);
 
         FixtureDef fixture = PhysicsFactory.createFixtureDef(10, 0, 0);
-        //fixture.isSensor = true;
+        fixture.isSensor = true;
 
         Body body = PhysicsFactory.createCircleBody(
                 pGameLevel.mPhysicsWorld,
@@ -46,7 +46,10 @@ public class Hole extends PhysObject<Sprite> {
 
     @Override
     public void onBeginContact(Contact pContact) {
+        if (this.mGameLevel.mIsLevelSettled) {
+            this.mGameLevel.ballEnteredHole = true;
         }
+    }
 
     @Override
     public void onEndContact(Contact pContact) { }
@@ -56,8 +59,6 @@ public class Hole extends PhysObject<Sprite> {
 
     @Override
     public void onPostSolve(float pMaxImpulse) {
-        if (this.mGameLevel.mIsLevelSettled) {
-            this.mGameLevel.ballEnteredHole = true;
-        }
+
     }
 }

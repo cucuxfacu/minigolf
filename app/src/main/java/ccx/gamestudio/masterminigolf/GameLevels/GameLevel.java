@@ -202,29 +202,24 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         public void reset() {}
     };
     private final IUpdateHandler holeEventHandler = new IUpdateHandler() {
+        private float holeTimer = 0f;
+        private final float HOLE_DELAY = 2f;
+
         @Override
         public void onUpdate(float pSecondsElapsed) {
             if (ballEnteredHole) {
-                ballEnteredHole = false;
+                holeTimer += pSecondsElapsed;
 
-                ResourceManager.getActivity().runOnUpdateThread(() -> {
+                if (holeTimer >= HOLE_DELAY) {
+                    // Reset
+                    ballEnteredHole = false;
+                    holeTimer = 0f;
 
-                    DelayModifier delay = new DelayModifier(1f, new IEntityModifier.IEntityModifierListener() {
-                        @Override
-                        public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                        }
-
-                        @Override
-                        public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                            onBallInHoleSafe();
-                        }
-                    });
-
-                    GameLevel.this.registerEntityModifier(delay);
-                });
+                    // Ejecutar lógica segura
+                    onBallInHoleSafe();
+                }
             }
         }
-
         @Override
         public void reset() {}
     };
