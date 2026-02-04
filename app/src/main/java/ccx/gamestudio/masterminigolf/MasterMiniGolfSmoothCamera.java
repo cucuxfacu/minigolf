@@ -32,7 +32,7 @@ public class MasterMiniGolfSmoothCamera extends SmoothCamera {
         mBaseY = pY;
     }
 
-    public void goToMagneTank() {
+    public void goToPlayer() {
         IEntity iEntity =  mPlayerEntity.mPlayer;
         this.setChaseEntity(iEntity);
     }

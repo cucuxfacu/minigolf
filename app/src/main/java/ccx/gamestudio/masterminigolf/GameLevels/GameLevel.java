@@ -211,7 +211,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                     // Reset
                     ballEnteredHole = false;
                     holeTimer = 0f;
-                    animateBallIntoHole();
 
                     onBallInHoleSafe();
                 }
@@ -652,25 +651,5 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         }
 
         spawnGreenAndHole();
-    }
-
-    public void animateBallIntoHole() {
-        Log.v("Ball", "Entre animateBallIntoHole");
-        if (mPlayer.mGrabbedMagneticObject == null)
-            return;
-
-        final Sprite ballSprite = (Sprite) mPlayer.mGrabbedMagneticObject.mEntity;
-        final float holeX = currentHole.mEntity.getX();
-        final float holeY = currentHole.mEntity.getY();
-
-        // Movimiento hacia el centro del hoyo
-        MoveModifier move = new MoveModifier( 0.6f, ballSprite.getX(), holeX, ballSprite.getY(), holeY );
-
-        // Reducción de escala (efecto de hundimiento)
-        ScaleModifier scale = new ScaleModifier(0.6f,ballSprite.getScaleX(),0f // desaparece
-        );
-
-        // Ejecutar ambas animaciones juntas
-        ballSprite.registerEntityModifier( new ParallelEntityModifier(move, scale));
     }
 }

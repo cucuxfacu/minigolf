@@ -5,15 +5,11 @@ import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.AnimatedSprite.IAnimationListener;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -25,7 +21,6 @@ import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
-import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 
 
@@ -114,7 +109,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         if(mOnPostSolve)
             this.mGameLevel.resetTrailingDots();
 
-        if(this.mEntity.getY()+200 >= ResourceManager.getEngine().getCamera().getHeight())
+        if(this.mEntity.getY()+100 >= ResourceManager.getEngine().getCamera().getHeight())
             ResourceManager.getCamera().setChaseEntity(this.mEntity);
 
         if (this.mEntity.getScaleX() < mScaleBall) {
@@ -133,7 +128,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
             mGameLevel.btnShoot.mIsEnabled = true;
             this.destroy();
 
-            ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
+            ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
         }
         mBodySpeed = 0f;
         if (secondsSinceLastSound < mMINIMUM_SECONDS_BETWEEN_SOUNDS)
@@ -151,17 +146,13 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         if (!this.mIsGrabbed) {
             if (this.mEntity != null) {
                 if (pMaxImpulse > 2f) {
-                    Log.v("Ball", "Entre PostSolve: "+ pMaxImpulse);
                     this.mGameLevel.mMagneticObjects.remove(this);
 
                     if (this.mGameLevel.mPlayer.mGrabbedMagneticObject == this)
                         this.mGameLevel.mPlayer.mGrabbedMagneticObject = null;
 
-//                    mGameLevel.mPlayer.mTurretMagnetOn = true;
-//                    mGameLevel.mPlayer.mBall.setVisible(true);
-//                    mGameLevel.btnShoot.mIsEnabled = true;
                     mOnPostSolve = true;
-                    //this.mGameLevel.resetTrailingDots();
+
                 }
             }
         }
@@ -169,11 +160,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
 	@Override
 	public void onBeginContact(Contact pContact) {
-
         ResourceManager.getActivity().runOnUpdateThread(() -> {
-            if (mBody != null) {
-                Log.v("Ball", "Entre BeginContact");
-            }
         });
 	}
 
