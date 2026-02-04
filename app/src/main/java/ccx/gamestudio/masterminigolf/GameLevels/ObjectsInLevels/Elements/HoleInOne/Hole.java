@@ -55,7 +55,7 @@ public class Hole extends PhysObject<Sprite> {
         this.set(mBody, holeSprite, connector, this.mGameLevel);
 
         pGameLevel.attachChild(holeSprite);
-        this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
+        //this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
     }
 
 

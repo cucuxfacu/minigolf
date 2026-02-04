@@ -227,7 +227,6 @@ public class Players implements IUpdateHandler  {
                 NewCrateSpawnLocation
         );
         this.mGrabbedMagneticObject.mDesiredXY = NewCrateSpawnLocation;
-        this.mGrabbedMagneticObject.mEntity.setZIndex(10);
         mGameLevel.sortChildren();
     }
 	

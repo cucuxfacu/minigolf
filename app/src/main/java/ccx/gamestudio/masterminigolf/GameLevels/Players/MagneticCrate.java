@@ -81,7 +81,6 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
         mBallSprite.setScale(mScaleBall);
         mBallSprite.setPosition( pLocationTorret.x * 32,pLocationTorret.y * 32);
-        mBallSprite.setZIndex(999);
 
         final FixtureDef mCRATE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mCRATE_DENSITY, mCRATE_ELASTICITY, mCRATE_FRICTION);
 		crateBody = PhysicsFactory.createCircleBody(this.mGameLevel.mPhysicsWorld, mBallSprite, BodyType.DynamicBody, mCRATE_FIXTURE_DEF);
@@ -92,7 +91,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 		this.mGameLevel.mMagneticObjects.add(this);
 
         this.mGameLevel.mCrateLayer.attachChild(mBallSprite);
-
+        this.mGameLevel.mCrateLayer.setZIndex(999);
 		this.mEntity.setScale(mScaleBall);
         this.mIsGrabbed = true;
 		this.mBody.setActive(false);
@@ -115,11 +114,13 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         if(mOnPostSolve)
             this.mGameLevel.resetTrailingDots();
 
+        if(this.mEntity.getY()+200 >= ResourceManager.getEngine().getCamera().getHeight())
+            ResourceManager.getCamera().setChaseEntity(this.mEntity);
+
         if (this.mEntity.getScaleX() < mScaleBall) {
             this.mEntity.setScale(mScaleBall);
         } else if (!this.mBody.isActive()) {
             this.mBody.setActive(true);
-
         } else if (this.mEntity.getY() < -20 && !mHasImpacted) {
             mHasImpacted = true;
 
@@ -147,7 +148,6 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
 	@Override
 	public void onPostSolve(float pMaxImpulse) {
-
         if (!this.mIsGrabbed) {
             if (this.mEntity != null) {
                 if (pMaxImpulse > 2f) {
@@ -157,9 +157,9 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                     if (this.mGameLevel.mPlayer.mGrabbedMagneticObject == this)
                         this.mGameLevel.mPlayer.mGrabbedMagneticObject = null;
 
-                    mGameLevel.mPlayer.mTurretMagnetOn = true;
-                    mGameLevel.mPlayer.mBall.setVisible(true);
-                    mGameLevel.btnShoot.mIsEnabled = true;
+//                    mGameLevel.mPlayer.mTurretMagnetOn = true;
+//                    mGameLevel.mPlayer.mBall.setVisible(true);
+//                    mGameLevel.btnShoot.mIsEnabled = true;
                     mOnPostSolve = true;
                     //this.mGameLevel.resetTrailingDots();
                 }
