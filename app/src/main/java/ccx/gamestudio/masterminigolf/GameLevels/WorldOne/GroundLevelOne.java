@@ -5,18 +5,22 @@ import static org.andengine.extension.physics.box2d.util.constants.PhysicsConsta
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
+import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
+import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 
-public class GroundLevelOne {
+public class GroundLevelOne extends PhysObject<Sprite> {
 
     // ===============================================================================================
     // CONSTANT
@@ -51,6 +55,25 @@ public class GroundLevelOne {
         mGroundBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGround, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mGround, mGroundBody));
 
+    }
+
+    @Override
+    public void onBeginContact(Contact pContact) {
+
+    }
+
+    @Override
+    public void onEndContact(Contact pContact) {
+
+    }
+
+    @Override
+    public void onPreSolve(Contact pContact, Manifold pOldManifold) {
+
+    }
+
+    @Override
+    public void onPostSolve(float pMaxImpulse) {
 
     }
 }

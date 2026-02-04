@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="MiniGolf">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-02-02T12:13:15.597343500Z">
+        <DropdownSelection timestamp="2026-02-04T10:47:14.825742700Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=AYAV6R3921009276" />

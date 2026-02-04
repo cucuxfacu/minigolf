@@ -26,6 +26,7 @@ import java.net.CookieHandler;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsDesertGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
+import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsHoleIOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
 import ccx.gamestudio.masterminigolf.Layers.ExitGameLayer;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfActivity;
@@ -117,6 +118,7 @@ public class ResourceManager {
 		GameObjectsGreenGround.getInstance().LoadObjects();
 		GameObjectsDesertGround.getInstance().LoadObjects();
         GamePlayers.getInstance().Initialize();
+        GameObjectsHoleIOne.getInstance().LoadObjects();
 	}
 
 	public static SwitchableFixedStepEngine getEngine()

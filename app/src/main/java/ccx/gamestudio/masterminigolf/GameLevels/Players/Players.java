@@ -25,7 +25,9 @@ import org.andengine.util.math.MathUtils;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
+import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GreenLevelOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.BoundTouchInput;
@@ -48,7 +50,7 @@ public class Players implements IUpdateHandler  {
 	private static final float mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_X = 20;
 	private static final float mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_Y = -120f;
 	private static final float mTURRET_JOINT_LOWER_ANGLE = 0.2285f;
-	private static final float mTURRET_JOINT_UPPER_ANGLE = 1.2f;
+	private static final float mTURRET_JOINT_UPPER_ANGLE = 1.3f;
     private static final float mTURRET_BODY_CENTER_OF_GRAVITY_X = -20f;
     private static final float mTURRET_BODY_CENTER_OF_GRAVITY_Y = 0f;
 	private static final float mTURRET_JOINT_MAX_MOTOR_TORQUE = 5000000000f;
@@ -84,6 +86,10 @@ public class Players implements IUpdateHandler  {
 	private final float mCHARACTER_START_Y;
 	private AnimatedSprite mAnimatedPlayers;
     public Sprite mBall;
+    private Hole currentHole;
+    private GreenLevelOne currentGreen;
+
+
 
 
     // ====================================================
@@ -170,7 +176,7 @@ public class Players implements IUpdateHandler  {
 
         this.mGameLevel.registerUpdateHandler(this);
 
-        //this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
+        this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
     }
 
 
@@ -219,7 +225,6 @@ public class Players implements IUpdateHandler  {
                 this.mGameLevel,
                 NewCrateSpawnLocation
         );
-
         this.mGrabbedMagneticObject.mDesiredXY = NewCrateSpawnLocation;
 	}
 	

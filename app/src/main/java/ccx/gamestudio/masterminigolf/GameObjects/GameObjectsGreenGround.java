@@ -25,6 +25,7 @@ public class GameObjectsGreenGround  {
     public static TextureRegion treeTwo;
     public static TextureRegion mGround01;
     public static TextureRegion mGround02;
+    public static TextureRegion mGroundGreen;
 
     public GameObjectsGreenGround(){
 
@@ -57,6 +58,7 @@ public class GameObjectsGreenGround  {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
 
         LoadPlatformsGreenGround();
+        LoadGreenGround();
     }
 
     private void LoadPlatformsGreenGround(){
@@ -65,6 +67,15 @@ public class GameObjectsGreenGround  {
 
         if(mGround01==null) mGround01 = ResourceManager.getInstance().getLimitableTR("ground01.png", mTransparentTextureOption);
         if(mGround02==null) mGround02 = ResourceManager.getInstance().getLimitableTR("ground02.png", mTransparentTextureOption);
+
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
+    }
+
+    private void LoadGreenGround(){
+        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Green/");
+
+        if(mGroundGreen==null) mGroundGreen = ResourceManager.getInstance().getLimitableTR("Green.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }

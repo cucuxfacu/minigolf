@@ -40,12 +40,14 @@ import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGr
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Mushroom;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Sign;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Trees;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Water;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.Players.Players;
+import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GreenLevelOne;
 import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GroundLevelOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
@@ -71,7 +73,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	public static final float mLEVEL_WIDTH = 7200f;
 	public static final float mTRAILING_DOTS_SPACING = 64f;
 	public static final int mCRATE_POINT_VALUE = 100;
-	
 	private static final float mPHYSICS_WORLD_GRAVITY = -SensorManager.GRAVITY_EARTH * 4f;
 	private static final int mPHYSICS_WORLD_POSITION_ITERATIONS = 20;
 	private static final int mPHYSICS_WORLD_VELOCITY_ITERATIONS = 20;
@@ -80,7 +81,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	private static final float mBASE_MOVEMENT_SPEED_THRESHOLD = 1f;
 	private static final float mBASE_MOVEMENT_TIME_THRESHOLD = 0.75f;
 	private static final int mNUMBER_TRAILING_DOTS = 92;
-	
 	private static final String mLOADING_STEP_STRING_1 = "";
 	private static final String mLOADING_STEP_STRING_2 = "";
 	private static final String mLOADING_STEP_STRING_3 = "";
@@ -97,7 +97,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	// VARIABLES
 	// ====================================================
 	public FixedStepPhysicsWorld mPhysicsWorld;
-	
 	public final LevelDef mLevelDef;
 	public float mBasePositionX;
 	public float mBasePositionY;
@@ -105,13 +104,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	public Players mPlayer;
 	public int mNumberEnemiesLeft;
 	public Entity mCrateLayer = new Entity();
-
 	public boolean mIsLevelSettled = false;
 	public float mBaseTotalMovementTime;
 	public boolean mIsThereBaseMovement = false;
 	public int TotalScorePossible;
 	public int CurrentScore;
-	
 	private final MasterMiniGolfSmoothCamera mCamera = ResourceManager.getCamera();
 	private static float SCALED_CAMERA_ZOOM = mCAMERA_ZOOM * ResourceManager.getInstance().cameraScaleFactorX;
 	private boolean mHasCompletionTimerRun = false;
@@ -127,7 +124,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     public GrowButtonControls btnShoot;
     public ArrayList<MagneticPhysObject<?>> mMagneticObjects = new ArrayList<>();
     public Water mWater;
-
+    public GreenLevelOne currentGreen;
+    public Hole currentHole;
+    float margin = 400f;
+    public boolean ballEnteredHole = false;
     // ====================================================
 	// UPDATE HANDLERS
 	// ====================================================
@@ -193,6 +193,18 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
             if (mTurretMovingDown) {
                 mPlayer.rotateTurretDown();
+            }
+        }
+
+        @Override
+        public void reset() {}
+    };
+    private final IUpdateHandler holeEventHandler = new IUpdateHandler() {
+        @Override
+        public void onUpdate(float pSecondsElapsed) {
+            if (ballEnteredHole) {
+                ballEnteredHole = false;
+                onBallInHoleSafe();
             }
         }
 
@@ -329,8 +341,18 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 			GameLevel.this.registerUpdateHandler(this.onCompletionTimer);
 		}
 	}
-	
-	@Override
+
+    public void spawnGreenAndHole() {
+        float randomX = MathUtils.random(margin, 2400f - margin);
+        float randomY = MathUtils.random(margin, 1080f -margin);
+
+        currentGreen = new GreenLevelOne(randomX, randomY, this);
+
+        currentHole = new Hole(randomX, randomY, this);
+    }
+
+
+    @Override
 	public void onLoadLevel() {
 		GameManager.setGameLevel(this);
 		
@@ -433,6 +455,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_6, this) {
 			@Override
 			public void onLoad() {
+
 				GameLevel.this.mPlayer = new Players(0f, 250f, GameLevel.this);
 				GameLevel.this.mCamera.setPlayerEntity(GameLevel.this.mPlayer);
 				BouncingPowerBar.attachInstanceToHud(GameLevel.this.mCamera.getHUD());
@@ -441,7 +464,9 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                 CreateBtnDown();
                 CreateBtnShoot();
                 GameLevel.this.attachChild(GameLevel.this.mCrateLayer);
-			}
+                spawnGreenAndHole();
+
+            }
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_7, this) {
 			@Override
@@ -471,8 +496,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
         this.registerUpdateHandler(turretUpdateHandler);
 		this.registerUpdateHandler(this.mMovementReportingTimer);
+        this.registerUpdateHandler(holeEventHandler);
 
-	}
+
+    }
 
     private void createObjetsInLevel() {
         for (final ObjectsInLevelDef curBeam : GameLevel.this.mLevelDef.mObjects) {
@@ -508,7 +535,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
             }
         }
     }
-
     private void CreateBtnUp() {
         btnUp = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 150f, BouncingPowerBar.mBackGround.getY() + 75f, GamePlayers.mBtnUp) {
             @Override
@@ -539,7 +565,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         GameLevel.this.mCamera.getHUD().registerTouchArea(btnDown);
         GameLevel.this.mCamera.getHUD().attachChild(btnDown);
     }
-
     private void CreateBtnShoot() {
         btnShoot  = new GrowButtonControls(BouncingPowerBar.mBackGround.getX() + 80f, btnDown.getY() - 140f, GamePlayers.mBtnShoot) {
             @Override
@@ -599,4 +624,14 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		this.mTrailingDotSprites[this.mTrailingDotCounter].setScale(0.5f - ((0.5f / mNUMBER_TRAILING_DOTS) * this.mTrailingDotCounter));
 		this.mTrailingDotCounter++;
 	}
+
+    public void onBallInHoleSafe() {
+
+
+
+        // crear nuevos green + hole
+        spawnGreenAndHole();
+
+    }
+
 }

@@ -66,6 +66,8 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 		this.mBallSprite = new Sprite(pX, pY, mBallCreation, ResourceManager.getActivity().getVertexBufferObjectManager()) {
 			protected void onManagedUpdate(final float pSecondsElapsed) {
                 super.onManagedUpdate(pSecondsElapsed);
+                float rotation = MathUtils.radToDeg((float) Math.atan2(-MagneticCrate.this.mBody.getLinearVelocity().y, MagneticCrate.this.mBody.getLinearVelocity().x));
+                this.setRotation(rotation);
                 if (MagneticCrate.this.mBody != null) {
                     MagneticCrate.this.mGameLevel.reportBaseBodySpeed(MagneticCrate.this.mBody.getLinearVelocity().len2());
                 }
@@ -74,7 +76,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
         mBallSprite.setScale(mScaleBall);
         mBallSprite.setPosition( pLocationTorret.x * 32,pLocationTorret.y * 32);
-
+        mBallSprite.setZIndex(999);
         final FixtureDef mCRATE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mCRATE_DENSITY, mCRATE_ELASTICITY, mCRATE_FRICTION);
 		crateBody = PhysicsFactory.createCircleBody(this.mGameLevel.mPhysicsWorld, mBallSprite, BodyType.DynamicBody, mCRATE_FIXTURE_DEF);
         final PhysicsConnector physConnector = new PhysicsConnector(mBallSprite, crateBody);
@@ -113,16 +115,12 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
             if (SplashWater.getInstance().waterContact) {
                 SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
-                SFXManager.playCrowdClap(1,0.25f);
             }
 
-            ResourceManager.getActivity().runOnUpdateThread(() -> {
-
-            });
             mGameLevel.mPlayer.mTurretMagnetOn = true;
             mGameLevel.mPlayer.mBall.setVisible(true);
             mGameLevel.btnShoot.mIsEnabled = true;
-            MagneticCrate.this.destroy();
+            this.destroy();
 
             ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToMagneTank();
         }
@@ -147,8 +145,9 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                     if (this.mGameLevel.mPlayer.mGrabbedMagneticObject == this)
                         this.mGameLevel.mPlayer.mGrabbedMagneticObject = null;
 
-                    //this.destroy();
-
+                    mGameLevel.mPlayer.mTurretMagnetOn = true;
+                    mGameLevel.mPlayer.mBall.setVisible(true);
+                    mGameLevel.btnShoot.mIsEnabled = true;
                 }
             }
         }
@@ -161,7 +160,9 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 				if (!mHasImpacted) {
 					mHasImpacted = true;
 					((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToBaseForSeconds(0.5f);
-                      //ResourceManager.getActivity().runOnUpdateThread(() -> mGameLevel.mPlayer.equipNextCrate(false));
+                    mGameLevel.mPlayer.mTurretMagnetOn = true;
+                    mGameLevel.mPlayer.mBall.setVisible(true);
+                    mGameLevel.btnShoot.mIsEnabled = true;
 				}
 			}
         }
@@ -170,5 +171,4 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 	@Override
 	public void onEndContact(Contact pContact) {
 	}
-
 }
