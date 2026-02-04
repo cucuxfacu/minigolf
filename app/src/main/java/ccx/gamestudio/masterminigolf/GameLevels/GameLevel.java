@@ -10,6 +10,7 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.CameraScene;
@@ -26,6 +27,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.adt.pool.GenericPool;
 import org.andengine.util.math.MathUtils;
+import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
 import android.hardware.SensorManager;
@@ -204,13 +206,29 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         public void onUpdate(float pSecondsElapsed) {
             if (ballEnteredHole) {
                 ballEnteredHole = false;
-                onBallInHoleSafe();
+
+                ResourceManager.getActivity().runOnUpdateThread(() -> {
+
+                    DelayModifier delay = new DelayModifier(1f, new IEntityModifier.IEntityModifierListener() {
+                        @Override
+                        public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+                        }
+
+                        @Override
+                        public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                            onBallInHoleSafe();
+                        }
+                    });
+
+                    GameLevel.this.registerEntityModifier(delay);
+                });
             }
         }
 
         @Override
         public void reset() {}
     };
+
 
 	// ====================================================
 	// OBJECT POOLS
@@ -626,12 +644,25 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	}
 
     public void onBallInHoleSafe() {
+        // destruir pelota
+        if (mPlayer.mGrabbedMagneticObject != null) {
+            mPlayer.mGrabbedMagneticObject.destroy();
+            mPlayer.mGrabbedMagneticObject = null;
+        }
 
+        // destruir green y hole
+        if (currentGreen != null) {
+            currentGreen.destroy();
+            currentGreen = null;
+        }
 
+        if (currentHole != null) {
+            currentHole.destroy();
+            currentHole = null;
+        }
 
         // crear nuevos green + hole
         spawnGreenAndHole();
 
     }
-
 }
