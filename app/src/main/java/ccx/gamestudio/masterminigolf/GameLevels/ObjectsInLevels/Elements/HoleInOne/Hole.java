@@ -7,6 +7,7 @@ import android.util.Log;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -26,52 +27,60 @@ import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 
 public class Hole extends PhysObject<Sprite> {
-    private static final float mGROUND_DENSITY = 0;
-    private static final float mGROUND_ELASTICITY = 0.01f;
-    private static final float mGROUND_FRICTION = 0.5f;
+    private static final float mGROUND_DENSITY = 10;
+    private static final float mGROUND_ELASTICITY = 0.05f;
+    private static final float mGROUND_FRICTION = 0.1f;
     private static final FixtureDef mGROUND_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mGROUND_DENSITY, mGROUND_ELASTICITY, mGROUND_FRICTION);
     private GameLevel mGameLevel;
+    private  Sprite mHoleSprite;
     private Body mBody;
     private boolean isSound;
     public Hole(float pX, float pY, GameLevel pGameLevel) {
         this.mGameLevel = pGameLevel;
 
-        Sprite holeSprite = new Sprite(pX, pY+34f, GameObjectsHoleIOne.mHoleInOne,  ResourceManager.getActivity().getVertexBufferObjectManager());
-        //holeSprite.setScale(0.1f);
+        mHoleSprite = new Sprite(pX, pY+10f, GameObjectsHoleIOne.mHoleInOne,  ResourceManager.getActivity().getVertexBufferObjectManager());
 
-        FixtureDef fixture = PhysicsFactory.createFixtureDef(10, 0, 0);
-        fixture.isSensor = true;
-
-        final float width = holeSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
-        final float height = holeSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
+        final float width = mHoleSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
+        final float height = mHoleSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
 
         final Vector2[] verticeGround = {
-                new Vector2(+0.29647f*width, -0.40132f*height),
-                new Vector2(+0.48474f*width, -0.00264f*height),
-                new Vector2(-0.49722f*width, +0.01398f*height),
-                new Vector2(-0.29418f*width, -0.40132f*height),
+                new Vector2(+0.47003f*width, -0.45179f*height),
+                new Vector2(-0.48683f*width, -0.44551f*height),
         };
 
-        mBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, holeSprite, verticeGround, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
+        mBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mHoleSprite, verticeGround, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
 
-        PhysicsConnector connector = new PhysicsConnector(holeSprite, mBody);
+        PhysicsConnector connector = new PhysicsConnector(mHoleSprite, mBody);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(connector);
 
-        this.set(mBody, holeSprite, connector, this.mGameLevel);
+        this.set(mBody, mHoleSprite, connector, this.mGameLevel);
 
-        pGameLevel.attachChild(holeSprite);
-        this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
+
+        pGameLevel.attachChild(mHoleSprite);
+
     }
 
 
     @Override
     public void onBeginContact(Contact pContact) {
-        isSound = false;
+        if(pContact.getFixtureB().getBody().getUserData() != null) {
+            if (pContact.getFixtureB().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.Players.MagneticCrate"))
+            {
+                if (this.mGameLevel.mIsLevelSettled) {
+                    mGameLevel.ballEnteredHole = true;
+                    if(!isSound)
+                    {
+                        isSound = true;
+                        SFXManager.playCrowdClap(1,0.25f);
+
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void onEndContact(Contact pContact) {
-
     }
 
     @Override
@@ -83,18 +92,6 @@ public class Hole extends PhysObject<Sprite> {
     }
     @Override
     public void postSolve(final Contact pContact, ContactImpulse impulse){
-        if(pContact.getFixtureB().getBody().getUserData() != null) {
-            if (pContact.getFixtureB().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.Players.MagneticCrate"))
-            {
-                if (this.mGameLevel.mIsLevelSettled) {
-                    mGameLevel.ballEnteredHole = true;
-                    if(!isSound)
-                    {
-                        isSound = true;
-                        SFXManager.playCrowdClap(1,0.25f);
-                    }
-                }
-            }
-        }
+
     }
 }

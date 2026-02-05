@@ -9,13 +9,11 @@ import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 public class Water {
     public final AnimatedSprite mWater;
-    private final GameLevel mGameLevel;
 
     // ====================================================
     // CONSTRUCTOR
     // ====================================================
     public Water(float pX, float pY, GameLevel pGameLevel) {
-        this.mGameLevel = pGameLevel;
         mWater = new AnimatedSprite(pX, pY, GameObjectsBackGround.gameWaterTTR, ResourceManager.getActivity().getVertexBufferObjectManager()) {
             @Override
             public void onManagedUpdate(final float pSecondsElapsed) {

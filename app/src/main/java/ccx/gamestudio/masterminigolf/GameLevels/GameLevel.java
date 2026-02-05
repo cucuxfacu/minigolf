@@ -55,6 +55,7 @@ import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.GrowButton;
 import ccx.gamestudio.masterminigolf.Input.GrowButtonControls;
 import ccx.gamestudio.masterminigolf.Input.GrowToggleButton;
+import ccx.gamestudio.masterminigolf.Layers.LevelPauseLayer;
 import ccx.gamestudio.masterminigolf.Manager.GameManager;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
@@ -76,7 +77,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	private static final float mPHYSICS_WORLD_GRAVITY = -SensorManager.GRAVITY_EARTH * 4f;
 	private static final int mPHYSICS_WORLD_POSITION_ITERATIONS = 20;
 	private static final int mPHYSICS_WORLD_VELOCITY_ITERATIONS = 20;
-	private static final float mCAMERA_ZOOM = 0.8888f;
+	private static final float mCAMERA_ZOOM = 0.999f;
 	private static final float mSECONDS_FOR_LEVEL_TO_SETTLE = 1f;
 	private static final float mBASE_MOVEMENT_SPEED_THRESHOLD = 1f;
 	private static final float mBASE_MOVEMENT_TIME_THRESHOLD = 0.75f;
@@ -199,16 +200,16 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         @Override
         public void reset() {}
     };
+
     private final IUpdateHandler holeEventHandler = new IUpdateHandler() {
         private float holeTimer = 0f;
-        private final float HOLE_DELAY = 2f;
 
         @Override
         public void onUpdate(float pSecondsElapsed) {
             if (ballEnteredHole) {
                 holeTimer += pSecondsElapsed;
-                if (holeTimer >= HOLE_DELAY) {
-                    // Reset
+                if (holeTimer >= 1.5f) {
+
                     ballEnteredHole = false;
                     holeTimer = 0f;
 
@@ -422,7 +423,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                 final GrowButton PauseButton = new GrowButton(MenuResourceManager.btnPause.getWidth() / 2f + 50f, GameLevel.this.mCamera.getHeight() - (MenuResourceManager.btnPause.getHeight() / 2f), MenuResourceManager.btnPause) {
 					@Override
 					public void onClick() {
-						//SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
+						SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
 					}
 				};
                 PauseButton.setAlpha(0.75f);
@@ -633,13 +634,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	}
 
     public void onBallInHoleSafe() {
-        // destruir pelota
         if (mPlayer.mGrabbedMagneticObject != null) {
             mPlayer.mGrabbedMagneticObject.destroy();
             mPlayer.mGrabbedMagneticObject = null;
         }
 
-        // destruir green y hole
         if (currentGreen != null) {
             currentGreen.destroy();
             currentGreen = null;

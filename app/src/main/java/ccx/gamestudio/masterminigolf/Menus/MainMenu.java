@@ -395,7 +395,7 @@ public class MainMenu extends ManagedMenuScene {
             }
         };
         Sprite mIconButton = new Sprite(selectButton.getWidth() / 2f, selectButton.getHeight() / 2f, pTextureRegion, ResourceManager.getActivity().getVertexBufferObjectManager());
-        //mIconButton.setScale(1.25f);
+
         selectButton.attachChild(mIconButton);
         return selectButton;
     }

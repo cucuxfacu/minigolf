@@ -24,10 +24,16 @@ public class GreenLevelOne extends PhysObject<Sprite> {
     private static final float mGROUND_ELASTICITY = 0.01f;
     private static final float mGROUND_FRICTION = 0.5f;
     private static final FixtureDef mGROUND_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mGROUND_DENSITY, mGROUND_ELASTICITY, mGROUND_FRICTION);
-    public Body mGroundBody;
+    public Body mGroundBodyLeft;
+    public Body mGroundBodyRight;
     public Sprite mGroundGreen;
+    private PhysicsConnector physConnectorGroundBodyLeft;
+    private PhysicsConnector physConnectorGroundBodyRight;
+
 
     public GreenLevelOne(float pX, float pY, final GameLevel pGameLevel) {
+        mGroundBodyLeft = null;
+        mGroundBodyRight = null;
 
         mGroundGreen = new Sprite(pX, pY, GameObjectsGreenGround.mGroundGreen, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGroundGreen);
@@ -35,20 +41,35 @@ public class GreenLevelOne extends PhysObject<Sprite> {
         final float width = mGroundGreen.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
         final float height = mGroundGreen.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
 
-        final Vector2[] verticeGround = {
+        final Vector2[] verticeGroundLeft = {
                 new Vector2(-0.25100f*width, -0.46383f*height),
-                new Vector2(+0.25525f*width, -0.45092f*height),
-                new Vector2(+0.46775f*width, -0.01221f*height),
-                new Vector2(+0.48650f*width, +0.36198f*height),
+                new Vector2(-0.08846f*width, -0.32423f*height),
+                new Vector2(-0.08846f*width, -0.01455f*height),
+                new Vector2(-0.08846f*width, +0.35964f*height),
                 new Vector2(-0.49787f*width, +0.36198f*height),
                 new Vector2(-0.46037f*width, +0.01359f*height),
-
         };
 
-        mGroundBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGround, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
-        final PhysicsConnector physConnector = new PhysicsConnector(mGroundGreen, mGroundBody);
-        pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnector);
-        this.set(mGroundBody, mGroundGreen, physConnector,pGameLevel);
+        final Vector2[] verticeGroundRight = {
+                new Vector2(+0.08341f*width, -0.33714f*height),
+                new Vector2(+0.26779f*width, -0.42746f*height),
+                new Vector2(+0.36466f*width, -0.07907f*height),
+                new Vector2(+0.46154f*width, +0.02416f*height),
+                new Vector2(+0.48029f*width, +0.37254f*height),
+                new Vector2(+0.08341f*width, +0.37254f*height),
+        };
+
+        mGroundBodyLeft = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
+        mGroundBodyRight = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGroundRight, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
+
+         physConnectorGroundBodyLeft = new PhysicsConnector(mGroundGreen, mGroundBodyLeft);
+        pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnectorGroundBodyLeft);
+
+        physConnectorGroundBodyRight = new PhysicsConnector(mGroundGreen, mGroundBodyRight);
+        pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnectorGroundBodyRight);
+
+        this.set(mGroundBodyLeft, mGroundGreen, physConnectorGroundBodyLeft, pGameLevel);
+        this.set(mGroundBodyRight, mGroundGreen, physConnectorGroundBodyRight, pGameLevel);
     }
 
     @Override
@@ -67,4 +88,34 @@ public class GreenLevelOne extends PhysObject<Sprite> {
     @Override
     public void onPostSolve(float pMaxImpulse) {
     }
+
+    public void destroy() {
+
+        if (physConnectorGroundBodyLeft != null) {
+            mGameLevel.mPhysicsWorld.unregisterPhysicsConnector(physConnectorGroundBodyLeft);
+            physConnectorGroundBodyLeft = null;
+        }
+
+        if (physConnectorGroundBodyRight != null) {
+            mGameLevel.mPhysicsWorld.unregisterPhysicsConnector(physConnectorGroundBodyRight);
+            physConnectorGroundBodyRight = null;
+        }
+
+        if (mGroundBodyLeft != null) {
+            mGameLevel.mPhysicsWorld.destroyBody(mGroundBodyLeft);
+            mGroundBodyLeft = null;
+        }
+
+        if (mGroundBodyRight != null) {
+            mGameLevel.mPhysicsWorld.destroyBody(mGroundBodyRight);
+            mGroundBodyRight = null;
+        }
+
+        if (mGroundGreen != null) {
+            mGroundGreen.detachSelf();
+            mGroundGreen.dispose();
+            mGroundGreen = null;
+        }
+    }
+
 }

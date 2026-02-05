@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -26,45 +27,45 @@ import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 
 public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
-	// ====================================================
-	// CONSTANTS
-	// ====================================================;
-	private static final float mCRATE_ANGULAR_DAMPING = 0.4f;
-	public static float mCRATE_DENSITY = 100;
-	private static final float mCRATE_ELASTICITY = 0.0f;
-	private static final float mCRATE_FRICTION = 0.95f;
-	private static final int mMAX_SOUNDS_PER_SECOND = 5;
-	private static final float mMINIMUM_SECONDS_BETWEEN_SOUNDS = 1f / mMAX_SOUNDS_PER_SECOND;
-	private static final float mScaleBall = 0.08f;
+    // ====================================================
+    // CONSTANTS
+    // ====================================================;
+    private static final float mCRATE_ANGULAR_DAMPING = 0.4f;
+    public static float mCRATE_DENSITY = 100;
+    private static final float mCRATE_ELASTICITY = 0.0f;
+    private static final float mCRATE_FRICTION = 0.95f;
+    private static final int mMAX_SOUNDS_PER_SECOND = 5;
+    private static final float mMINIMUM_SECONDS_BETWEEN_SOUNDS = 1f / mMAX_SOUNDS_PER_SECOND;
+    private static final float mScaleBall = 0.08f;
 
-	// ====================================================
-	// VARIABLES
-	// ====================================================
-	public int mBall;
+    // ====================================================
+    // VARIABLES
+    // ====================================================
+    public int mBall;
 
-	public TextureRegion mBallCreation;
-	private final GameLevel mGameLevel;
-	private boolean mHasImpacted = false;
-	private float mBodySpeed = 0f;
-	private float secondsSinceLastSound = 0.5f;
-	private final Sprite mBallSprite;
-	private float force = 0;
-	private boolean animationDestroy = false;
-	private Body crateBody;
+    public TextureRegion mBallCreation;
+    private final GameLevel mGameLevel;
+    private boolean mHasImpacted = false;
+    private float mBodySpeed = 0f;
+    private float secondsSinceLastSound = 0.5f;
+    private final Sprite mBallSprite;
+    private float force = 0;
+    private boolean animationDestroy = false;
+    private Body crateBody;
 
     private boolean mOnPostSolve;
 
-	// ====================================================
-	// CONSTRUCTOR
-	// ====================================================
-	public MagneticCrate(float pX, float pY, int pBall, GameLevel pGameLevel, Vector2 pLocationTorret) {
-		this.mBall = pBall;
-		this.mGameLevel = pGameLevel;
+    // ====================================================
+    // CONSTRUCTOR
+    // ====================================================
+    public MagneticCrate(float pX, float pY, int pBall, GameLevel pGameLevel, Vector2 pLocationTorret) {
+        this.mBall = pBall;
+        this.mGameLevel = pGameLevel;
 
         mBallCreation = MenuResourceManager.mListBall.get(mBall);
 
-		this.mBallSprite = new Sprite(pX, pY, mBallCreation, ResourceManager.getActivity().getVertexBufferObjectManager()) {
-			protected void onManagedUpdate(final float pSecondsElapsed) {
+        this.mBallSprite = new Sprite(pX, pY, mBallCreation, ResourceManager.getActivity().getVertexBufferObjectManager()) {
+            protected void onManagedUpdate(final float pSecondsElapsed) {
                 super.onManagedUpdate(pSecondsElapsed);
                 float rotation = MathUtils.radToDeg((float) Math.atan2(-MagneticCrate.this.mBody.getLinearVelocity().y, MagneticCrate.this.mBody.getLinearVelocity().x));
                 this.setRotation(rotation);
@@ -72,32 +73,32 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                     MagneticCrate.this.mGameLevel.reportBaseBodySpeed(MagneticCrate.this.mBody.getLinearVelocity().len2());
                 }
             }
-		};
+        };
 
         mBallSprite.setScale(mScaleBall);
-        mBallSprite.setPosition( pLocationTorret.x * 32,pLocationTorret.y * 32);
+        mBallSprite.setPosition(pLocationTorret.x * 32, pLocationTorret.y * 32);
 
         final FixtureDef mCRATE_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mCRATE_DENSITY, mCRATE_ELASTICITY, mCRATE_FRICTION);
-		crateBody = PhysicsFactory.createCircleBody(this.mGameLevel.mPhysicsWorld, mBallSprite, BodyType.DynamicBody, mCRATE_FIXTURE_DEF);
+        crateBody = PhysicsFactory.createCircleBody(this.mGameLevel.mPhysicsWorld, mBallSprite, BodyType.DynamicBody, mCRATE_FIXTURE_DEF);
         final PhysicsConnector physConnector = new PhysicsConnector(mBallSprite, crateBody);
-		this.mGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnector);
+        this.mGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnector);
         crateBody.setAngularDamping(mCRATE_ANGULAR_DAMPING);
-		this.set(crateBody, mBallSprite, physConnector, this.mGameLevel);
-		this.mGameLevel.mMagneticObjects.add(this);
+        this.set(crateBody, mBallSprite, physConnector, this.mGameLevel);
+        this.mGameLevel.mMagneticObjects.add(this);
 
         this.mGameLevel.mCrateLayer.attachChild(mBallSprite);
         this.mGameLevel.mCrateLayer.setZIndex(999);
-		this.mEntity.setScale(mScaleBall);
+        this.mEntity.setScale(mScaleBall);
         this.mIsGrabbed = true;
-		this.mBody.setActive(false);
-	}
+        this.mBody.setActive(false);
+    }
 
 
-	// ====================================================
-	// METHODS
-	// ====================================================
-	@Override
-	public void onUpdate(float pSecondsElapsed) {
+    // ====================================================
+    // METHODS
+    // ====================================================
+    @Override
+    public void onUpdate(float pSecondsElapsed) {
         super.onUpdate(pSecondsElapsed);
         if (!mHasImpacted) {
             final Sprite lastTrailingDot = mGameLevel.getLastTrailingDot();
@@ -106,10 +107,10 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
             }
         }
 
-        if(mOnPostSolve)
+        if (mOnPostSolve)
             this.mGameLevel.resetTrailingDots();
 
-        if(this.mEntity.getY()+100 >= ResourceManager.getEngine().getCamera().getHeight())
+        if (this.mEntity.getY() + 100 >= ResourceManager.getEngine().getCamera().getHeight())
             ResourceManager.getCamera().setChaseEntity(this.mEntity);
 
         if (this.mEntity.getScaleX() < mScaleBall) {
@@ -136,13 +137,13 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     }
 
 
-	@Override
-	public void onPreSolve(Contact pContact, Manifold pOldManifold) {
-		mBodySpeed = Math.max(this.mBody.getLinearVelocity().len2(),mBodySpeed);
-	}
+    @Override
+    public void onPreSolve(Contact pContact, Manifold pOldManifold) {
+        mBodySpeed = Math.max(this.mBody.getLinearVelocity().len2(), mBodySpeed);
+    }
 
-	@Override
-	public void onPostSolve(float pMaxImpulse) {
+    @Override
+    public void onPostSolve(float pMaxImpulse) {
         if (!this.mIsGrabbed) {
             if (this.mEntity != null) {
                 if (pMaxImpulse > 2f) {
@@ -158,14 +159,38 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         }
     }
 
-	@Override
-	public void onBeginContact(Contact pContact) {
-        ResourceManager.getActivity().runOnUpdateThread(() -> {
-        });
-	}
+    @Override
+    public void onBeginContact(Contact pContact) {
+        if (pContact.getFixtureA().getBody().getUserData() != null) {
+            if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole")) {
+                mGameLevel.mPlayer.mTurretMagnetOn = true;
+                mGameLevel.mPlayer.mBall.setVisible(true);
+                mGameLevel.btnShoot.mIsEnabled = true;
+                DestroyBall();
+            }
+        }
+    }
 
-	@Override
-	public void onEndContact(Contact pContact) {
-	}
+    @Override
+    public void onEndContact(Contact pContact) {
+    }
+    private void DestroyBall(){
+        this.mGameLevel.registerUpdateHandler(this.onCompleteTimeBallInhole);
+    }
+    private final IUpdateHandler onCompleteTimeBallInhole = new IUpdateHandler() {
+        private float mTotalElapsedTime = 1.5f;
+        @Override
+        public void onUpdate(float pSecondsElapsed) {
+            this.mTotalElapsedTime -= pSecondsElapsed;
+            if (mTotalElapsedTime <= 0) {
+                destroy();
+                ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
+            }
+        }
 
+        @Override
+        public void reset() {
+
+        }
+    };
 }
