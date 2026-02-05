@@ -115,8 +115,10 @@ public class SharedResources {
                 "<br><br><b>" + ResourceManager.getContext().getText(R.string.app_productions) + "</b><br>Facundo Javier Immerso." +
                 "<br><br><b><u>" + ResourceManager.getContext().getText(R.string.app_contactinformation) + "</u></b>" +
                 "<br><a href=\"mailto:facuimmerso@gmail.com\">Email CCX Game Studio</a>" +
-                "<br><br><b><u>" + ResourceManager.getContext().getText(R.string.app_sound_title) + "</u></b><br>" + ResourceManager.getContext().getText(R.string.app_sound) +"<br>"+
-                "Crowd clapping.mp3 by CosminPa <a href=\"https://freesound.org/s/445284/\">clapping</a> -- License: Creative Commons 0";
+                "<br><br><b><u>" + ResourceManager.getContext().getText(R.string.app_sound_title) + "</u></b>"
+                +"<br>"+"Crowd clapping by CosminPa <a href=\"https://freesound.org/s/445284/\">Clapping</a>"
+                +"<br>"+"Golf ball by TarynMichele101 <a href=\"https://freesound.org/s/592974/\">Golf ball</a>"
+                +"<br>"+"Golf ball hit by jittels <a href=\"https://freesound.org/s/366596/\">Golf ball hit</a>";
 
         return Html.fromHtml(htmlMessage, Html.FROM_HTML_MODE_LEGACY);
     }

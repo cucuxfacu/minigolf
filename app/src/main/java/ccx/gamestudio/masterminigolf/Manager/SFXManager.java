@@ -27,6 +27,7 @@ public class SFXManager
 	private static Sound mWood;
 	private static Sound mTankEngine;
 	private static Sound mcoin;
+	private static Sound mBallCup;
 	private static Sound mWaterSplash;
 	private static Sound mIntro;
 	
@@ -83,10 +84,6 @@ public class SFXManager
 			mWood = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "wood.mp3");
 		} catch (final IOException e) { Debug.e(e); }
 
-		try {mTankEngine = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "TankEngine.mp3");
-			mTankEngine.setLooping(true);
-
-		} catch (final IOException e) {	Debug.e(e);	}
 
 		try {mcoin = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "coins.mp3");
 		} catch (final IOException e) {	Debug.e(e);}
@@ -101,6 +98,10 @@ public class SFXManager
 		}
 		catch (final IOException e) { Debug.e(e); }
 
+        try {
+            mBallCup = SoundFactory.createSoundFromAsset(ResourceManager.getActivity().getSoundManager(), ResourceManager.getActivity(), "golfballcup.mp3");
+        } catch (final IOException e) { Debug.e(e); }
+
 	}
 	
 	// ====================================================
@@ -112,7 +113,8 @@ public class SFXManager
         mCrowdClapping.setVolume(pVolume);
 		mShoot.setVolume(pVolume);
 		mWood.setVolume(pVolume);
-		mTankEngine.setVolume(pVolume);
+		mcoin.setVolume(pVolume);
+		mBallCup.setVolume(pVolume);
 	}
 	
 	public static boolean isSoundMuted() {
@@ -243,42 +245,21 @@ public class SFXManager
 		playSound(mcoin,pRate,pVolume);
 	}
 
+    public static void playBallCup(final float pRate, final float pVolume) {
+        playSound(mBallCup,pRate,pVolume);
+    }
+
+
 	public static void playWaterSplash(float pRate, float pVolume) {
 		playSound(mWaterSplash,pRate,pVolume);
 	}
 
 	public static void PlayIntro() {
-
         mIntro.setVolume(1f);
 		mIntro.setRate(1f);
 		mIntro.play();
 	}
 
-	public static void playTankEngine(final float pVolume, final float pRate) {
-		if(!SharedResources.getBooleanFromSharedPreferences(SharedResources.SHARED_PREFS_SOUNDS_ENGINE_TANK)) {
-			playSoundTank(mTankEngine,pRate,pVolume);
-			SharedResources.writeBooleanToSharedPreferences(SharedResources.SHARED_PREFS_SOUNDS_ENGINE_TANK, true);
-		}
-	}
-	private static void playSoundTank(final Sound pSound, final float pRate, final float pVolume) {
-		if (SFXManager.isSoundMuted()) return;
-		pSound.setRate(pRate);
-		pSound.setVolume(pVolume);
-		pSound.onMasterVolumeChanged(1f);
-		pSound.setLooping(true);
-		pSound.play();
-	}
-	public static void IncrementTankEngine(final float pVolume, final float pRate) {
-		IncrementSoundTank(mTankEngine, pVolume, pRate);
-	}
-
-	public static void StopSoundTank() {
-		if (SFXManager.isSoundMuted()) return;
-		mTankEngine.setRate(0);
-		mTankEngine.setVolume(0);
-		mTankEngine.setLooping(false);
-		mTankEngine.stop();
-	}
 	private static void playSound(final Sound pSound, final float pRate, final float pVolume) {
 		if(SFXManager.isSoundMuted()) return;
 		pSound.setRate(pRate);
@@ -286,9 +267,4 @@ public class SFXManager
 		pSound.play();
 	}
 
-	private static void IncrementSoundTank(final Sound pSound, final float pVolume, final float pRate) {
-		if(SFXManager.isSoundMuted()) return;
-		pSound.setVolume(pVolume);
-		pSound.setRate(pRate);
-	}
 }

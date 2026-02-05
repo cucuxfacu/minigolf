@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="MiniGolf">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-02-05T10:31:23.845928900Z">
+        <DropdownSelection timestamp="2026-02-05T18:15:31.494504100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=AYAV6R3921009276" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\immer\.android\avd\Pixel_9_Pro_XL.avd" />
             </handle>
           </Target>
         </DropdownSelection>

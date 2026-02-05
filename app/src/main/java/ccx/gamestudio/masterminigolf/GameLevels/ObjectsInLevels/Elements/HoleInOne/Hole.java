@@ -38,7 +38,8 @@ public class Hole extends PhysObject<Sprite> {
     public Hole(float pX, float pY, GameLevel pGameLevel) {
         this.mGameLevel = pGameLevel;
 
-        mHoleSprite = new Sprite(pX, pY+10f, GameObjectsHoleIOne.mHoleInOne,  ResourceManager.getActivity().getVertexBufferObjectManager());
+        mHoleSprite = new Sprite(pX, pY, GameObjectsHoleIOne.mHoleInOne,  ResourceManager.getActivity().getVertexBufferObjectManager());
+        mHoleSprite.setZIndex(999);
 
         final float width = mHoleSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
         final float height = mHoleSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
@@ -57,7 +58,7 @@ public class Hole extends PhysObject<Sprite> {
 
 
         pGameLevel.attachChild(mHoleSprite);
-
+        //this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
     }
 
 
@@ -68,11 +69,12 @@ public class Hole extends PhysObject<Sprite> {
             {
                 if (this.mGameLevel.mIsLevelSettled) {
                     mGameLevel.ballEnteredHole = true;
+
                     if(!isSound)
                     {
                         isSound = true;
                         SFXManager.playCrowdClap(1,0.25f);
-
+                        mGameLevel.addPointsToScore(this.mEntity, 1);
                     }
                 }
             }

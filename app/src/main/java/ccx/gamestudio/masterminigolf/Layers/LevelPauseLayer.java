@@ -41,12 +41,13 @@ public class LevelPauseLayer extends ManagedLayer {
 	// VARIABLES
 	// ====================================================
 	public GameLevel mCurrentLevel;
-	private boolean mIsGoingToRestartLevel = false;
-	private boolean mIsGoingToNextLevel = false;
 	private boolean mIsGoingBackToLevel = true;
     private  Rectangle fadableBGRect;
     private Sprite mLayerBG;
 	private boolean howIsTheSound;
+    private Text mMainText;
+    public int msgShow = 0;
+    public  String txtMensajeParaDetalle ="";
 
 	// ====================================================
 	// UPDATE HANDLERS
@@ -111,7 +112,7 @@ public class LevelPauseLayer extends ManagedLayer {
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
 
         fadableBGRect = new Rectangle(0,0, ResourceManager.getInstance().cameraWidth, ResourceManager.getInstance().cameraHeight, ResourceManager.getActivity().getVertexBufferObjectManager());
-		fadableBGRect.setColor(0f, 0f, 0f, 0.6f);
+        fadableBGRect.setColor(0.55f, 0.40f, 0.20f, 0.55f);
         this.attachChild(fadableBGRect);
 
         this.mLayerBG = new Sprite(0f, ResourceManager.getInstance().cameraHeight / 2f, MenuResourceManager.layerGeneric, ResourceManager.getActivity().getVertexBufferObjectManager());
@@ -119,7 +120,7 @@ public class LevelPauseLayer extends ManagedLayer {
         mLayerBG.setAlpha(0);
         this.mLayerBG.setScale(1f);
 
-		Text mMainText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_pause), ResourceManager.getActivity().getVertexBufferObjectManager());
+        mMainText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_pause), ResourceManager.getActivity().getVertexBufferObjectManager());
 		mMainText.setPosition(mLayerBG.getWidth() / 2f, mLayerBG.getHeight() / 2f + 250f);
         mMainText.setScale(2.5f);
         mLayerBG.attachChild(mMainText);
@@ -152,9 +153,17 @@ public class LevelPauseLayer extends ManagedLayer {
 	public void onShowLayer() {
 		//ResourceManager.getActivity().ShowAds();
 		ResourceManager.getInstance().engine.registerUpdateHandler(this.mSlideInUpdateHandler);
-		this.mIsGoingToRestartLevel = false;
-		this.mIsGoingToNextLevel = false;
-		this.mIsGoingBackToLevel = true;
+        mMainText.setText("");
+
+        switch (msgShow) {
+            case 0:
+                mMainText.setText(ResourceManager.getContext().getText(R.string.app_pause));
+                break;
+            case 1:
+                mMainText.setText(ResourceManager.getContext().getText(R.string.app_failed));
+                mMainText.setPosition(mLayerBG.getWidth() / 2f, mLayerBG.getHeight() / 2f + 450f);
+                break;
+        }
 
 		howIsTheSound = SFXManager.isSoundMuted();
 
@@ -162,7 +171,6 @@ public class LevelPauseLayer extends ManagedLayer {
 		{
 			SFXManager.setSoundMuted(true);
 		}
-
 	}
 	
 	@Override

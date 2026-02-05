@@ -129,6 +129,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     public Hole currentHole;
     float margin = 400f;
     public boolean ballEnteredHole = false;
+    public int checkFailed =0;
     // ====================================================
 	// UPDATE HANDLERS
 	// ====================================================
@@ -203,7 +204,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
     private final IUpdateHandler holeEventHandler = new IUpdateHandler() {
         private float holeTimer = 0f;
-
         @Override
         public void onUpdate(float pSecondsElapsed) {
             if (ballEnteredHole) {
@@ -247,13 +247,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 					this.setRotation(this.getRotation() - (this.getRotation() * pSecondsElapsed * 2f));
 					if(this.getAlpha() <= 0.1f) {
 						this.setVisible(false);
-						ResourceManager.getActivity().runOnUpdateThread(new Runnable() {
-							@Override
-							public void run() {
-								ThisText.detachSelf();
-								GameLevel.this.ScoreTextPool.recyclePoolItem(ThisText);
-							}
-						});
+						ResourceManager.getActivity().runOnUpdateThread(() -> {
+                            ThisText.detachSelf();
+                            GameLevel.this.ScoreTextPool.recyclePoolItem(ThisText);
+                        });
 					}
 				}
 			};
@@ -272,7 +269,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	// ====================================================
 	public void addPointsToScore(final IEntity pEntity, final int pPoints) {
 		this.CurrentScore += pPoints;
-		this.ScoreText.setText(mON_SCREEN_SCORE_PRETEXT.toString() + this.CurrentScore);
+		this.ScoreText.setText(mON_SCREEN_SCORE_PRETEXT + this.CurrentScore);
 		final Text scorePopup = this.ScoreTextPool.obtainPoolItem();
 		scorePopup.setText(String.valueOf(pPoints));
 		scorePopup.setPosition(pEntity.getX(), pEntity.getY());
@@ -282,24 +279,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 			this.attachChild(scorePopup);
 		}
 	}
-	
-	public void createExplosion(final Vector2 pBombPos, final float pExplosionConstant) {
-		final Iterator<Body> bodies = this.mPhysicsWorld.getBodies();
-		while(bodies.hasNext()) {
-			final Body b = bodies.next();
-			if(b.getType() == BodyType.DynamicBody) {
-				final Vector2 BodyPos = Vector2Pool.obtain(b.getWorldCenter());
-				final Vector2 NormalizedDirectionFromBombToBody = Vector2Pool.obtain(BodyPos).sub(pBombPos).nor();
-				final float dist = BodyPos.dst(pBombPos);
-				final Vector2 ForceBasedOnDist = Vector2Pool.obtain(NormalizedDirectionFromBombToBody).mul(pExplosionConstant * (1f / dist));
-				b.applyForce(ForceBasedOnDist, b.getWorldCenter());
-				Vector2Pool.recycle(ForceBasedOnDist);
-				Vector2Pool.recycle(NormalizedDirectionFromBombToBody);
-				Vector2Pool.recycle(BodyPos);
-			}
-		}
-	}
-	
+
 	public void disposeLevel() {
 		this.mCamera.setChaseEntity(null);
 		final HUD oldHUD = this.mCamera.getHUD();
@@ -345,8 +325,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	@Override
 	public void onLevelFailed() {
 		if(this.mHasCompletionTimerRun) {
-			// player lost - restart level
-			//this.restartLevel();
+
 		} else {
 			GameLevel.this.registerUpdateHandler(this.onCompletionTimer);
 		}
@@ -359,7 +338,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         currentHole = new Hole(randomX, randomY, this);
     }
 
-
+    public void onBallFailed()
+    {
+        LevelPauseLayer.getInstance().msgShow = checkFailed;
+        SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
+    }
     @Override
 	public void onLoadLevel() {
 		GameManager.setGameLevel(this);
@@ -415,21 +398,23 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 			public void onLoad() {
 				GameLevel.this.mCamera.setHUD(new HUD());
 				GameLevel.this.mCamera.getHUD().setVisible(false);
-				GameLevel.this.ScoreText = new Text(GameLevel.this.mCamera.getWidth() / 2f, 0f, ResourceManager.fontDefault48, mON_SCREEN_SCORE_PRETEXT + "0      ", ResourceManager.getActivity().getVertexBufferObjectManager());
-				GameLevel.this.ScoreText.setPosition(GameLevel.this.mCamera.getWidth() / 2f, GameLevel.this.mCamera.getHeight() - (GameLevel.this.ScoreText.getHeight() / 2f));
-				GameLevel.this.ScoreText.setScale(0.75f);
-				GameLevel.this.ScoreText.setAlpha(0.85f);
+				GameLevel.this.ScoreText = new Text(0, 0f, ResourceManager.fontDefault48,  "0",255, ResourceManager.getActivity().getVertexBufferObjectManager());
+				GameLevel.this.ScoreText.setPosition(GameLevel.this.mCamera.getWidth() / 2f, GameLevel.this.mCamera.getHeight() / 2);
+				GameLevel.this.ScoreText.setScale(10f);
+				GameLevel.this.ScoreText.setAlpha(0.7f);
+                GameLevel.this.mCamera.getHUD().attachChild(GameLevel.this.ScoreText);
 
                 final GrowButton PauseButton = new GrowButton(MenuResourceManager.btnPause.getWidth() / 2f + 50f, GameLevel.this.mCamera.getHeight() - (MenuResourceManager.btnPause.getHeight() / 2f), MenuResourceManager.btnPause) {
 					@Override
 					public void onClick() {
-						SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
+                        LevelPauseLayer.getInstance().msgShow = 0;
+                        SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
 					}
 				};
                 PauseButton.setAlpha(0.75f);
                 PauseButton.setScales(0.75f, 0.80f);
 
-				GameLevel.this.mCamera.getHUD().attachChild(GameLevel.this.ScoreText);
+
 				GameLevel.this.mCamera.getHUD().attachChild(PauseButton);
 				GameLevel.this.mCamera.getHUD().registerTouchArea(PauseButton);
 				final Text LevelIndexText = new Text(GameLevel.this.mCamera.getWidth() / 2f, GameLevel.this.mCamera.getHeight() / 2f, ResourceManager.fontDefault48, mLEVEL_NUMBER_PRETEXT, ResourceManager.getActivity().getVertexBufferObjectManager());

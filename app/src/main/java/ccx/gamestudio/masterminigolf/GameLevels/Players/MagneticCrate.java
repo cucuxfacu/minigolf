@@ -22,6 +22,7 @@ import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
+import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 
 
@@ -32,8 +33,8 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     // ====================================================;
     private static final float mCRATE_ANGULAR_DAMPING = 0.4f;
     public static float mCRATE_DENSITY = 100;
-    private static final float mCRATE_ELASTICITY = 0.0f;
-    private static final float mCRATE_FRICTION = 0.95f;
+    private static final float mCRATE_ELASTICITY = 0.2f;
+    private static final float mCRATE_FRICTION = 0.2f;
     private static final int mMAX_SOUNDS_PER_SECOND = 5;
     private static final float mMINIMUM_SECONDS_BETWEEN_SOUNDS = 1f / mMAX_SOUNDS_PER_SECOND;
     private static final float mScaleBall = 0.08f;
@@ -49,8 +50,6 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     private float mBodySpeed = 0f;
     private float secondsSinceLastSound = 0.5f;
     private final Sprite mBallSprite;
-    private float force = 0;
-    private boolean animationDestroy = false;
     private Body crateBody;
 
     private boolean mOnPostSolve;
@@ -87,7 +86,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         this.mGameLevel.mMagneticObjects.add(this);
 
         this.mGameLevel.mCrateLayer.attachChild(mBallSprite);
-        this.mGameLevel.mCrateLayer.setZIndex(999);
+        this.mGameLevel.mCrateLayer.setZIndex(998);
         this.mEntity.setScale(mScaleBall);
         this.mIsGrabbed = true;
         this.mBody.setActive(false);
@@ -122,14 +121,15 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
             if (SplashWater.getInstance().waterContact) {
                 SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
+                CompleteSplashWater();
+                this.destroy();
+            }else {
+                mGameLevel.mPlayer.mTurretMagnetOn = true;
+                mGameLevel.mPlayer.mBall.setVisible(true);
+                mGameLevel.btnShoot.mIsEnabled = true;
+                this.destroy();
+                ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
             }
-
-            mGameLevel.mPlayer.mTurretMagnetOn = true;
-            mGameLevel.mPlayer.mBall.setVisible(true);
-            mGameLevel.btnShoot.mIsEnabled = true;
-            this.destroy();
-
-            ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
         }
         mBodySpeed = 0f;
         if (secondsSinceLastSound < mMINIMUM_SECONDS_BETWEEN_SOUNDS)
@@ -166,6 +166,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                 mGameLevel.mPlayer.mTurretMagnetOn = true;
                 mGameLevel.mPlayer.mBall.setVisible(true);
                 mGameLevel.btnShoot.mIsEnabled = true;
+                SFXManager.playBallCup(1,0.5f);
                 DestroyBall();
             }
         }
@@ -177,14 +178,34 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     private void DestroyBall(){
         this.mGameLevel.registerUpdateHandler(this.onCompleteTimeBallInhole);
     }
+    private void CompleteSplashWater(){
+        this.mGameLevel.registerUpdateHandler(this.onCompleteSplashWater);
+    }
     private final IUpdateHandler onCompleteTimeBallInhole = new IUpdateHandler() {
-        private float mTotalElapsedTime = 1.5f;
+        private float mTotalElapsedTime = 1.9f;
         @Override
         public void onUpdate(float pSecondsElapsed) {
             this.mTotalElapsedTime -= pSecondsElapsed;
             if (mTotalElapsedTime <= 0) {
                 destroy();
                 ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
+            }
+        }
+
+        @Override
+        public void reset() {
+
+        }
+    };
+
+    private final IUpdateHandler onCompleteSplashWater = new IUpdateHandler() {
+        private float mTotalElapsedTime = 1.222f;
+        @Override
+        public void onUpdate(float pSecondsElapsed) {
+            this.mTotalElapsedTime -= pSecondsElapsed;
+            if (mTotalElapsedTime <= 0) {
+                mGameLevel.checkFailed = 1;
+                mGameLevel.onBallFailed();
             }
         }
 

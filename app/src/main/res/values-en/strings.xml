@@ -9,4 +9,5 @@
     <string name="app_sound">Golf ball hit.wav by jittels -- https://freesound.org/s/366596/ -- License: Attribution NonCommercial 3.0</string>
     <string name="app_sound_title">Contribution</string>
     <string name="app_pause">IN PAUSE</string>
+    <string name="app_failed">YOU FAILED</string>
 </resources>
