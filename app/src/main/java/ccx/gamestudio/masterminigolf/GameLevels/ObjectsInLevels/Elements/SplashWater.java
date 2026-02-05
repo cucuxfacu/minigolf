@@ -5,8 +5,10 @@ import org.andengine.entity.sprite.AnimatedSprite;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
+import ccx.gamestudio.masterminigolf.Layers.FailedLevelLayer;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
+import ccx.gamestudio.masterminigolf.Manager.SceneManager;
 
 
 public class SplashWater {
@@ -32,6 +34,7 @@ public class SplashWater {
         getInstance().mWaterSplash.animate(30, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
+
             }
 
             @Override
@@ -44,6 +47,7 @@ public class SplashWater {
                     pAnimatedSprite.detachSelf();
                     if(!pAnimatedSprite.isDisposed()) {
                         SplashWater.getInstance().waterContact = true;
+                        SceneManager.getInstance().showLayer(FailedLevelLayer.getInstance(mGameLevel), false, true, true);
                     }
                 });
             }

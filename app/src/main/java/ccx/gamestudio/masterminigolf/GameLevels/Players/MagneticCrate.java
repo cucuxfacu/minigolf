@@ -20,9 +20,11 @@ import org.andengine.util.math.MathUtils;
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
+import ccx.gamestudio.masterminigolf.Layers.FailedLevelLayer;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
+import ccx.gamestudio.masterminigolf.Manager.SceneManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 
 
@@ -121,7 +123,6 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
             if (SplashWater.getInstance().waterContact) {
                 SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
-                CompleteSplashWater();
                 this.destroy();
             }else {
                 mGameLevel.mPlayer.mTurretMagnetOn = true;
@@ -178,9 +179,6 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     private void DestroyBall(){
         this.mGameLevel.registerUpdateHandler(this.onCompleteTimeBallInhole);
     }
-    private void CompleteSplashWater(){
-        this.mGameLevel.registerUpdateHandler(this.onCompleteSplashWater);
-    }
     private final IUpdateHandler onCompleteTimeBallInhole = new IUpdateHandler() {
         private float mTotalElapsedTime = 1.9f;
         @Override
@@ -198,20 +196,4 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         }
     };
 
-    private final IUpdateHandler onCompleteSplashWater = new IUpdateHandler() {
-        private float mTotalElapsedTime = 1.222f;
-        @Override
-        public void onUpdate(float pSecondsElapsed) {
-            this.mTotalElapsedTime -= pSecondsElapsed;
-            if (mTotalElapsedTime <= 0) {
-                mGameLevel.checkFailed = 1;
-                mGameLevel.onBallFailed();
-            }
-        }
-
-        @Override
-        public void reset() {
-
-        }
-    };
 }

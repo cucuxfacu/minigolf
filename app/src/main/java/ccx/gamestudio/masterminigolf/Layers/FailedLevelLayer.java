@@ -15,23 +15,23 @@ import ccx.gamestudio.masterminigolf.Manager.SceneManager;
 import ccx.gamestudio.masterminigolf.R;
 
 
-public class LevelPauseLayer extends ManagedLayer {
+public class FailedLevelLayer extends ManagedLayer {
 	
 	// ====================================================
 	// CONSTANTS
 	// ====================================================
-	private static final LevelPauseLayer INSTANCE = new LevelPauseLayer();
+	private static final FailedLevelLayer INSTANCE = new FailedLevelLayer();
 	private static float mScale= 3f;
-	private static Color mColor = new Color(0.212f, 0.275f, 0.212f);
+	private static Color mColor = new Color(0.55f, 0.40f, 0.20f, 0.55f);
 
 	// ====================================================
 	// INSTANCE GETTERS
 	// ====================================================
-	public static LevelPauseLayer getInstance() {
+	public static FailedLevelLayer getInstance() {
 		return INSTANCE;
 	}
 	
-	public static LevelPauseLayer getInstance(final GameLevel pCurrentLevel) {
+	public static FailedLevelLayer getInstance(final GameLevel pCurrentLevel) {
 		INSTANCE.setCurrentLevel(pCurrentLevel);
 		return INSTANCE;
 	}
@@ -52,8 +52,8 @@ public class LevelPauseLayer extends ManagedLayer {
 	IUpdateHandler mSlideInUpdateHandler = new IUpdateHandler() {
 		@Override
 		public void onUpdate(final float pSecondsElapsed) {
-            if(LevelPauseLayer.this.mLayerBG.getY() > 0f) {
-                LevelPauseLayer.this.mLayerBG.setY(Math.max(LevelPauseLayer.this.mLayerBG.getY() - (pSecondsElapsed * mSLIDE_PIXELS_PER_SECONDS), 0f));
+            if(FailedLevelLayer.this.mLayerBG.getY() > 0f) {
+                FailedLevelLayer.this.mLayerBG.setY(Math.max(FailedLevelLayer.this.mLayerBG.getY() - (pSecondsElapsed * mSLIDE_PIXELS_PER_SECONDS), 0f));
             } else {
                 ResourceManager.getInstance().engine.unregisterUpdateHandler(this);
             }
@@ -65,18 +65,19 @@ public class LevelPauseLayer extends ManagedLayer {
 	IUpdateHandler mSlideOutUpdateHandler = new IUpdateHandler() {
 		@Override
 		public void onUpdate(final float pSecondsElapsed) {
-            if(LevelPauseLayer.this.mLayerBG.getY() < ((ResourceManager.getInstance().cameraHeight / 2f) + (LevelPauseLayer.this.mLayerBG.getHeight() / 2f))) {
-                LevelPauseLayer.this.mLayerBG.setY(Math.min(LevelPauseLayer.this.mLayerBG.getY() + (pSecondsElapsed * mSLIDE_PIXELS_PER_SECONDS), (ResourceManager.getInstance().cameraHeight / 2f) + (LevelPauseLayer.this.mLayerBG.getHeight() / 2f)));
+            if(FailedLevelLayer.this.mLayerBG.getY() < ((ResourceManager.getInstance().cameraHeight / 2f) + (FailedLevelLayer.this.mLayerBG.getHeight() / 2f))) {
+                FailedLevelLayer.this.mLayerBG.setY(Math.min(FailedLevelLayer.this.mLayerBG.getY() + (pSecondsElapsed * mSLIDE_PIXELS_PER_SECONDS), (ResourceManager.getInstance().cameraHeight / 2f) + (FailedLevelLayer.this.mLayerBG.getHeight() / 2f)));
 			} else {
                 ResourceManager.getInstance().engine.unregisterUpdateHandler(this);
                 SceneManager.getInstance().hideLayer();
 
-                if (LevelPauseLayer.this.mIsGoingBackToLevel) {
+                if (FailedLevelLayer.this.mIsGoingBackToLevel) {
+                    mCurrentLevel.restartLevel();
                     ActivateSound();
                     return;
                 }
 
-                LevelPauseLayer.this.mCurrentLevel.disposeLevel();
+                FailedLevelLayer.this.mCurrentLevel.disposeLevel();
                 ActivateSound();
                 SceneManager.getInstance().showMainMenu();
             }
@@ -111,7 +112,7 @@ public class LevelPauseLayer extends ManagedLayer {
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
 
         fadableBGRect = new Rectangle(0,0, ResourceManager.getInstance().cameraWidth, ResourceManager.getInstance().cameraHeight, ResourceManager.getActivity().getVertexBufferObjectManager());
-        fadableBGRect.setColor(0.55f, 0.40f, 0.20f, 0.55f);
+        fadableBGRect.setColor(mColor);
         this.attachChild(fadableBGRect);
 
         this.mLayerBG = new Sprite(0f, ResourceManager.getInstance().cameraHeight / 2f, MenuResourceManager.layerGeneric, ResourceManager.getActivity().getVertexBufferObjectManager());
@@ -119,16 +120,16 @@ public class LevelPauseLayer extends ManagedLayer {
         mLayerBG.setAlpha(0);
         this.mLayerBG.setScale(1f);
 
-        mMainText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_pause),255, ResourceManager.getActivity().getVertexBufferObjectManager());
-		mMainText.setPosition(mLayerBG.getWidth() / 2f, mLayerBG.getHeight() / 2f + 250f);
+        mMainText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_failed),255, ResourceManager.getActivity().getVertexBufferObjectManager());
+		mMainText.setPosition(mLayerBG.getWidth() / 2f, mLayerBG.getHeight() / 2f + 450f);
         mMainText.setScale(2.5f);
         mLayerBG.attachChild(mMainText);
 
-		final GrowButtonExit btnBackToMenu = new GrowButtonExit(mLayerBG.getWidth() / 2f -250, mLayerBG.getHeight() / 2f -250, MenuResourceManager.btnReturnHome) {
+		final GrowButtonExit btnBackToMenu = new GrowButtonExit(mLayerBG.getWidth() / 2f - 250, mLayerBG.getHeight() / 2f - 250, MenuResourceManager.btnReturnHome) {
 			@Override
 			public void onClick() {
-                LevelPauseLayer.this.mIsGoingBackToLevel = false;
-				LevelPauseLayer.this.onHideLayer();
+                FailedLevelLayer.this.mIsGoingBackToLevel = false;
+				FailedLevelLayer.this.onHideLayer();
 			}
 		};
         mLayerBG.attachChild(btnBackToMenu);
@@ -137,8 +138,8 @@ public class LevelPauseLayer extends ManagedLayer {
         final GrowButtonExit btnBackToLevel = new GrowButtonExit(btnBackToMenu.getX() + 350, btnBackToMenu.getY(), MenuResourceManager.btnPlayGame) {
             @Override
             public void onClick() {
-                LevelPauseLayer.this.mIsGoingBackToLevel = true;
-                LevelPauseLayer.this.onHideLayer();
+                FailedLevelLayer.this.mIsGoingBackToLevel = true;
+                FailedLevelLayer.this.onHideLayer();
             }
         };
         mLayerBG.attachChild(btnBackToLevel);

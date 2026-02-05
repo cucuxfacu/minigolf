@@ -29,6 +29,7 @@ import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsHoleIOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
 import ccx.gamestudio.masterminigolf.Layers.ExitGameLayer;
+import ccx.gamestudio.masterminigolf.Layers.FailedLevelLayer;
 import ccx.gamestudio.masterminigolf.Layers.LevelPauseLayer;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfActivity;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
@@ -97,6 +98,7 @@ public class ResourceManager {
 		LoadGameResources();
 		ExitGameLayer.getInstance().onLoadLayer();
         LevelPauseLayer.getInstance().onLoadLayer();
+        FailedLevelLayer.getInstance().onLoadLayer();
 
 		/*LevelWonLayer.getInstance().onLoadLayer();
 		LevelPauseLayer.getInstance().onLoadLayer();

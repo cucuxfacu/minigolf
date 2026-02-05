@@ -324,12 +324,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	
 	@Override
 	public void onLevelFailed() {
-		if(this.mHasCompletionTimerRun) {
-
-		} else {
-			GameLevel.this.registerUpdateHandler(this.onCompletionTimer);
-		}
-	}
+        if (!this.mHasCompletionTimerRun) {
+            GameLevel.this.registerUpdateHandler(this.onCompletionTimer);
+        }
+    }
 
     public void spawnGreenAndHole() {
         float randomX = MathUtils.random(margin, 2400f - margin);
@@ -340,8 +338,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
     public void onBallFailed()
     {
-        LevelPauseLayer.getInstance().msgShow = checkFailed;
-        SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
+
     }
     @Override
 	public void onLoadLevel() {
@@ -407,7 +404,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                 final GrowButton PauseButton = new GrowButton(MenuResourceManager.btnPause.getWidth() / 2f + 50f, GameLevel.this.mCamera.getHeight() - (MenuResourceManager.btnPause.getHeight() / 2f), MenuResourceManager.btnPause) {
 					@Override
 					public void onClick() {
-                        LevelPauseLayer.getInstance().msgShow = 0;
                         SceneManager.getInstance().showLayer(LevelPauseLayer.getInstance(GameLevel.this), false, true, true);
 					}
 				};
