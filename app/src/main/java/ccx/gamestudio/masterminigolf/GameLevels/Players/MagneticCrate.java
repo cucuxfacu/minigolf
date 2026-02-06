@@ -33,13 +33,13 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     // ====================================================
     // CONSTANTS
     // ====================================================;
-    private static final float mCRATE_ANGULAR_DAMPING = 0.4f;
+    private static final float mCRATE_ANGULAR_DAMPING = 0.05f;
     public static float mCRATE_DENSITY = 100;
     private static final float mCRATE_ELASTICITY = 0.2f;
-    private static final float mCRATE_FRICTION = 0.2f;
+    private static final float mCRATE_FRICTION = 0f;
     private static final int mMAX_SOUNDS_PER_SECOND = 5;
     private static final float mMINIMUM_SECONDS_BETWEEN_SOUNDS = 1f / mMAX_SOUNDS_PER_SECOND;
-    private static final float mScaleBall = 0.08f;
+    private static final float mScaleBall = 0.25f;
 
     // ====================================================
     // VARIABLES
@@ -68,8 +68,10 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         this.mBallSprite = new Sprite(pX, pY, mBallCreation, ResourceManager.getActivity().getVertexBufferObjectManager()) {
             protected void onManagedUpdate(final float pSecondsElapsed) {
                 super.onManagedUpdate(pSecondsElapsed);
+                Vector2 vel = MagneticCrate.this.mBody.getLinearVelocity();
                 float rotation = MathUtils.radToDeg((float) Math.atan2(-MagneticCrate.this.mBody.getLinearVelocity().y, MagneticCrate.this.mBody.getLinearVelocity().x));
                 this.setRotation(rotation);
+
                 if (MagneticCrate.this.mBody != null) {
                     MagneticCrate.this.mGameLevel.reportBaseBodySpeed(MagneticCrate.this.mBody.getLinearVelocity().len2());
                 }

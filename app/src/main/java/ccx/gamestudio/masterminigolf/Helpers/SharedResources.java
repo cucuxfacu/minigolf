@@ -41,6 +41,7 @@ public class SharedResources {
     public static final String SHARED_PREFS_PRACTICA_CHECK = "practicacheck";
     public static final String SHARED_PREFS_PLAYER_SELECTED = "playerselected";
     public static final String SHARED_PREFS_BALL_SELECTED = "ballselected";
+    public static final String SHARED_PREFS_SCENE_SELECTED = "sceneselected";
     public static final float SCALE_BACKGROUND_MENU = 1.07f;
 
 
@@ -137,6 +138,14 @@ public class SharedResources {
 
     public static int getSelectedBall() {
         return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_BALL_SELECTED);
+    }
+
+    public static void setSelectedScene(int index) {
+        SharedResources.writeIntToSharedPreferences(SharedResources.SHARED_PREFS_SCENE_SELECTED, index);
+    }
+
+    public static int getSelectedScene() {
+        return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_SCENE_SELECTED);
     }
 
     public static void setHighScorePlayer(int index) {

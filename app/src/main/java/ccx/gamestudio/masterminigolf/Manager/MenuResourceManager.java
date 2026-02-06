@@ -61,6 +61,7 @@ public class MenuResourceManager {
     public static List<TextureRegion> mPlayers;
     public static List<TextureRegion> mListBall;
     public static List<TextureRegion> mListHeads;
+    public static List<TextureRegion> mListScene;
     // ======================== END ================= //
 
     public void LoadImgMenu() {
@@ -88,7 +89,6 @@ public class MenuResourceManager {
 
         LayerExit();
         LayerFailed();
-        LoadBallsMenu();
         LoadHeadsMenu();
         LoadSelectablePlayers();
         LoadSelectableBalls();
@@ -115,13 +115,6 @@ public class MenuResourceManager {
 
     }
 
-    public void LoadBallsMenu(){
-        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/GUI/Balls/");
-        if (btnBalls == null) btnBalls = ResourceManager.getInstance().getLimitableTR("ball.png", mTransparentTextureOption);
-
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
-    }
 
     public void LoadSelectablePlayers(){
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
@@ -139,16 +132,16 @@ public class MenuResourceManager {
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }
+
     public void LoadSelectableBalls(){
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Balls/");
-        int mBallsPlayers = 1;
+        int mBallsPlayers = 3;
         TextureRegion mBallsTextureRegion;
 
-        ///Cargamos todos los tanques
         mListBall = new ArrayList<>();
         for (int i = 0; i < mBallsPlayers; i++) {
-            BitmapTextureAtlas mBallsTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 256, 256, mTransparentTextureOption);
+            BitmapTextureAtlas mBallsTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 98, 98, mTransparentTextureOption);
             mBallsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBallsTextureAtlas, ResourceManager.getActivity(), "ball" + i + ".png", 0, 0);
             mBallsTextureAtlas.load();
             mListBall.add(mBallsTextureRegion);

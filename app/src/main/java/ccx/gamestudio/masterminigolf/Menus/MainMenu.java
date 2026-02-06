@@ -195,34 +195,29 @@ public class MainMenu extends ManagedMenuScene {
         GrowButton selectPlayerButton = getGrowButton(challengeButton.getX() + 350f, challengeButton.getY(), MenuResourceManager.mListHeads.get(SharedResources.getSelectedPlayer()), new SelectPlayerMenu());
         this.registerTouchArea(selectPlayerButton);
 
-        GrowButton selectBallButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, MenuResourceManager.btnBalls, new SelectBallMenu());
+        GrowButton selectBallButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, MenuResourceManager.mListBall.get(SharedResources.getSelectedBall()), new SelectBallMenu());
         this.registerTouchArea(selectBallButton);
 
-		GrowButton selectTrophyButton = new GrowButton(selectBallButton.getX() , selectBallButton.getY() - 200f , MenuResourceManager.btnTrophy) {
-			@Override
-			public void onClick() {
-
-			}
-		};
-		this.registerTouchArea(selectTrophyButton);
+//		GrowButton selectLevelButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, MenuResourceManager.mListScene.get(SharedResources.getSelectedScene()), new SelectBallMenu());
+//		this.registerTouchArea(selectLevelButton);
 
 		///About button
-		GrowButton mAbout = new GrowButton(selectTrophyButton.getX(), selectTrophyButton.getY() - 200f, MenuResourceManager.btnInformacion) {
-			@Override
-			public void onClick() {
-				ResourceManager.getActivity().runOnUiThread(() -> {
-					final AlertDialog.Builder builder = new AlertDialog.Builder(ResourceManager.getActivity())
-							.setIcon(R.mipmap.ic_launcher)
-							.setTitle(ResourceManager.getContext().getString(R.string.app_name))
-							.setMessage(SharedResources.getSpanned()).setPositiveButton(ResourceManager.getContext().getText(R.string.app_back), (dialog, id) -> {
-							});
-					final AlertDialog alert = builder.create();
-					alert.show();
-					((TextView) alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-				});
-			}
-		};
-		this.registerTouchArea(mAbout);
+//		GrowButton mAbout = new GrowButton(selectLevelButton.getX(), selectLevelButton.getY() - 200f, MenuResourceManager.btnInformacion) {
+//			@Override
+//			public void onClick() {
+//				ResourceManager.getActivity().runOnUiThread(() -> {
+//					final AlertDialog.Builder builder = new AlertDialog.Builder(ResourceManager.getActivity())
+//							.setIcon(R.mipmap.ic_launcher)
+//							.setTitle(ResourceManager.getContext().getString(R.string.app_name))
+//							.setMessage(SharedResources.getSpanned()).setPositiveButton(ResourceManager.getContext().getText(R.string.app_back), (dialog, id) -> {
+//							});
+//					final AlertDialog alert = builder.create();
+//					alert.show();
+//					((TextView) alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+//				});
+//			}
+//		};
+//		this.registerTouchArea(mAbout);
 
 //
 //		GrowButton mUser = new GrowButton(ResourceManager.getCamera().getWidth() - 100f, ResourceManager.getCamera().getHeight() - 100f, ResourceManager.btnBlueCircleTTR.getTextureRegion(0)) {
@@ -382,8 +377,6 @@ public class MainMenu extends ManagedMenuScene {
 		this.mHomeMenuScreen.attachChild(exitButton);
 		this.mHomeMenuScreen.attachChild(selectBallButton);
 		this.mHomeMenuScreen.attachChild(selectPlayerButton);
-		this.mHomeMenuScreen.attachChild(selectTrophyButton);
-		this.mHomeMenuScreen.attachChild(mAbout);
 		this.attachChild(this.mHomeMenuScreen);
 
 	}
@@ -397,7 +390,6 @@ public class MainMenu extends ManagedMenuScene {
             }
         };
         Sprite mIconButton = new Sprite(selectButton.getWidth() / 2f, selectButton.getHeight() / 2f, pTextureRegion, ResourceManager.getActivity().getVertexBufferObjectManager());
-
         selectButton.attachChild(mIconButton);
         return selectButton;
     }

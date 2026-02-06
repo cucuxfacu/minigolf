@@ -214,7 +214,7 @@ public class Players implements IUpdateHandler  {
         this.mGrabbedMagneticObject = new MagneticCrate(
                 NewCrateSpawnLocation.x ,
                 NewCrateSpawnLocation.y,
-                0,
+                SharedResources.getSelectedBall(),
                 this.mGameLevel,
                 NewCrateSpawnLocation
         );
@@ -306,8 +306,8 @@ public class Players implements IUpdateHandler  {
 
 
     public void createBall() {
-        this.mBall = new Sprite(0, 0, MenuResourceManager.mListBall.get(0), ResourceManager.getActivity().getVertexBufferObjectManager());
-        mBall.setScale(0.08f);
+        this.mBall = new Sprite(0, 0, MenuResourceManager.mListBall.get(SharedResources.getSelectedBall()), ResourceManager.getActivity().getVertexBufferObjectManager());
+        mBall.setScale(0.25f);
         mBall.setPosition(  this.mPlayer.getX() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_X - 10f, this.mPlayer.getY() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_Y);
         this.mGameLevel.attachChild(mBall);
     }

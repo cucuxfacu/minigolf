@@ -12,6 +12,7 @@ import java.util.List;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.Level;
+import ccx.gamestudio.masterminigolf.Helpers.Scroll3DEffect;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.GrowButton;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
@@ -105,7 +106,6 @@ public class SelectPlayerMenu extends ManagedMenuScene {
         // ============================================================
         // SCROLL POR BOTONES
         // ============================================================
-
         scrollContainer = new Entity(0, 0);
 
         float separation = 150f;
@@ -130,18 +130,13 @@ public class SelectPlayerMenu extends ManagedMenuScene {
             xOffset += player.getWidth() + separation;
         }
 
-        // Centrar el primer jugador
         selectedIndex = SharedResources.getSelectedPlayer();
         if (selectedIndex < 0 || selectedIndex >= playerCenters.size()) {
-            selectedIndex = 0; // fallback por si algo raro pasa
+            selectedIndex = 0;
         }
         centerOnPlayer(selectedIndex);
 
         update3DEffect();
-
-
-        this.mHomeMenuScreen.attachChild(scrollContainer);
-
 
 
         // ============================================================
@@ -208,6 +203,7 @@ public class SelectPlayerMenu extends ManagedMenuScene {
         this.registerTouchArea(btnLeft);
         this.mHomeMenuScreen.attachChild(btnLeft);
 
+        this.mHomeMenuScreen.attachChild(scrollContainer);
         this.attachChild(mHomeMenuScreen);
     }
 
@@ -232,44 +228,14 @@ public class SelectPlayerMenu extends ManagedMenuScene {
     }
 
     private void update3DEffect() {
-
-        float maxDist = 400f; // distancia donde el efecto deja de aplicarse
-
-        for (int i = 0; i < scrollContainer.getChildCount(); i++) {
-
-            Sprite s = (Sprite) scrollContainer.getChildByIndex(i);
-
-            float spriteCenter = s.getX() + scrollContainer.getX();
-            float dist = Math.abs(spriteCenter - mHalfCameraWidth);
-
-            // -------------------------
-            // ALPHA (1.0 → 0.5)
-            // -------------------------
-            float alpha;
-            if (dist >= maxDist) {
-                alpha = 0.5f;
-            } else {
-                float t = dist / maxDist;
-                alpha = 1f - (0.5f * t);
-            }
-            s.setAlpha(alpha);
-
-            // -------------------------
-            // SCALE (1.8 → 1.0)
-            // -------------------------
-            float maxScale = 1.8f;
-            float minScale = 1.2f;
-
-            float scale;
-            if (dist >= maxDist) {
-                scale = minScale;
-            } else {
-                float t = dist / maxDist;
-                scale = maxScale - (t * (maxScale - minScale));
-            }
-
-            s.setScale(scale);
-        }
+        Scroll3DEffect effect = new Scroll3DEffect(
+                mHalfCameraWidth, // centro
+                400f,             // maxDist
+                1.8f,             // maxScale
+                1.2f,             // minScale
+                0.5f              // minAlpha
+        );
+        effect.apply(scrollContainer);
     }
 
     @Override
