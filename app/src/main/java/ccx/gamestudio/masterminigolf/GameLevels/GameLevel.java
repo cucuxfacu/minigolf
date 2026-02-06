@@ -36,6 +36,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Coin;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Bushes;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Mushroom;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Sign;
@@ -128,11 +129,14 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     public Water mWater;
     public GreenLevelOne currentGreen;
     public Hole currentHole;
+    public Coin mCoins;
     float margin = 400f;
     public boolean ballEnteredHole = false;
     public int checkFailed = 0;
     public boolean mIsPractice;
     public boolean isTimeTrial;
+    public int shotsCount = 0;
+
     // ====================================================
 	// UPDATE HANDLERS
 	// ====================================================
@@ -286,7 +290,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         if (checkFailed == 0) {
             showHoleInOneText(currentHole.mEntity.getX(), currentHole.mEntity.getY());
         }
-        SharedResources.setScorePlayer(pPoints);
+        SharedResources.setScorePlayer(this.CurrentScore);
     }
 
 	public void disposeLevel() {
@@ -343,6 +347,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         float randomY = MathUtils.random(margin, 1080f -margin);
         currentGreen = new GreenLevelOne(randomX, randomY, this);
         currentHole = new Hole(randomX, randomY, this);
+        if(!mIsPractice)
+            if (shouldSpawnCoin()) {
+                mCoins = new Coin(randomX - 40, randomY + 120, GameLevel.this);
+                shotsCount = 0;
+            }
     }
 
     @Override
@@ -461,6 +470,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                 CreateBtnShoot();
                 GameLevel.this.attachChild(mCrateLayer);
                 spawnGreenAndHole();
+
                 mPlayer.createBall();
             }
 		});
@@ -637,7 +647,18 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
             currentHole.destroy();
             currentHole = null;
         }
+        if (mCoins != null) {
+            mCoins.destroy();
+        }
 
         spawnGreenAndHole();
+    }
+
+    private boolean shouldSpawnCoin() {
+
+        if (shotsCount < 2)
+            return false;
+        int random = MathUtils.random(2, 3);
+        return shotsCount >= random;
     }
 }

@@ -24,6 +24,7 @@ import org.andengine.util.adt.color.Color;
 import java.net.CookieHandler;
 
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
+import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsCoins;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsDesertGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsHoleIOne;
@@ -104,6 +105,7 @@ public class ResourceManager {
 		GameObjectsDesertGround.getInstance().LoadObjects();
         GamePlayers.getInstance().Initialize();
         GameObjectsHoleIOne.getInstance().LoadObjects();
+        GameObjectsCoins.getInstance().LoadObjectsCoins();
 	}
 
 	public static SwitchableFixedStepEngine getEngine()

@@ -240,6 +240,7 @@ public class Players implements IUpdateHandler  {
             public void onAnimationFrameChanged(final AnimatedSprite pAnimatedSprite, final int pOldFrameIndex, final int pNewFrameIndex) {
                 if (pNewFrameIndex == 2) {
                     SFXManager.playShoot(1f, 2f);
+                    mGameLevel.shotsCount++;
                     equipNextBall();
                     if (mGrabbedMagneticObject != null) {
                         mBall.setVisible(false);

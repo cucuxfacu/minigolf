@@ -126,11 +126,9 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                 SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
                 this.destroy();
             }else {
-                mGameLevel.mPlayer.mTurretMagnetOn = true;
-                mGameLevel.mPlayer.mBall.setVisible(true);
-                mGameLevel.btnShoot.mIsEnabled = true;
+                getACtivateBall();
                 this.destroy();
-                ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
+                ((MasterMiniGolfSmoothCamera)ResourceManager.getEngine().getCamera()).goToPlayer();
             }
         }
         mBodySpeed = 0f;
@@ -163,15 +161,24 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
     @Override
     public void onBeginContact(Contact pContact) {
+        Log.v("Ball", "onBeginContact:" + pContact.getFixtureA().getBody().getUserData().toString());
         if (pContact.getFixtureA().getBody().getUserData() != null) {
             if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole")) {
-                mGameLevel.mPlayer.mTurretMagnetOn = true;
-                mGameLevel.mPlayer.mBall.setVisible(true);
-                mGameLevel.btnShoot.mIsEnabled = true;
+                getACtivateBall();
                 SFXManager.playBallCup(1,0.5f);
                 DestroyBall();
             }
+            if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GroundLevelOne")) {
+                getACtivateBall();
+                DestroyBall();
+            }
         }
+    }
+
+    private void getACtivateBall() {
+        mGameLevel.mPlayer.mTurretMagnetOn = true;
+        mGameLevel.mPlayer.mBall.setVisible(true);
+        mGameLevel.btnShoot.mIsEnabled = true;
     }
 
     @Override
