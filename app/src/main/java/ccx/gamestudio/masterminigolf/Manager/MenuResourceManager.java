@@ -43,6 +43,7 @@ public class MenuResourceManager {
     public static TextureRegion bntAcceptInLayer;
     public static TextureRegion btnTrophy;
     public static TextureRegion btnReturnHome;
+    public static TextureRegion btnReturn;
     public static TextureRegion btnPlayGame;
     public static TextureRegion btnInformacion;
     public static TextureRegion btnBalls;
@@ -79,6 +80,7 @@ public class MenuResourceManager {
         if (btnExit == null) btnExit = ResourceManager.getInstance().getLimitableTR("buttonexit.png", mTransparentTextureOption);
         if (btnTrophy == null) btnTrophy = ResourceManager.getInstance().getLimitableTR("buttontrofeo.png", mTransparentTextureOption);
         if (btnReturnHome == null) btnReturnHome = ResourceManager.getInstance().getLimitableTR("returnhome.png", mTransparentTextureOption);
+        if (btnReturn == null) btnReturn = ResourceManager.getInstance().getLimitableTR("return.png", mTransparentTextureOption);
         if (btnPlayGame == null) btnPlayGame = ResourceManager.getInstance().getLimitableTR("playgame.png", mTransparentTextureOption);
         if (btnInformacion == null) btnInformacion = ResourceManager.getInstance().getLimitableTR("informacion.png", mTransparentTextureOption);
         if (arrow == null) arrow = ResourceManager.getInstance().getLimitableTR("Arrow.png", mTransparentTextureOption);

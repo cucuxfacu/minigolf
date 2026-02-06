@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -19,15 +18,11 @@ import org.andengine.extension.debugdraw.DebugRenderer;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.math.MathUtils;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
-import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GreenLevelOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.BoundTouchInput;
@@ -84,12 +79,8 @@ public class Players implements IUpdateHandler  {
 	private float mTurretDesiredAngle;
 	private final float mCHARACTER_START_X;
 	private final float mCHARACTER_START_Y;
-	private AnimatedSprite mAnimatedPlayers;
     public Sprite mBall;
-    private Hole currentHole;
-    private GreenLevelOne currentGreen;
-
-
+    private int mPlayerSelected;
 
 
     // ====================================================
@@ -134,10 +125,11 @@ public class Players implements IUpdateHandler  {
         this.mCHARACTER_START_Y = pY;
         this.mGameLevel = pGameLevel;
 
-        this.mPlayer = new Sprite(this.mCHARACTER_START_X, this.mCHARACTER_START_Y, MenuResourceManager.mPlayers.get(0), ResourceManager.getActivity().getVertexBufferObjectManager()) {
+        mPlayerSelected = SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_PLAYER_SELECTED);
+
+        this.mPlayer = new Sprite(this.mCHARACTER_START_X, this.mCHARACTER_START_Y, MenuResourceManager.mPlayers.get(mPlayerSelected), ResourceManager.getActivity().getVertexBufferObjectManager()) {
             @Override
             public void setPosition(final float pX, final float pY) {
-
                 super.setPosition(pX, pY);
             }
         };
@@ -238,7 +230,7 @@ public class Players implements IUpdateHandler  {
         }
     }
 	private void AnimationSwing() {
-        AnimatedSprite animPlayer = new AnimatedSprite(this.mCHARACTER_START_X - 10f, this.mCHARACTER_START_Y + 23f, GamePlayers.mLisPlayer.get(0), ResourceManager.getActivity().getVertexBufferObjectManager());
+        AnimatedSprite animPlayer = new AnimatedSprite(this.mCHARACTER_START_X - 10f, this.mCHARACTER_START_Y + 23f, GamePlayers.mLisPlayer.get(mPlayerSelected), ResourceManager.getActivity().getVertexBufferObjectManager());
         animPlayer.setZIndex(999);
         animPlayer.animate(new long[]{240,240,240}, 1,3,true, new AnimatedSprite.IAnimationListener() {
             @Override
@@ -253,7 +245,6 @@ public class Players implements IUpdateHandler  {
                         mBall.setVisible(false);
                         mGrabbedMagneticObject.release();
                         mGrabbedMagneticObject.mIsShot = true;
-                       //ResourceManager.getCamera().setChaseEntity(mGrabbedMagneticObject.mEntity);
 
                         mGrabbedMagneticObject.mBody.setLinearVelocity(0f, 0f);
                         final float vPower = ((MathUtils.distance(mSensorBody.getWorldCenter().x, mSensorBody.getWorldCenter().y, mGrabbedMagneticObject.mBody.getWorldCenter().x, mGrabbedMagneticObject.mBody.getWorldCenter().y) < mTURRET_SHOOT_GRABBED_OBJECT_IF_WITHIN_RANGE) ? mShootingPower : 0f);

@@ -2,6 +2,8 @@ package ccx.gamestudio.masterminigolf.GameLevels.WorldOne;
 
 import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
+import android.util.Log;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -32,6 +34,7 @@ public class GroundLevelOne extends PhysObject<Sprite> {
     public  Body mGroundBody;
     public Sprite mGround;
     public Sprite mGround02;
+
     // ===============================================================================================
     // CONSTRUCTOR
     // ===============================================================================================
@@ -45,6 +48,7 @@ public class GroundLevelOne extends PhysObject<Sprite> {
 
         final float width = mGround.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
         final float height = mGround.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
+
         final Vector2[] verticeGroundLeft = {
                 new Vector2(-0.46198f * width, -0.39537f * height),
                 new Vector2(+0.46216f * width, -0.39537f * height),
@@ -52,9 +56,9 @@ public class GroundLevelOne extends PhysObject<Sprite> {
                 new Vector2(-0.48405f * width, +0.45456f * height),
 
         };
+
         mGroundBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGround, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mGround, mGroundBody));
-
     }
 
     @Override

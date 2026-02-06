@@ -76,7 +76,6 @@ public class SplashScreens extends ManagedSplashScreen {
 		this.attachChild(mCcxLogoSprite);
 		mLogoSprite.setAlpha(0.001f);
 		mLogoSprite.setScale(SharedResources.SCALE_BACKGROUND_MENU);
-		//mLogoSprite.setPosition((mLogoSprite.getWidth() * mLogoSprite.getScaleX()/2f), 0);
 		this.attachChild(mLogoSprite);
 
 		mCcxGamestudioLogo_SequenceEntityModifier.addModifierListener(new IModifierListener<IEntity>() {
@@ -104,7 +103,7 @@ public class SplashScreens extends ManagedSplashScreen {
 					SharedResources.writeStringToSharedPreferences(SharedResources.SHARED_PREFS_MUSIC_VOLUMEN, "1");
 				}
 
-				//SFXManager.playMusic();
+				SFXManager.playMusic();
 
 				if (SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_MUSIC_MUTED) > 0)
 					SFXManager.setMusicMuted(true);

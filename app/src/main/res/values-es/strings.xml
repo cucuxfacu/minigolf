@@ -10,4 +10,5 @@
     <string name="app_sound_title">Contribución</string>
     <string name="app_pause">EN PAUSA</string>
     <string name="app_failed">FALLASTE</string>
+    <string name="app_holeinone">HOYO EN UNO</string>
 </resources>

@@ -20,6 +20,8 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.adt.align.HorizontalAlign;
 
+import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
+import ccx.gamestudio.masterminigolf.GameLevels.Level;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.GrowButton;
 import ccx.gamestudio.masterminigolf.Input.GrowToggleButton;
@@ -150,7 +152,7 @@ public class MainMenu extends ManagedMenuScene {
 		GrowButton challengeButton = new GrowButton(mCameraWidth / 2f, mCameraHeight / 2f + 250f, MenuResourceManager.btnGeneric) {
 			@Override
 			public void onClick() {
-
+                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1)));
 			}
 
 		};

@@ -50,15 +50,11 @@ public class Hole extends PhysObject<Sprite> {
         };
 
         mBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mHoleSprite, verticeGround, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
-
         PhysicsConnector connector = new PhysicsConnector(mHoleSprite, mBody);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(connector);
-
         this.set(mBody, mHoleSprite, connector, this.mGameLevel);
-
-
         pGameLevel.attachChild(mHoleSprite);
-        //this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
+        this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
     }
 
 
@@ -69,7 +65,6 @@ public class Hole extends PhysObject<Sprite> {
             {
                 if (this.mGameLevel.mIsLevelSettled) {
                     mGameLevel.ballEnteredHole = true;
-
                     if(!isSound)
                     {
                         isSound = true;

@@ -54,10 +54,6 @@ public class ResourceManager {
 	public float cameraHeight;
 	public float cameraScaleFactorX;
 	public float cameraScaleFactorY;
-	public boolean setMultiTouch;
-
-
-	public static Sound clickSound;
 	public static Font fontDefault24;
 	public static Font fontDefault36;
 	public static Font fontDefault48;
@@ -100,21 +96,6 @@ public class ResourceManager {
         LevelPauseLayer.getInstance().onLoadLayer();
         FailedLevelLayer.getInstance().onLoadLayer();
 
-		/*LevelWonLayer.getInstance().onLoadLayer();
-		LevelPauseLayer.getInstance().onLoadLayer();
-		OptionsLayer.getInstance().onLoadLayer();
-		ExitGameLayer.getInstance().onLoadLayer();
-		ShopCoinsAndGemsLayer.getInstance().onLoadLayer();
-		WeaponsInGame.getInstance().onLoadLayer();
-		ShopTanksLayer.getInstance().onLoadLayer();
-		UserTanksLayer.getInstance().onLoadLayer();
-		NotGemsGameLayer.getInstance().onLoadLayer();
-		FreeCoinsLayer.getInstance().onLoadLayer();
-		GiftOfDayLayer.getInstance().onLoadLayer();
-		LeaderBoardGameLayer.getInstance().onLoadLayer();
-		OptionsNextLevelLayer.getInstance().onLoadLayer();
-		DefeatedLayer.getInstance().onLoadLayer();
-		FreeGemsLayer.getInstance().onLoadLayer();*/
 	}
 
 	public static void LoadGameResources(){

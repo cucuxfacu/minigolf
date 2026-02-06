@@ -9,6 +9,7 @@ import ccx.gamestudio.masterminigolf.Layers.FailedLevelLayer;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.Manager.SceneManager;
+import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 
 
 public class SplashWater {
@@ -47,6 +48,7 @@ public class SplashWater {
                     pAnimatedSprite.detachSelf();
                     if(!pAnimatedSprite.isDisposed()) {
                         SplashWater.getInstance().waterContact = true;
+                        ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
                         SceneManager.getInstance().showLayer(FailedLevelLayer.getInstance(mGameLevel), false, true, true);
                     }
                 });

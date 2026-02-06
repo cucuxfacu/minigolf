@@ -10,4 +10,5 @@
     <string name="app_sound_title">Contribution</string>
     <string name="app_pause">IN PAUSE</string>
     <string name="app_failed">YOU FAILED</string>
+    <string name="app_holeinone">HOLE IN ONE</string>
 </resources>

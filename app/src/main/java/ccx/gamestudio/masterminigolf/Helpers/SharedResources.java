@@ -28,8 +28,6 @@ public class SharedResources {
     public static final String SHARED_PREFS_SOUNDS_MUTED = "mute.sounds";
     public static final String SHARED_PREFS_MUSIC_VOLUMEN = "volumenmusic";
     public static final String SHARED_PREFS_MUSIC_GAME_VOLUMEN = "volumenmusic";
-    public static final String SHARED_PREFS_SOUNDS_ENGINE_TANK = "soundenginetank";
-    public static final String SHARED_PREFS_WEAPONSELECT = "weapondselect";
     public static final String SHARED_PREFS_GEMS = "gems";
     public static final String SHARED_PREFS_COINS = "coins";
     public static final String SHARED_DATE = "date";
@@ -41,9 +39,10 @@ public class SharedResources {
     public static final String SHARED_PREFS_DESAFIO_CHECK = "desafiocheck";
     public static final String SHARED_PREFS_CONTRARELOJ_CHECK = "contrarelojcheck";
     public static final String SHARED_PREFS_PRACTICA_CHECK = "practicacheck";
+    public static final String SHARED_PREFS_PLAYER_SELECTED = "playerselected";
+    public static final String SHARED_PREFS_BALL_SELECTED = "ballselected";
     public static final float SCALE_BACKGROUND_MENU = 1.07f;
 
-    private static int selectedPlayer = 0;
 
     public static int writeIntToSharedPreferences(final String pStr, final int pValue) {
         ResourceManager.getActivity().getSharedPreferences(SHARED_PREFS_MAIN, 0).edit().putInt(pStr, pValue).apply();
@@ -124,13 +123,20 @@ public class SharedResources {
     }
 
 
-
     public static void setSelectedPlayer(int index) {
-        selectedPlayer = index;
+        SharedResources.writeIntToSharedPreferences(SharedResources.SHARED_PREFS_PLAYER_SELECTED, index);
     }
 
     public static int getSelectedPlayer() {
-        return selectedPlayer;
+        return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_PLAYER_SELECTED);
+    }
+
+    public static void setSelectedBall(int index) {
+        SharedResources.writeIntToSharedPreferences(SharedResources.SHARED_PREFS_BALL_SELECTED, index);
+    }
+
+    public static int getSelectedBall() {
+        return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_BALL_SELECTED);
     }
 
 }

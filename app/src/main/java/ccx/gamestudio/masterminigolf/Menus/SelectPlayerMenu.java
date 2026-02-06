@@ -38,7 +38,7 @@ public class SelectPlayerMenu extends ManagedMenuScene {
     private Entity scrollContainer;
     private List<Float> playerCenters = new ArrayList<>();
     private int selectedIndex = 0;
-
+    private int intChange;
     public SelectPlayerMenu() {
         super(0.001f);
         this.setTouchAreaBindingOnActionDownEnabled(true);
@@ -117,7 +117,6 @@ public class SelectPlayerMenu extends ManagedMenuScene {
 
             Sprite player = new Sprite(0, 0,   MenuResourceManager.mPlayers.get(i),ResourceManager.getEngine().getVertexBufferObjectManager());
 
-            //player.setScale(2);
             Text playerName = new Text(player.getWidth() / 2, player.getY() - 15f, ResourceManager.fontDefault36,getPlayerName(i), ResourceManager.getEngine().getVertexBufferObjectManager());
             player.attachChild(playerName);
 
@@ -151,7 +150,7 @@ public class SelectPlayerMenu extends ManagedMenuScene {
         GrowButton selectPlayerButton = new GrowButton(mCameraWidth / 2f + 120f, mCameraHeight / 2f - 400f,MenuResourceManager.btnPlayGame) {
             @Override
             public void onClick() {
-                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1)));
+                SceneManager.getInstance().showScene(new MainMenu());
             }
         };
 
@@ -274,7 +273,6 @@ public class SelectPlayerMenu extends ManagedMenuScene {
             s.setScale(scale);
         }
     }
-
 
     @Override
     public void onShowScene() {

@@ -26,14 +26,17 @@ public class GreenLevelOne extends PhysObject<Sprite> {
     private static final FixtureDef mGROUND_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mGROUND_DENSITY, mGROUND_ELASTICITY, mGROUND_FRICTION);
     public Body mGroundBodyLeft;
     public Body mGroundBodyRight;
+    public Body mGroundBodycenter;
     public Sprite mGroundGreen;
     private PhysicsConnector physConnectorGroundBodyLeft;
     private PhysicsConnector physConnectorGroundBodyRight;
+    private PhysicsConnector physConnectorGroundBodyCenter;
 
 
     public GreenLevelOne(float pX, float pY, final GameLevel pGameLevel) {
         mGroundBodyLeft = null;
         mGroundBodyRight = null;
+        mGroundBodycenter= null;
 
         mGroundGreen = new Sprite(pX, pY, GameObjectsGreenGround.mGroundGreen, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGroundGreen);
@@ -43,7 +46,7 @@ public class GreenLevelOne extends PhysObject<Sprite> {
 
         final Vector2[] verticeGroundLeft = {
                 new Vector2(-0.25100f*width, -0.46383f*height),
-                new Vector2(-0.08846f*width, -0.32423f*height),
+                new Vector2(-0.08859f*width, -0.47123f*height),
                 new Vector2(-0.08846f*width, -0.01455f*height),
                 new Vector2(-0.08846f*width, +0.35964f*height),
                 new Vector2(-0.49787f*width, +0.36198f*height),
@@ -51,7 +54,7 @@ public class GreenLevelOne extends PhysObject<Sprite> {
         };
 
         final Vector2[] verticeGroundRight = {
-                new Vector2(+0.08341f*width, -0.33714f*height),
+                new Vector2(+0.08472f*width, -0.44634f*height),
                 new Vector2(+0.26779f*width, -0.42746f*height),
                 new Vector2(+0.36466f*width, -0.07907f*height),
                 new Vector2(+0.46154f*width, +0.02416f*height),
@@ -59,22 +62,52 @@ public class GreenLevelOne extends PhysObject<Sprite> {
                 new Vector2(+0.08341f*width, +0.37254f*height),
         };
 
+        final Vector2[] verticeGroundcenter = {
+                new Vector2(+0.09678f*width, -0.44634f*height),
+                new Vector2(-0.09612f*width, -0.44634f*height),
+        };
+
         mGroundBodyLeft = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
         mGroundBodyRight = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGroundRight, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
+        mGroundBodycenter = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGroundcenter, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
 
-         physConnectorGroundBodyLeft = new PhysicsConnector(mGroundGreen, mGroundBodyLeft);
+        physConnectorGroundBodyLeft = new PhysicsConnector(mGroundGreen, mGroundBodyLeft);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnectorGroundBodyLeft);
 
         physConnectorGroundBodyRight = new PhysicsConnector(mGroundGreen, mGroundBodyRight);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnectorGroundBodyRight);
 
+        physConnectorGroundBodyCenter = new PhysicsConnector(mGroundGreen, mGroundBodycenter);
+        pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnectorGroundBodyCenter);
+
         this.set(mGroundBodyLeft, mGroundGreen, physConnectorGroundBodyLeft, pGameLevel);
         this.set(mGroundBodyRight, mGroundGreen, physConnectorGroundBodyRight, pGameLevel);
+        this.set(mGroundBodycenter, mGroundGreen, physConnectorGroundBodyCenter, pGameLevel);
     }
 
     @Override
     public void onBeginContact(Contact pContact) {
+        Body a = pContact.getFixtureA().getBody();
+        Body b = pContact.getFixtureB().getBody();
 
+        boolean ballTouched = false;
+
+        if (a.getUserData() != null && a.getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.Players.MagneticCrate"))
+            ballTouched = true;
+        else if (b.getUserData() != null && b.getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.Players.MagneticCrate"))
+            ballTouched = true;
+
+
+        if (!ballTouched)
+            return;
+
+        if (pContact.getFixtureA().getBody() == mGroundBodyLeft ||
+                pContact.getFixtureB().getBody() == mGroundBodyLeft ||
+                pContact.getFixtureA().getBody() == mGroundBodyRight ||
+                pContact.getFixtureB().getBody() == mGroundBodyRight) {
+
+            mGameLevel.checkFailed++;
+        }
     }
 
     @Override
@@ -101,6 +134,11 @@ public class GreenLevelOne extends PhysObject<Sprite> {
             physConnectorGroundBodyRight = null;
         }
 
+        if (physConnectorGroundBodyCenter != null) {
+            mGameLevel.mPhysicsWorld.unregisterPhysicsConnector(physConnectorGroundBodyCenter);
+            physConnectorGroundBodyCenter = null;
+        }
+
         if (mGroundBodyLeft != null) {
             mGameLevel.mPhysicsWorld.destroyBody(mGroundBodyLeft);
             mGroundBodyLeft = null;
@@ -111,11 +149,15 @@ public class GreenLevelOne extends PhysObject<Sprite> {
             mGroundBodyRight = null;
         }
 
+        if (mGroundBodycenter != null) {
+            mGameLevel.mPhysicsWorld.destroyBody(mGroundBodycenter);
+            mGroundBodycenter = null;
+        }
+
         if (mGroundGreen != null) {
             mGroundGreen.detachSelf();
             mGroundGreen.dispose();
             mGroundGreen = null;
         }
     }
-
 }

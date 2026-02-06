@@ -63,6 +63,7 @@ import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.Manager.SceneManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer.ParallaxEntity;
+import ccx.gamestudio.masterminigolf.R;
 import ccx.gamestudio.masterminigolf.SwitchableFixedStepEngine;
 
 public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener, GameManager.GameLevelGoal {
@@ -141,7 +142,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 			this.mTotalElapsedTime += pSecondsElapsed;
 			if(this.mTotalElapsedTime >= mSECONDS_FOR_LEVEL_TO_SETTLE) {
 				GameLevel.this.mIsLevelSettled = true;
-				GameLevel.this.mPlayer.createBall();
 				GameLevel.this.unregisterUpdateHandler(this);
 			}
 		}
@@ -225,37 +225,46 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	// ====================================================
 	// OBJECT POOLS
 	// ====================================================
-	GenericPool<Text> ScoreTextPool = new GenericPool<Text>() {
-		@Override
-		protected Text onAllocatePoolItem() {
-			return new Text(0f, 0f, ResourceManager.fontDefault48, "", 15, ResourceManager.getActivity().getVertexBufferObjectManager()) {
-				Text ThisText = this;
-				
-				@Override
-				public void onAttached() {
-					this.setVisible(true);
-					this.setAlpha(1f);
-					this.setScale(4f);
-					this.setRotation(MathUtils.random(-35f, 35f));
-				}
-				
-				@Override
-				protected void onManagedUpdate(final float pSecondsElapsed) {
-					super.onManagedUpdate(pSecondsElapsed);
-					this.setAlpha(this.getAlpha() - (pSecondsElapsed / 2f));
-					this.setScale(this.getScaleX() - pSecondsElapsed);
-					this.setRotation(this.getRotation() - (this.getRotation() * pSecondsElapsed * 2f));
-					if(this.getAlpha() <= 0.1f) {
-						this.setVisible(false);
-						ResourceManager.getActivity().runOnUpdateThread(() -> {
+    public void showHoleInOneText(float x, float y) {
+        final Text popup = this.ScoreTextPool.obtainPoolItem();
+        popup.setText(ResourceManager.getContext().getText(R.string.app_holeinone));
+        popup.setScale(6f);
+        popup.setAlpha(1f);
+        popup.setPosition(x, y + 250f);
+        this.attachChild(popup);
+    }
+
+    GenericPool<Text> ScoreTextPool = new GenericPool<>() {
+        @Override
+        protected Text onAllocatePoolItem() {
+            return new Text(0f, 0f, ResourceManager.fontDefault48, "", 15, ResourceManager.getActivity().getVertexBufferObjectManager()) {
+                final Text ThisText = this;
+
+                @Override
+                public void onAttached() {
+                    this.setVisible(true);
+                    this.setAlpha(1f);
+                    this.setScale(4f);
+                    this.setRotation(MathUtils.random(-35f, 35f));
+                }
+
+                @Override
+                protected void onManagedUpdate(final float pSecondsElapsed) {
+                    super.onManagedUpdate(pSecondsElapsed);
+                    this.setAlpha(this.getAlpha() - (pSecondsElapsed / 2f));
+                    this.setScale(this.getScaleX() - pSecondsElapsed);
+                    this.setRotation(this.getRotation() - (this.getRotation() * pSecondsElapsed * 2f));
+                    if (this.getAlpha() <= 0.1f) {
+                        this.setVisible(false);
+                        ResourceManager.getActivity().runOnUpdateThread(() -> {
                             ThisText.detachSelf();
                             GameLevel.this.ScoreTextPool.recyclePoolItem(ThisText);
                         });
-					}
-				}
-			};
-		}
-	};
+                    }
+                }
+            };
+        }
+    };
 	
 	// ====================================================
 	// CONSTRUCTOR
@@ -270,15 +279,11 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	public void addPointsToScore(final IEntity pEntity, final int pPoints) {
 		this.CurrentScore += pPoints;
 		this.ScoreText.setText(mON_SCREEN_SCORE_PRETEXT + this.CurrentScore);
-		final Text scorePopup = this.ScoreTextPool.obtainPoolItem();
-		scorePopup.setText(String.valueOf(pPoints));
-		scorePopup.setPosition(pEntity.getX(), pEntity.getY());
-		if(pEntity.hasParent()) {
-			pEntity.getParent().attachChild(scorePopup);
-		} else {
-			this.attachChild(scorePopup);
-		}
-	}
+        if (checkFailed == 0) {
+            showHoleInOneText(currentHole.mEntity.getX(), currentHole.mEntity.getY());
+        }
+
+    }
 
 	public void disposeLevel() {
 		this.mCamera.setChaseEntity(null);
@@ -369,6 +374,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 
                 final Sprite Sky = new Sprite(0f, 0f, mBackGroundTR, ResourceManager.getActivity().getVertexBufferObjectManager());
 				Sky.setAnchorCenter(0f, 0f);
+                Sky.setZIndex(-1);
                 BGParallaxLayer.attachParallaxEntity(new ParallaxEntity(0.5f, Sky, true));
 
 				final ParallaxLayer CloudParallaxLayer = new ParallaxLayer(GameLevel.this.mCamera, true);
@@ -393,13 +399,14 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_3, this) {
 			@Override
 			public void onLoad() {
-				GameLevel.this.mCamera.setHUD(new HUD());
-				GameLevel.this.mCamera.getHUD().setVisible(false);
-				GameLevel.this.ScoreText = new Text(0, 0f, ResourceManager.fontDefault48,  "0",255, ResourceManager.getActivity().getVertexBufferObjectManager());
-				GameLevel.this.ScoreText.setPosition(GameLevel.this.mCamera.getWidth() / 2f, GameLevel.this.mCamera.getHeight() / 2);
-				GameLevel.this.ScoreText.setScale(10f);
-				GameLevel.this.ScoreText.setAlpha(0.7f);
-                GameLevel.this.mCamera.getHUD().attachChild(GameLevel.this.ScoreText);
+				mCamera.setHUD(new HUD());
+				mCamera.getHUD().setVisible(false);
+				ScoreText = new Text(0, 0f, ResourceManager.fontDefault48,  "0",255, ResourceManager.getActivity().getVertexBufferObjectManager());
+				ScoreText.setPosition(GameLevel.this.mCamera.getWidth() / 2f - 300f, GameLevel.this.mCamera.getHeight() / 2 - 200f);
+                ScoreText.setZIndex(1);
+				ScoreText.setScale(10f);
+				ScoreText.setAlpha(0.7f);
+                attachChild(ScoreText);
 
                 final GrowButton PauseButton = new GrowButton(MenuResourceManager.btnPause.getWidth() / 2f + 50f, GameLevel.this.mCamera.getHeight() - (MenuResourceManager.btnPause.getHeight() / 2f), MenuResourceManager.btnPause) {
 					@Override
@@ -445,16 +452,16 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 			@Override
 			public void onLoad() {
 
-				GameLevel.this.mPlayer = new Players(0f, 250f, GameLevel.this);
-				GameLevel.this.mCamera.setPlayerEntity(GameLevel.this.mPlayer);
-				BouncingPowerBar.attachInstanceToHud(GameLevel.this.mCamera.getHUD());
+				mPlayer = new Players(0f, 250f, GameLevel.this);
+				mCamera.setPlayerEntity(mPlayer);
+				BouncingPowerBar.attachInstanceToHud(mCamera.getHUD());
 
                 CreateBtnUp();
                 CreateBtnDown();
                 CreateBtnShoot();
-                GameLevel.this.attachChild(GameLevel.this.mCrateLayer);
+                GameLevel.this.attachChild(mCrateLayer);
                 spawnGreenAndHole();
-
+                mPlayer.createBall();
             }
 		});
 		this.addLoadingStep(new LoadingRunnable(mLOADING_STEP_STRING_7, this) {
@@ -486,8 +493,6 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         this.registerUpdateHandler(turretUpdateHandler);
 		this.registerUpdateHandler(this.mMovementReportingTimer);
         this.registerUpdateHandler(holeEventHandler);
-
-
     }
 
     private void createObjetsInLevel() {
@@ -615,6 +620,9 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	}
 
     public void onBallInHoleSafe() {
+
+        checkFailed = 0; // reset
+
         if (mPlayer.mGrabbedMagneticObject != null) {
             mPlayer.mGrabbedMagneticObject.destroy();
             mPlayer.mGrabbedMagneticObject = null;

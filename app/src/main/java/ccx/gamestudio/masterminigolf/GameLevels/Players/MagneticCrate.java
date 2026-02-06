@@ -111,7 +111,8 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         if (mOnPostSolve)
             this.mGameLevel.resetTrailingDots();
 
-        if (this.mEntity.getY() + 100 >= ResourceManager.getEngine().getCamera().getHeight())
+        if (this.mEntity.getY() + 100 >= ResourceManager.getEngine().getCamera().getHeight()  ||
+                this.mEntity.getX() + 100 >= ResourceManager.getEngine().getCamera().getWidth())
             ResourceManager.getCamera().setChaseEntity(this.mEntity);
 
         if (this.mEntity.getScaleX() < mScaleBall) {
@@ -148,13 +149,13 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         if (!this.mIsGrabbed) {
             if (this.mEntity != null) {
                 if (pMaxImpulse > 2f) {
+
                     this.mGameLevel.mMagneticObjects.remove(this);
 
                     if (this.mGameLevel.mPlayer.mGrabbedMagneticObject == this)
                         this.mGameLevel.mPlayer.mGrabbedMagneticObject = null;
 
                     mOnPostSolve = true;
-
                 }
             }
         }
