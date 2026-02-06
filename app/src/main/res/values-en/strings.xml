@@ -11,4 +11,6 @@
     <string name="app_pause">IN PAUSE</string>
     <string name="app_failed">YOU FAILED</string>
     <string name="app_holeinone">HOLE IN ONE</string>
+    <string name="app_bestscore">BEST SCORE:</string>
+    <string name="app_score">SCORE:</string>
 </resources>

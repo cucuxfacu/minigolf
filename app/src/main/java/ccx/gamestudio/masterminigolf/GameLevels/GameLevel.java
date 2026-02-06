@@ -130,7 +130,9 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     public Hole currentHole;
     float margin = 400f;
     public boolean ballEnteredHole = false;
-    public int checkFailed =0;
+    public int checkFailed = 0;
+    public boolean mIsPractice;
+    public boolean isTimeTrial;
     // ====================================================
 	// UPDATE HANDLERS
 	// ====================================================
@@ -269,8 +271,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	// ====================================================
 	// CONSTRUCTOR
 	// ====================================================
-	public GameLevel(final LevelDef pLevelDef) {
+	public GameLevel(final LevelDef pLevelDef, final boolean isPractice, boolean isTimeTrial) {
 		this.mLevelDef = pLevelDef;
+        this.mIsPractice = isPractice;
+        this.isTimeTrial = isTimeTrial;
 	}
 	
 	// ====================================================
@@ -282,7 +286,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         if (checkFailed == 0) {
             showHoleInOneText(currentHole.mEntity.getX(), currentHole.mEntity.getY());
         }
-
+        SharedResources.setScorePlayer(pPoints);
     }
 
 	public void disposeLevel() {
@@ -341,14 +345,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         currentHole = new Hole(randomX, randomY, this);
     }
 
-    public void onBallFailed()
-    {
-
-    }
     @Override
 	public void onLoadLevel() {
 		GameManager.setGameLevel(this);
-		
+        SharedResources.setScorePlayer(0);
 		this.ScoreTextPool.batchAllocatePoolItems(8);
 		
 		this.mPhysicsWorld = new FixedStepPhysicsWorld(ResourceManager.getEngine().mStepsPerSecond, new Vector2(0f, mPHYSICS_WORLD_GRAVITY), true, mPHYSICS_WORLD_VELOCITY_ITERATIONS, mPHYSICS_WORLD_POSITION_ITERATIONS);
@@ -606,7 +606,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	
 	public void restartLevel() {
 		this.disposeLevel();
-		SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(this.mLevelDef.mLevelIndex, this.mLevelDef.mWorldIndex)));
+		SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(this.mLevelDef.mLevelIndex, this.mLevelDef.mWorldIndex), mIsPractice, isTimeTrial));
 	}
 	
 	public void setNextTrailingDot(final float pX, final float pY) {

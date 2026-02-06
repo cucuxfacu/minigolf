@@ -39,6 +39,7 @@ public class MenuResourceManager {
     public static TextureRegion btnGenericSmall;
     public static TextureRegion btnExit;
     public static TextureRegion layerGeneric;
+    public static TextureRegion layerFailed;
     public static TextureRegion bntExitInLayer;
     public static TextureRegion bntAcceptInLayer;
     public static TextureRegion btnTrophy;
@@ -47,7 +48,6 @@ public class MenuResourceManager {
     public static TextureRegion btnPlayGame;
     public static TextureRegion btnInformacion;
     public static TextureRegion btnBalls;
-    public static TextureRegion btnHeads;
     public static TextureRegion arrow;
 
 
@@ -60,6 +60,7 @@ public class MenuResourceManager {
     // ======================== Players================= //
     public static List<TextureRegion> mPlayers;
     public static List<TextureRegion> mListBall;
+    public static List<TextureRegion> mListHeads;
     // ======================== END ================= //
 
     public void LoadImgMenu() {
@@ -86,6 +87,7 @@ public class MenuResourceManager {
         if (arrow == null) arrow = ResourceManager.getInstance().getLimitableTR("Arrow.png", mTransparentTextureOption);
 
         LayerExit();
+        LayerFailed();
         LoadBallsMenu();
         LoadHeadsMenu();
         LoadSelectablePlayers();
@@ -98,7 +100,17 @@ public class MenuResourceManager {
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/GUI/Heads/");
 
-        if (btnHeads == null) btnHeads = ResourceManager.getInstance().getLimitableTR("headmam.png", mTransparentTextureOption);
+        int mSelectablePlayers = 2;
+        TextureRegion mHeadsTextureRegion;
+
+        mListHeads = new ArrayList<>();
+        for (int i = 0; i < mSelectablePlayers; i++) {
+            BitmapTextureAtlas mPlayersTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 98, 98, mTransparentTextureOption);
+            mHeadsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mPlayersTextureAtlas, ResourceManager.getActivity(), "head" + i + ".png", 0, 0);
+            mPlayersTextureAtlas.load();
+            mListHeads.add(mHeadsTextureRegion);
+        };
+
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
 
     }
@@ -153,5 +165,11 @@ public class MenuResourceManager {
             bntExitInLayer = ResourceManager.getInstance().getLimitableTR("buttonexitinlayer.png", mTransparentTextureOption);
         if (bntAcceptInLayer == null)
             bntAcceptInLayer = ResourceManager.getInstance().getLimitableTR("buttonacceptinlayer.png", mTransparentTextureOption);
+    }
+
+    private void LayerFailed() {
+        if (layerFailed == null)
+            layerFailed = ResourceManager.getInstance().getLimitableTR("LayerFailed.png", mTransparentTextureOption);
+
     }
 }

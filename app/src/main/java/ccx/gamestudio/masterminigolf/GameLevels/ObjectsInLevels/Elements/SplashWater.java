@@ -5,6 +5,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
+import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Layers.FailedLevelLayer;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
@@ -49,7 +50,13 @@ public class SplashWater {
                     if(!pAnimatedSprite.isDisposed()) {
                         SplashWater.getInstance().waterContact = true;
                         ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
-                        SceneManager.getInstance().showLayer(FailedLevelLayer.getInstance(mGameLevel), false, true, true);
+                        if(!mGameLevel.mIsPractice) {
+                            SceneManager.getInstance().showLayer(FailedLevelLayer.getInstance(mGameLevel), false, true, true);
+                            return;
+                        }
+                        mGameLevel.mPlayer.mTurretMagnetOn = true;
+                        mGameLevel.mPlayer.mBall.setVisible(true);
+                        mGameLevel.btnShoot.mIsEnabled = true;
                     }
                 });
             }

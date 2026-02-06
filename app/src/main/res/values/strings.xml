@@ -20,4 +20,6 @@
     <string name="app_pause">EN PAUSA</string>
     <string name="app_failed">FALLASTE</string>
     <string name="app_holeinone">HOYO EN UNO</string>
+    <string name="app_bestscore">MEJOR PUNTUACIÓN:</string>
+    <string name="app_score">PUNTAJE:</string>
 </resources>

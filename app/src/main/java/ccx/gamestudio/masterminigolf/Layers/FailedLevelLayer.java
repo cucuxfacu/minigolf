@@ -3,17 +3,20 @@ package ccx.gamestudio.masterminigolf.Layers;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
+import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.GrowButtonExit;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.Manager.SceneManager;
 import ccx.gamestudio.masterminigolf.R;
-
 
 public class FailedLevelLayer extends ManagedLayer {
 	
@@ -23,6 +26,7 @@ public class FailedLevelLayer extends ManagedLayer {
 	private static final FailedLevelLayer INSTANCE = new FailedLevelLayer();
 	private static float mScale= 3f;
 	private static Color mColor = new Color(0.55f, 0.40f, 0.20f, 0.55f);
+	private static Color mColorTextos = new Color(0.55f, 0.40f, 0.20f, 0.55f);
 
 	// ====================================================
 	// INSTANCE GETTERS
@@ -45,6 +49,10 @@ public class FailedLevelLayer extends ManagedLayer {
     private Sprite mLayerBG;
 	private boolean howIsTheSound;
     private Text mMainText;
+    private Text mHighScoreText;
+    private Text mScoreText;
+    private Text mHighScoreNumber;
+    private Text mScoreNumber;
 
 	// ====================================================
 	// UPDATE HANDLERS
@@ -115,23 +123,46 @@ public class FailedLevelLayer extends ManagedLayer {
         fadableBGRect.setColor(mColor);
         this.attachChild(fadableBGRect);
 
-        this.mLayerBG = new Sprite(0f, ResourceManager.getInstance().cameraHeight / 2f, MenuResourceManager.layerGeneric, ResourceManager.getActivity().getVertexBufferObjectManager());
+        this.mLayerBG = new Sprite(0f, ResourceManager.getInstance().cameraHeight / 2f, MenuResourceManager.layerFailed, ResourceManager.getActivity().getVertexBufferObjectManager());
         this.attachChild(this.mLayerBG);
-        mLayerBG.setAlpha(0);
-        this.mLayerBG.setScale(1f);
 
         mMainText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_failed),255, ResourceManager.getActivity().getVertexBufferObjectManager());
-		mMainText.setPosition(mLayerBG.getWidth() / 2f, mLayerBG.getHeight() / 2f + 450f);
-        mMainText.setScale(2.5f);
+		mMainText.setPosition(mLayerBG.getWidth() / 2f, mLayerBG.getHeight() / 2f + 250f);
+        mMainText.setScale(1.3f);
         mLayerBG.attachChild(mMainText);
 
-		final GrowButtonExit btnBackToMenu = new GrowButtonExit(mLayerBG.getWidth() / 2f - 250, mLayerBG.getHeight() / 2f - 250, MenuResourceManager.btnReturnHome) {
+        mHighScoreText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_bestscore),255, new TextOptions(AutoWrap.WORDS, 1000, HorizontalAlign.CENTER),ResourceManager.getActivity().getVertexBufferObjectManager());
+        mHighScoreText.setPosition(mLayerBG.getWidth() / 2f - 50f, mLayerBG.getHeight() / 2f + 50f);
+        mHighScoreText.setScale(1f);
+        mHighScoreText.setColor(mColorTextos);
+        mLayerBG.attachChild(mHighScoreText);
+
+        mScoreText = new Text(0f, 0f, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_score),255, new TextOptions(AutoWrap.WORDS, 1000, HorizontalAlign.CENTER),ResourceManager.getActivity().getVertexBufferObjectManager());
+        mScoreText.setPosition(mLayerBG.getWidth() / 2f -200f, mLayerBG.getHeight() / 2f );
+        mScoreText.setScale(1f);
+        mScoreText.setColor(mColorTextos);
+        mLayerBG.attachChild(mScoreText);
+
+        mHighScoreNumber = new Text(0f, 0f, ResourceManager.fontDefault60, "0",100, new TextOptions(AutoWrap.WORDS, 10, HorizontalAlign.LEFT),ResourceManager.getActivity().getVertexBufferObjectManager());
+        mHighScoreNumber.setPosition(mLayerBG.getWidth() / 2f + 250f, mLayerBG.getHeight() / 2f + 50f);
+        mHighScoreNumber.setScale(1f);
+        mHighScoreNumber.setColor(mColorTextos);
+        mLayerBG.attachChild(mHighScoreNumber);
+
+        mScoreNumber = new Text(0f, 0f, ResourceManager.fontDefault60, "0",100, new TextOptions(AutoWrap.WORDS, 10, HorizontalAlign.LEFT),ResourceManager.getActivity().getVertexBufferObjectManager());
+        mScoreNumber.setPosition(mLayerBG.getWidth() / 2f + 250f, mLayerBG.getHeight() / 2f );
+        mScoreNumber.setScale(1f);
+        mScoreNumber.setColor(mColorTextos);
+        mLayerBG.attachChild(mScoreNumber);
+
+		final GrowButtonExit btnBackToMenu = new GrowButtonExit(mLayerBG.getWidth() / 2f - 250f, mLayerBG.getHeight() / 2f - 230f, MenuResourceManager.btnReturnHome) {
 			@Override
 			public void onClick() {
                 FailedLevelLayer.this.mIsGoingBackToLevel = false;
 				FailedLevelLayer.this.onHideLayer();
 			}
 		};
+        btnBackToMenu.setScales(0.85f, 0.95f);
         mLayerBG.attachChild(btnBackToMenu);
 		this.registerTouchArea(btnBackToMenu);
 
@@ -142,6 +173,7 @@ public class FailedLevelLayer extends ManagedLayer {
                 FailedLevelLayer.this.onHideLayer();
             }
         };
+        btnBackToLevel.setScales(0.85f, 0.95f);
         mLayerBG.attachChild(btnBackToLevel);
         this.registerTouchArea(btnBackToLevel);
 
@@ -159,10 +191,21 @@ public class FailedLevelLayer extends ManagedLayer {
 		{
 			SFXManager.setSoundMuted(true);
 		}
+
+        mHighScoreNumber.setText("");
+        if(SharedResources.getScorePlayer() > SharedResources.getHighScorePlayer())
+        {
+            SharedResources.setHighScorePlayer(SharedResources.getScorePlayer());
+        }
+        mHighScoreNumber.setText(String.valueOf(SharedResources.getHighScorePlayer()));
+        mScoreNumber.setText("");
+        mScoreNumber.setText(String.valueOf(SharedResources.getScorePlayer()));
 	}
 	
 	@Override
-	public void onUnloadLayer() {}
+	public void onUnloadLayer() {
+
+    }
 	
 	public void setCurrentLevel(final GameLevel pCurrentLevel) {
 		this.mCurrentLevel = pCurrentLevel;

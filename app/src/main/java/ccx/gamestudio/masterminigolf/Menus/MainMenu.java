@@ -152,7 +152,7 @@ public class MainMenu extends ManagedMenuScene {
 		GrowButton challengeButton = new GrowButton(mCameraWidth / 2f, mCameraHeight / 2f + 250f, MenuResourceManager.btnGeneric) {
 			@Override
 			public void onClick() {
-                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1)));
+                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1), false, false));
 			}
 
 		};
@@ -163,7 +163,7 @@ public class MainMenu extends ManagedMenuScene {
 		GrowButton timeTrialButton = new GrowButton(challengeButton.getX(), challengeButton.getY() - 200f, MenuResourceManager.btnGeneric) {
 			@Override
 			public void onClick() {
-
+                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1), false, true));
 			}
 		};
 		final Text txtTimeTrial = new Text(timeTrialButton.getWidth() / 2, timeTrialButton.getHeight() / 2 + 25, ResourceManager.fontDefault60, ResourceManager.getContext().getText(R.string.app_contrareloj), ResourceManager.getActivity().getVertexBufferObjectManager());
@@ -173,7 +173,7 @@ public class MainMenu extends ManagedMenuScene {
 		GrowButton practiceButton = new GrowButton(timeTrialButton.getX(), timeTrialButton.getY() - 200f, MenuResourceManager.btnGeneric) {
 			@Override
 			public void onClick() {
-
+                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1), true, false));
 			}
 		};
 		final Text txtPractice = new Text(practiceButton.getWidth() / 2, practiceButton.getHeight() / 2 + 25, ResourceManager.fontDefault72, ResourceManager.getContext().getText(R.string.app_pratica), ResourceManager.getActivity().getVertexBufferObjectManager());
@@ -192,7 +192,7 @@ public class MainMenu extends ManagedMenuScene {
 
 
 		//====================================== BUTTONS OPTIONS======================================//
-        GrowButton selectPlayerButton = getGrowButton(challengeButton.getX() + 350f, challengeButton.getY(), MenuResourceManager.btnHeads, new SelectPlayerMenu());
+        GrowButton selectPlayerButton = getGrowButton(challengeButton.getX() + 350f, challengeButton.getY(), MenuResourceManager.mListHeads.get(SharedResources.getSelectedPlayer()), new SelectPlayerMenu());
         this.registerTouchArea(selectPlayerButton);
 
         GrowButton selectBallButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, MenuResourceManager.btnBalls, new SelectBallMenu());

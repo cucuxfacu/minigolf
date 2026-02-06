@@ -18,7 +18,7 @@ public class SharedResources {
     public static final String SHARED_PREFS_ACTIVITY_START_USER = "countloadactivyty";
     public static final String SHARED_PREFS_MAIN = "MasterGolfSettings";
     public static final String SHARED_PREFS_LEVEL_STARS = "level.stars";
-    public static final String SHARED_PREFS_LEVEL_HIGHSCORE = "level.highscore";
+    public static final String SHARED_PREFS_LEVEL_HIGHSCORE = "level.score";
     public static final String SHARED_PREFS_HIGHSCORE = "highscore";
     public static final String SHARED_PREFS_ENEMIES_TOTALS_DEFEATED = "level.enemiesdefeated";
     public static final String SHARED_PREFS_LEVEL_MAX_REACHED = "levels.reached";
@@ -139,4 +139,18 @@ public class SharedResources {
         return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_BALL_SELECTED);
     }
 
+    public static void setHighScorePlayer(int index) {
+        SharedResources.writeIntToSharedPreferences(SharedResources.SHARED_PREFS_HIGHSCORE, index);
+    }
+    public static int getHighScorePlayer() {
+        return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_HIGHSCORE);
+    }
+
+    public static void setScorePlayer(int index) {
+        SharedResources.writeIntToSharedPreferences(SharedResources.SHARED_PREFS_LEVEL_HIGHSCORE, index);
+    }
+
+    public static int getScorePlayer() {
+        return SharedResources.getIntFromSharedPreferences(SharedResources.SHARED_PREFS_LEVEL_HIGHSCORE);
+    }
 }

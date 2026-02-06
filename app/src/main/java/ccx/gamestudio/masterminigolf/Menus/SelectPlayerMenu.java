@@ -233,8 +233,6 @@ public class SelectPlayerMenu extends ManagedMenuScene {
 
     private void update3DEffect() {
 
-        float centerScreen = mHalfCameraWidth;
-
         float maxDist = 400f; // distancia donde el efecto deja de aplicarse
 
         for (int i = 0; i < scrollContainer.getChildCount(); i++) {
@@ -242,7 +240,7 @@ public class SelectPlayerMenu extends ManagedMenuScene {
             Sprite s = (Sprite) scrollContainer.getChildByIndex(i);
 
             float spriteCenter = s.getX() + scrollContainer.getX();
-            float dist = Math.abs(spriteCenter - centerScreen);
+            float dist = Math.abs(spriteCenter - mHalfCameraWidth);
 
             // -------------------------
             // ALPHA (1.0 → 0.5)
@@ -297,5 +295,4 @@ public class SelectPlayerMenu extends ManagedMenuScene {
             default: return ResourceManager.getContext().getText(R.string.app_defaultnameplayer).toString();
         }
     }
-
 }
