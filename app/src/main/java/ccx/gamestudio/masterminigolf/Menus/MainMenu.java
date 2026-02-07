@@ -219,18 +219,6 @@ public class MainMenu extends ManagedMenuScene {
 //		};
 //		this.registerTouchArea(mAbout);
 
-//
-//		GrowButton mUser = new GrowButton(ResourceManager.getCamera().getWidth() - 100f, ResourceManager.getCamera().getHeight() - 100f, ResourceManager.btnBlueCircleTTR.getTextureRegion(0)) {
-//			@Override
-//			public void onClick() {
-//				SceneManager.getInstance().showLayer(UserTanksLayer.getInstance(), false, false, true);
-//			}
-//		};
-//		Sprite mIconUser = new Sprite(0f, 0f, ResourceManager.btnIconsBtnTTR.getTextureRegion(9), ResourceManager.getActivity().getVertexBufferObjectManager());
-//		mIconUser.setPosition(mUser.getWidth() / 2f, mUser.getHeight() / 2f);
-//		mUser.attachChild(mIconUser);
-//		this.registerTouchArea(mUser);
-//
 //		GrowButton mUserLeaderBoard = new GrowButton(mUser.getX(), mUser.getY() - 200f, ResourceManager.btnOrangeCircleTTR.getTextureRegion(1)) {
 //			@Override
 ////			public void onClick() {

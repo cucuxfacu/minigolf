@@ -9,12 +9,13 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import java.util.ArrayList;
 import java.util.List;
 
+import ccx.gamestudio.masterminigolf.Manager.AssetTextureLoader;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 public class GamePlayers {
     private static final GamePlayers INSTANCE = new GamePlayers();
     private static final TextureOptions mTransparentTextureOption = TextureOptions.BILINEAR;
-    private static final float mSELECTABLEPLAYERS = 2;
+    private static final float mSELECTABLEPLAYERS = 5;
     public static TextureRegion mSensorShoot;
     public static TextureRegion mTrailingDotTR;
     public static TextureRegion mBtnUp;

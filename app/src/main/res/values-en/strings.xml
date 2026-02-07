@@ -13,7 +13,10 @@
     <string name="app_holeinone">HOLE IN ONE</string>
     <string name="app_bestscore">BEST SCORE:</string>
     <string name="app_score">SCORE:</string>
-    <string name="app_boladefault">Golf ball</string>
+    <string name="app_boladefault">Golf</string>
     <string name="app_apple">Apple</string>
-    <string name="app_tenis">Tenis bal</string>
+    <string name="app_tenis">Tenis</string>
+    <string name="app_frog">FROG</string>
+    <string name="app_bolaocho">Billiard</string>
+    <string name="app_astronauta">ASTRONAUT</string>
 </resources>

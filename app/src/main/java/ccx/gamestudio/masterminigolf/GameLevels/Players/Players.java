@@ -167,8 +167,6 @@ public class Players implements IUpdateHandler  {
         this.mTurretRevoluteJoint = (RevoluteJoint) this.mGameLevel.mPhysicsWorld.createJoint(magneTankTurretRevoluteJointDef);
 
         this.mGameLevel.registerUpdateHandler(this);
-
-
     }
 
 
@@ -232,7 +230,7 @@ public class Players implements IUpdateHandler  {
 	private void AnimationSwing() {
         AnimatedSprite animPlayer = new AnimatedSprite(this.mCHARACTER_START_X - 10f, this.mCHARACTER_START_Y + 23f, GamePlayers.mLisPlayer.get(mPlayerSelected), ResourceManager.getActivity().getVertexBufferObjectManager());
         animPlayer.setZIndex(999);
-        animPlayer.animate(new long[]{240,240,240}, 1,3,true, new AnimatedSprite.IAnimationListener() {
+        animPlayer.animate(new long[]{200,200,200}, 1,3,true, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
             }

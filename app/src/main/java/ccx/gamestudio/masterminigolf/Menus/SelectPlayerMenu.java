@@ -258,6 +258,8 @@ public class SelectPlayerMenu extends ManagedMenuScene {
         switch (index) {
             case 0: return ResourceManager.getContext().getText(R.string.app_nina).toString();
             case 1: return ResourceManager.getContext().getText(R.string.app_nino).toString();
+            case 2: return ResourceManager.getContext().getText(R.string.app_frog).toString();
+            case 3: return ResourceManager.getContext().getText(R.string.app_astronauta).toString();
             default: return ResourceManager.getContext().getText(R.string.app_defaultnameplayer).toString();
         }
     }

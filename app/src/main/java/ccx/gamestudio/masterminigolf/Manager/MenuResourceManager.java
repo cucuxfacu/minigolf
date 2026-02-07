@@ -15,6 +15,9 @@ public class MenuResourceManager {
 
     private static final MenuResourceManager INSTANCE = new MenuResourceManager();
     private static final TextureOptions mTransparentTextureOption = TextureOptions.BILINEAR;
+    private static final String mPathPlayer ="MasterGolf/GUI/Players/";
+    private static final String mPathBalls ="MasterGolf/Balls/";
+    private static final String mPathHeads ="MasterGolf/GUI/Heads/";
 
     //====================================================
     // CONSTRUCTOR
@@ -97,57 +100,33 @@ public class MenuResourceManager {
     }
 
     public void LoadHeadsMenu(){
-        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/GUI/Heads/");
-
-        int mSelectablePlayers = 2;
-        TextureRegion mHeadsTextureRegion;
-
-        mListHeads = new ArrayList<>();
-        for (int i = 0; i < mSelectablePlayers; i++) {
-            BitmapTextureAtlas mPlayersTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 98, 98, mTransparentTextureOption);
-            mHeadsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mPlayersTextureAtlas, ResourceManager.getActivity(), "head" + i + ".png", 0, 0);
-            mPlayersTextureAtlas.load();
-            mListHeads.add(mHeadsTextureRegion);
-        };
-
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
-
+        mListHeads = AssetTextureLoader.loadTexturesFromFolder(
+                mPathHeads,
+                98,
+                98,
+                mTransparentTextureOption);
     }
 
 
     public void LoadSelectablePlayers(){
-        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/GUI/Players/");
-        int mSelectablePlayers = 2;
-        TextureRegion mPlayeresTextureRegion;
+        mPlayers =         AssetTextureLoader.loadTexturesFromFolder(
+                mPathPlayer,
+                140,
+                265,
+                mTransparentTextureOption
+        );
 
-        mPlayers = new ArrayList<>();
-        for (int i = 0; i < mSelectablePlayers; i++) {
-            BitmapTextureAtlas mPlayersTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 140, 265, mTransparentTextureOption);
-            mPlayeresTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mPlayersTextureAtlas, ResourceManager.getActivity(), "player" + i + ".png", 0, 0);
-            mPlayersTextureAtlas.load();
-            mPlayers.add(mPlayeresTextureRegion);
-        };
 
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }
 
-    public void LoadSelectableBalls(){
-        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Balls/");
-        int mBallsPlayers = 3;
-        TextureRegion mBallsTextureRegion;
 
-        mListBall = new ArrayList<>();
-        for (int i = 0; i < mBallsPlayers; i++) {
-            BitmapTextureAtlas mBallsTextureAtlas = new BitmapTextureAtlas(ResourceManager.getActivity().getTextureManager(), 98, 98, mTransparentTextureOption);
-            mBallsTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBallsTextureAtlas, ResourceManager.getActivity(), "ball" + i + ".png", 0, 0);
-            mBallsTextureAtlas.load();
-            mListBall.add(mBallsTextureRegion);
-        };
-
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
+    public void LoadSelectableBalls() {
+        mListBall = AssetTextureLoader.loadTexturesFromFolder(
+                mPathBalls,
+                98,
+                98,
+                mTransparentTextureOption
+        );
     }
 
 

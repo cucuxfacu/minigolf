@@ -22,7 +22,10 @@
     <string name="app_holeinone">HOYO EN UNO</string>
     <string name="app_bestscore">MEJOR PUNTUACIÓN:</string>
     <string name="app_score">PUNTAJE:</string>
-    <string name="app_boladefault">Bola de golf</string>
+    <string name="app_boladefault">Golf</string>
     <string name="app_apple">Manzana</string>
-    <string name="app_tenis">Bola de tenis</string>
+    <string name="app_tenis">Tenis</string>
+    <string name="app_frog">RANA</string>
+    <string name="app_bolaocho">Billar</string>
+    <string name="app_astronauta">ASTRONAUTA</string>
 </resources>

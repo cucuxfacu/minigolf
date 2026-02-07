@@ -125,7 +125,7 @@ public class SelectBallMenu extends ManagedMenuScene {
 
             Sprite ball = new Sprite(0, 0,   MenuResourceManager.mListBall.get(i),ResourceManager.getEngine().getVertexBufferObjectManager());
 
-            Text ballName = new Text(ball.getWidth() / 2, ball.getY() - 15f, ResourceManager.fontDefault36, getBallName(i), ResourceManager.getEngine().getVertexBufferObjectManager());
+            Text ballName = new Text(ball.getWidth() / 2, ball.getY() - 35f, ResourceManager.fontDefault36, getBallName(i), ResourceManager.getEngine().getVertexBufferObjectManager());
             ball.attachChild(ballName);
 
             float centerX = xOffset + ball.getWidth() / 2f;
@@ -142,6 +142,7 @@ public class SelectBallMenu extends ManagedMenuScene {
         if (selectedIndex < 0 || selectedIndex >= ballCenters.size()) {
             selectedIndex = 0;
         }
+
         centerOnBall(selectedIndex);
 
         update3DEffect();
@@ -270,6 +271,7 @@ public class SelectBallMenu extends ManagedMenuScene {
         switch (index) {
             case 1: return ResourceManager.getContext().getText(R.string.app_apple).toString();
             case 2: return ResourceManager.getContext().getText(R.string.app_tenis).toString();
+            case 3: return ResourceManager.getContext().getText(R.string.app_bolaocho).toString();
             default: return ResourceManager.getContext().getText(R.string.app_boladefault).toString();
         }
     }
