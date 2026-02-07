@@ -10,6 +10,7 @@ public class GameObjectsHoleIOne {
     private static final GameObjectsHoleIOne INSTANCE = new GameObjectsHoleIOne();
     private static final TextureOptions mTransparentTextureOption = TextureOptions.BILINEAR;
     public static TextureRegion mHoleInOne;
+    public static TextureRegion mHoleInOneDesert;
 
 
     public GameObjectsHoleIOne(){
@@ -26,11 +27,9 @@ public class GameObjectsHoleIOne {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/HoleInOne/");
 
         if(mHoleInOne==null) mHoleInOne = ResourceManager.getInstance().getLimitableTR("HoleInOne.png", mTransparentTextureOption);
-
+        if(mHoleInOneDesert==null) mHoleInOneDesert = ResourceManager.getInstance().getLimitableTR("GreenDesert.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
 
-
     }
-
 }

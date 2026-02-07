@@ -24,6 +24,9 @@ public class GameObjectsDesertGround {
     private TextureRegion stone;
     private TextureRegion stoneBlock;
     private TextureRegion tree;
+    public static TextureRegion mGround01;
+    public static TextureRegion mGround02;
+    public static TextureRegion mGroundGreen;
 
     public GameObjectsDesertGround(){
 
@@ -52,6 +55,25 @@ public class GameObjectsDesertGround {
         if(stone==null) stone = ResourceManager.getInstance().getLimitableTR("Stone.png", mTransparentTextureOption);
         if(stoneBlock==null) stoneBlock = ResourceManager.getInstance().getLimitableTR("StoneBlock.png", mTransparentTextureOption);
         if(tree==null) tree = ResourceManager.getInstance().getLimitableTR("Tree.png", mTransparentTextureOption);
+
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
+    }
+
+    private void LoadPlatformsGreenGround(){
+        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Tiles/Desert/");
+
+        if(mGround01==null) mGround01 = ResourceManager.getInstance().getLimitableTR("ground01.png", mTransparentTextureOption);
+        if(mGround02==null) mGround02 = ResourceManager.getInstance().getLimitableTR("ground02.png", mTransparentTextureOption);
+
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
+    }
+
+    private void LoadGreenGround(){
+        String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Green/");
+
+        if(mGroundGreen==null) mGroundGreen = ResourceManager.getInstance().getLimitableTR("GreenDesert.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }
