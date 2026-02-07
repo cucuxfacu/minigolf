@@ -6,13 +6,9 @@ import org.andengine.opengl.texture.region.TextureRegion;
 
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
-public class GameObjectsGreenGround  {
-    private static final GameObjectsGreenGround INSTANCE = new GameObjectsGreenGround();
+public class GameObjectsWinterGround {
+    private static final GameObjectsWinterGround INSTANCE = new GameObjectsWinterGround();
     private static final TextureOptions mTransparentTextureOption = TextureOptions.BILINEAR;
-    public static TextureRegion bushGreen;
-    public static TextureRegion bushGreenOne;
-    public static TextureRegion bushGreenTwo;
-    public static TextureRegion bushGreenThree;
     public static TextureRegion crateGreen;
     public static TextureRegion mushroom;
     public static TextureRegion mushroomOne;
@@ -25,33 +21,29 @@ public class GameObjectsGreenGround  {
     public static TextureRegion treeTwo;
     public static TextureRegion mGround01;
     public static TextureRegion mGround02;
-    public static TextureRegion mGroundGreen;
+    public static TextureRegion mGroundGreenWinter;
 
-    public GameObjectsGreenGround(){
+    public GameObjectsWinterGround(){
 
     }
 
-    public static GameObjectsGreenGround getInstance(){
+    public static GameObjectsWinterGround getInstance(){
         return INSTANCE;
     }
 
     public void LoadObjects()
     {
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Objects/GreenGround/");
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Objects/WinterGround/");
 
-        if(bushGreen==null) bushGreen = ResourceManager.getInstance().getLimitableTR("Bush.png", mTransparentTextureOption);
-        if(bushGreenOne==null) bushGreenOne = ResourceManager.getInstance().getLimitableTR("BushOne.png", mTransparentTextureOption);
-        if(bushGreenTwo==null) bushGreenTwo = ResourceManager.getInstance().getLimitableTR("BushTwo.png", mTransparentTextureOption);
-        if(bushGreenThree==null) bushGreenThree = ResourceManager.getInstance().getLimitableTR("BushThree.png", mTransparentTextureOption);
         if(crateGreen==null) crateGreen = ResourceManager.getInstance().getLimitableTR("Crate.png", mTransparentTextureOption);
-        if(mushroom==null) mushroom = ResourceManager.getInstance().getLimitableTR("Mushroom.png", mTransparentTextureOption);
-        if(mushroomOne==null) mushroomOne = ResourceManager.getInstance().getLimitableTR("MushroomOne.png", mTransparentTextureOption);
-        if(rocks==null) rocks = ResourceManager.getInstance().getLimitableTR("Rocks.png", mTransparentTextureOption);
-        if(rocksOne==null) rocksOne = ResourceManager.getInstance().getLimitableTR("RocksOne.png", mTransparentTextureOption);
+        if(mushroom==null) mushroom = ResourceManager.getInstance().getLimitableTR("Crystal.png", mTransparentTextureOption);
+        if(mushroomOne==null) mushroomOne = ResourceManager.getInstance().getLimitableTR("IceBox.png", mTransparentTextureOption);
+        if(rocks==null) rocks = ResourceManager.getInstance().getLimitableTR("Igloo.png", mTransparentTextureOption);
+        if(rocksOne==null) rocksOne = ResourceManager.getInstance().getLimitableTR("Stone.png", mTransparentTextureOption);
         if(sign==null) sign = ResourceManager.getInstance().getLimitableTR("Sign.png", mTransparentTextureOption);
         if(signOne==null) signOne = ResourceManager.getInstance().getLimitableTR("SignOne.png", mTransparentTextureOption);
-        if(tree==null) tree = ResourceManager.getInstance().getLimitableTR("Tree.png", mTransparentTextureOption);
+        if(tree==null) tree = ResourceManager.getInstance().getLimitableTR("SnowMan.png", mTransparentTextureOption);
         if(treeOne==null) treeOne = ResourceManager.getInstance().getLimitableTR("TreeOne.png", mTransparentTextureOption);
         if(treeTwo==null) treeTwo = ResourceManager.getInstance().getLimitableTR("TreeTwo.png", mTransparentTextureOption);
 
@@ -63,7 +55,7 @@ public class GameObjectsGreenGround  {
 
     private void LoadPlatformsGreenGround(){
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Tiles/Green/");
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Tiles/Winter/");
 
         if(mGround01==null) mGround01 = ResourceManager.getInstance().getLimitableTR("ground01.png", mTransparentTextureOption);
         if(mGround02==null) mGround02 = ResourceManager.getInstance().getLimitableTR("ground02.png", mTransparentTextureOption);
@@ -75,7 +67,7 @@ public class GameObjectsGreenGround  {
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Green/");
 
-        if(mGroundGreen==null) mGroundGreen = ResourceManager.getInstance().getLimitableTR("Green.png", mTransparentTextureOption);
+        if(mGroundGreenWinter==null) mGroundGreenWinter = ResourceManager.getInstance().getLimitableTR("GreenWinter.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }

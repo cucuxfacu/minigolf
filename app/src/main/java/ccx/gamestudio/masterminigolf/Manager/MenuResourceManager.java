@@ -109,16 +109,13 @@ public class MenuResourceManager {
 
 
     public void LoadSelectablePlayers(){
-        mPlayers =         AssetTextureLoader.loadTexturesFromFolder(
+        mPlayers = AssetTextureLoader.loadTexturesFromFolder(
                 mPathPlayer,
                 140,
                 265,
                 mTransparentTextureOption
         );
-
-
     }
-
 
     public void LoadSelectableBalls() {
         mListBall = AssetTextureLoader.loadTexturesFromFolder(
@@ -129,19 +126,12 @@ public class MenuResourceManager {
         );
     }
 
-
     private void LayerExit() {
-        if (layerGeneric == null)
-            layerGeneric = ResourceManager.getInstance().getLimitableTR("LayerGeneric.png", mTransparentTextureOption);
-        if (bntExitInLayer == null)
-            bntExitInLayer = ResourceManager.getInstance().getLimitableTR("buttonexitinlayer.png", mTransparentTextureOption);
-        if (bntAcceptInLayer == null)
-            bntAcceptInLayer = ResourceManager.getInstance().getLimitableTR("buttonacceptinlayer.png", mTransparentTextureOption);
+        if (layerGeneric == null)layerGeneric = ResourceManager.getInstance().getLimitableTR("LayerGeneric.png", mTransparentTextureOption);
+        if (bntExitInLayer == null)bntExitInLayer = ResourceManager.getInstance().getLimitableTR("buttonexitinlayer.png", mTransparentTextureOption);
+        if (bntAcceptInLayer == null) bntAcceptInLayer = ResourceManager.getInstance().getLimitableTR("buttonacceptinlayer.png", mTransparentTextureOption);
     }
-
     private void LayerFailed() {
-        if (layerFailed == null)
-            layerFailed = ResourceManager.getInstance().getLimitableTR("LayerFailed.png", mTransparentTextureOption);
-
+        if (layerFailed == null) layerFailed = ResourceManager.getInstance().getLimitableTR("LayerFailed.png", mTransparentTextureOption);
     }
 }
