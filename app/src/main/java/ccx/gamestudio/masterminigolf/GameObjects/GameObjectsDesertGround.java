@@ -26,7 +26,7 @@ public class GameObjectsDesertGround {
     private TextureRegion tree;
     public static TextureRegion mGround01;
     public static TextureRegion mGround02;
-    public static TextureRegion mGroundGreen;
+    public static TextureRegion mGreenDesert;
 
     public GameObjectsDesertGround(){
 
@@ -75,7 +75,7 @@ public class GameObjectsDesertGround {
         String mPreviousAssetBasePath = BitmapTextureAtlasTextureRegionFactory.getAssetBasePath();
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("MasterGolf/Green/");
 
-        if(mGroundGreen==null) mGroundGreen = ResourceManager.getInstance().getLimitableTR("GreenDesert.png", mTransparentTextureOption);
+        if(mGreenDesert==null) mGreenDesert = ResourceManager.getInstance().getLimitableTR("GreenDesert.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }

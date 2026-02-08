@@ -7,7 +7,7 @@ import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.CoinInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 
-public class WorldOneLevelOne {
+public class WorldLevelGreen {
     public LevelDef Level() {
         return new LevelDef(1, 1,
                 new CoinInLevelDef[]{

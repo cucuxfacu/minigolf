@@ -123,7 +123,7 @@ public class SelectBallMenu extends ManagedMenuScene {
 
         for (int i = 0; i < MenuResourceManager.mListBall.size(); i++) {
 
-            Sprite ball = new Sprite(0, 0,   MenuResourceManager.mListBall.get(i),ResourceManager.getEngine().getVertexBufferObjectManager());
+            Sprite ball = new Sprite(0, 0, MenuResourceManager.mListBall.get(i),ResourceManager.getEngine().getVertexBufferObjectManager());
 
             Text ballName = new Text(ball.getWidth() / 2, ball.getY() - 35f, ResourceManager.fontDefault36, getBallName(i), ResourceManager.getEngine().getVertexBufferObjectManager());
             ball.attachChild(ballName);

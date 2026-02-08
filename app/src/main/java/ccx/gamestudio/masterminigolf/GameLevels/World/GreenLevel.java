@@ -12,10 +12,13 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
+import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsDesertGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
+import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 public class GreenLevel extends PhysObject<Sprite> {
@@ -31,6 +34,8 @@ public class GreenLevel extends PhysObject<Sprite> {
     private PhysicsConnector physConnectorGroundBodyLeft;
     private PhysicsConnector physConnectorGroundBodyRight;
     private PhysicsConnector physConnectorGroundBodyCenter;
+    private TextureRegion mGroundTexture;
+
 
 
     public GreenLevel(float pX, float pY, final GameLevel pGameLevel) {
@@ -38,7 +43,23 @@ public class GreenLevel extends PhysObject<Sprite> {
         mGroundBodyRight = null;
         mGroundBodycenter= null;
 
-        mGroundGreen = new Sprite(pX, pY, GameObjectsGreenGround.mGroundGreen, ResourceManager.getActivity().getVertexBufferObjectManager());
+        physConnectorGroundBodyLeft = null;
+        physConnectorGroundBodyRight = null;
+        physConnectorGroundBodyCenter = null;
+        mGroundGreen = null;
+        mGameLevel = pGameLevel;
+
+        switch (SharedResources.getSelectedScene()){
+            case 0:
+                mGroundTexture =  GameObjectsGreenGround.mGroundGreen;
+                break;
+            case 1:
+                mGroundTexture =  GameObjectsDesertGround.mGreenDesert;
+                break;
+        }
+
+        assert mGroundTexture != null;
+        mGroundGreen = new Sprite(pX, pY, mGroundTexture, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGroundGreen);
 
         final float width = mGroundGreen.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
@@ -63,8 +84,9 @@ public class GreenLevel extends PhysObject<Sprite> {
         };
 
         final Vector2[] verticeGroundcenter = {
-                new Vector2(+0.09678f*width, -0.44634f*height),
-                new Vector2(-0.09612f*width, -0.44634f*height),
+                new Vector2(+0.08876f*width, -0.32419f*height),
+                new Vector2(-0.09334f*width, -0.32419f*height),
+
         };
 
         mGroundBodyLeft = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGroundGreen, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
@@ -80,9 +102,9 @@ public class GreenLevel extends PhysObject<Sprite> {
         physConnectorGroundBodyCenter = new PhysicsConnector(mGroundGreen, mGroundBodycenter);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(physConnectorGroundBodyCenter);
 
-        this.set(mGroundBodyLeft, mGroundGreen, physConnectorGroundBodyLeft, pGameLevel);
-        this.set(mGroundBodyRight, mGroundGreen, physConnectorGroundBodyRight, pGameLevel);
-        this.set(mGroundBodycenter, mGroundGreen, physConnectorGroundBodyCenter, pGameLevel);
+        this.set(mGroundBodyLeft, mGroundGreen, physConnectorGroundBodyLeft, mGameLevel);
+        this.set(mGroundBodyRight, mGroundGreen, physConnectorGroundBodyRight, mGameLevel);
+        this.set(mGroundBodycenter, mGroundGreen, physConnectorGroundBodyCenter, mGameLevel);
     }
 
     @Override

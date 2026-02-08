@@ -1,6 +1,7 @@
 package ccx.gamestudio.masterminigolf.GameLevels;
 
-import ccx.gamestudio.masterminigolf.GameLevels.World.WorldOneLevelOne;
+import ccx.gamestudio.masterminigolf.GameLevels.World.WorldLevelDesert;
+import ccx.gamestudio.masterminigolf.GameLevels.World.WorldLevelGreen;
 
 public class Level {
 	private static final LevelDef[] AvailableLevels =
@@ -12,7 +13,12 @@ public class Level {
 					//==================================
 					//World One
 					//==================================
-					 new WorldOneLevelOne().Level(),
+					 new WorldLevelGreen().Level(),
+                    //==================================
+                    //World Two
+                    //==================================
+                    new WorldLevelDesert().Level(),
+
 
 			};
 

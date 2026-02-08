@@ -33,7 +33,7 @@ public class Hole extends PhysObject<Sprite> {
     private static final FixtureDef mGROUND_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mGROUND_DENSITY, mGROUND_ELASTICITY, mGROUND_FRICTION);
     private GameLevel mGameLevel;
     private  Sprite mHoleSprite;
-    private Body mBody;
+    private Body mBodySensor;
     private boolean isSound;
     public Hole(float pX, float pY, GameLevel pGameLevel) {
         this.mGameLevel = pGameLevel;
@@ -44,17 +44,21 @@ public class Hole extends PhysObject<Sprite> {
         final float width = mHoleSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
         final float height = mHoleSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
 
-        final Vector2[] verticeGround = {
-                new Vector2(+0.47003f*width, -0.45179f*height),
+        final Vector2[] verticeSensor = {
                 new Vector2(-0.48683f*width, -0.44551f*height),
+                new Vector2(+0.46486f*width, -0.44584f*height),
+                new Vector2(+0.46446f*width, +0.47081f*height),
+                new Vector2(-0.48474f*width, +0.47081f*height),
         };
 
-        mBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mHoleSprite, verticeGround, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
-        PhysicsConnector connector = new PhysicsConnector(mHoleSprite, mBody);
+        mGROUND_FIXTURE_DEF.isSensor = true;
+        mBodySensor = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mHoleSprite, verticeSensor, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
+        PhysicsConnector connector = new PhysicsConnector(mHoleSprite, mBodySensor);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(connector);
-        this.set(mBody, mHoleSprite, connector, this.mGameLevel);
+        this.set(mBodySensor, mHoleSprite, connector, this.mGameLevel);
+
         pGameLevel.attachChild(mHoleSprite);
-        //this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
+        this.mGameLevel.attachChild(new DebugRenderer(this.mGameLevel.mPhysicsWorld, ResourceManager.getActivity().getVertexBufferObjectManager()));
     }
 
 
