@@ -30,8 +30,8 @@ public class GameObjectsHoleIOne {
 
         if(mHoleInOne==null) mHoleInOne = ResourceManager.getInstance().getLimitableTR("HoleInOne.png", mTransparentTextureOption);
         if(mHoleInOneDesert==null) mHoleInOneDesert = ResourceManager.getInstance().getLimitableTR("HoleInOneDesert.png", mTransparentTextureOption);
-        if(mHoleInOneNight==null) mHoleInOneDesert = ResourceManager.getInstance().getLimitableTR("HoleInOneNight.png", mTransparentTextureOption);
-        if(mHoleInOneWinter==null) mHoleInOneDesert = ResourceManager.getInstance().getLimitableTR("HoleInOneWinter.png", mTransparentTextureOption);
+        if(mHoleInOneNight==null) mHoleInOneNight = ResourceManager.getInstance().getLimitableTR("HoleInOneNight.png", mTransparentTextureOption);
+        if(mHoleInOneWinter==null) mHoleInOneWinter = ResourceManager.getInstance().getLimitableTR("HoleInOneWinter.png", mTransparentTextureOption);
 
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
 

@@ -380,10 +380,10 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                         break;
                 }
 
-                final Sprite Sky = new Sprite(0f, 0f, mBackGroundTR, ResourceManager.getActivity().getVertexBufferObjectManager());
+                final Sprite Sky = new Sprite(0, 0, mBackGroundTR, ResourceManager.getActivity().getVertexBufferObjectManager());
 				Sky.setAnchorCenter(0f, 0f);
                 Sky.setZIndex(-1);
-                BGParallaxLayer.attachParallaxEntity(new ParallaxEntity(0.5f, Sky, true));
+                BGParallaxLayer.attachParallaxEntity(new ParallaxEntity(0.25f, Sky, true));
 
 				final ParallaxLayer CloudParallaxLayer = new ParallaxLayer(GameLevel.this.mCamera, true);
 				CloudParallaxLayer.setParallaxChangePerSecond(-200f);

@@ -152,7 +152,6 @@ public class MainMenu extends ManagedMenuScene {
 			public void onClick() {
                 SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(SharedResources.getSelectedScene() + 1, 1), false, false));
 			}
-
 		};
 		final Text txtPlay = new Text(challengeButton.getWidth() / 2, challengeButton.getHeight() / 2 + 25, ResourceManager.fontDefault72, ResourceManager.getContext().getText(R.string.app_desafio), ResourceManager.getActivity().getVertexBufferObjectManager());
 		challengeButton.attachChild(txtPlay);
@@ -171,7 +170,7 @@ public class MainMenu extends ManagedMenuScene {
 		GrowButton practiceButton = new GrowButton(timeTrialButton.getX(), timeTrialButton.getY() - 200f, MenuResourceManager.btnGeneric) {
 			@Override
 			public void onClick() {
-                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1), true, false));
+                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(SharedResources.getSelectedScene() + 1, 1), true, false));
 			}
 		};
 		final Text txtPractice = new Text(practiceButton.getWidth() / 2, practiceButton.getHeight() / 2 + 25, ResourceManager.fontDefault72, ResourceManager.getContext().getText(R.string.app_pratica), ResourceManager.getActivity().getVertexBufferObjectManager());

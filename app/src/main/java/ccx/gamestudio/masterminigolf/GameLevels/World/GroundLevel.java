@@ -14,10 +14,14 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
+import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsDesertGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
+import ccx.gamestudio.masterminigolf.Helpers.SceneAssets;
+import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 
@@ -33,16 +37,23 @@ public class GroundLevel extends PhysObject<Sprite> {
     public  Body mGroundBody;
     public Sprite mGround;
     public Sprite mGround02;
+    private TextureRegion mGround1;
+    private TextureRegion mGround2;
+
 
     // ===============================================================================================
     // CONSTRUCTOR
     // ===============================================================================================
     public GroundLevel(float pX, float pY, final GameLevel pGameLevel) {
 
-        mGround02 = new Sprite(pX-200, pY + 150, GameObjectsGreenGround.mGround02, ResourceManager.getActivity().getVertexBufferObjectManager());
+        mGround1 = SceneAssets.getGround1();
+        mGround2 = SceneAssets.getGround2();
+
+        assert mGround2 != null;
+        mGround02 = new Sprite(pX-200, pY + 150, mGround2, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGround02);
 
-        mGround = new Sprite(pX, pY, GameObjectsGreenGround.mGround01, ResourceManager.getActivity().getVertexBufferObjectManager());
+        mGround = new Sprite(pX, pY, mGround1, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGround);
 
         final float width = mGround.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;

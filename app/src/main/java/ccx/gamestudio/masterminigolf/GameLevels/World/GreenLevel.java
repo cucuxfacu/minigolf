@@ -18,6 +18,7 @@ import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsDesertGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
+import ccx.gamestudio.masterminigolf.Helpers.SceneAssets;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
@@ -49,14 +50,8 @@ public class GreenLevel extends PhysObject<Sprite> {
         mGroundGreen = null;
         mGameLevel = pGameLevel;
 
-        switch (SharedResources.getSelectedScene()){
-            case 0:
-                mGroundTexture =  GameObjectsGreenGround.mGroundGreen;
-                break;
-            case 1:
-                mGroundTexture =  GameObjectsDesertGround.mGreenDesert;
-                break;
-        }
+        mGroundTexture = SceneAssets.getGreenLevelTexture();
+
 
         assert mGroundTexture != null;
         mGroundGreen = new Sprite(pX, pY, mGroundTexture, ResourceManager.getActivity().getVertexBufferObjectManager());

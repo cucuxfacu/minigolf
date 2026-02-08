@@ -17,12 +17,17 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.debugdraw.DebugRenderer;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
 import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
 
+import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsDesertGround;
+import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsHoleIOne;
+import ccx.gamestudio.masterminigolf.Helpers.SceneAssets;
+import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 
@@ -35,20 +40,24 @@ public class Hole extends PhysObject<Sprite> {
     private  Sprite mHoleSprite;
     private Body mBodySensor;
     private boolean isSound;
+    public static TextureRegion mGree;
     public Hole(float pX, float pY, GameLevel pGameLevel) {
         this.mGameLevel = pGameLevel;
 
-        mHoleSprite = new Sprite(pX, pY, GameObjectsHoleIOne.mHoleInOne,  ResourceManager.getActivity().getVertexBufferObjectManager());
+        mGree = SceneAssets.getHoleTexture();
+
+        mHoleSprite = new Sprite(pX, pY, mGree, ResourceManager.getActivity().getVertexBufferObjectManager());
         mHoleSprite.setZIndex(999);
 
         final float width = mHoleSprite.getWidth() / PIXEL_TO_METER_RATIO_DEFAULT;
         final float height = mHoleSprite.getHeight() / PIXEL_TO_METER_RATIO_DEFAULT;
 
         final Vector2[] verticeSensor = {
-                new Vector2(-0.48683f*width, -0.44551f*height),
-                new Vector2(+0.46486f*width, -0.44584f*height),
-                new Vector2(+0.46446f*width, +0.47081f*height),
-                new Vector2(-0.48474f*width, +0.47081f*height),
+                new Vector2(-0.43437f*width, -0.44539f*height),
+                new Vector2(+0.40766f*width, -0.44539f*height),
+                new Vector2(+0.40766f*width, +0.27673f*height),
+                new Vector2(-0.43437f*width, +0.27673f*height),
+
         };
 
         mGROUND_FIXTURE_DEF.isSensor = true;

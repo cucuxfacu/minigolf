@@ -72,12 +72,10 @@ public class LevelPauseLayer extends ManagedLayer {
                 SceneManager.getInstance().hideLayer();
 
                 if (LevelPauseLayer.this.mIsGoingBackToLevel) {
-                    ActivateSound();
                     return;
                 }
 
                 LevelPauseLayer.this.mCurrentLevel.disposeLevel();
-                ActivateSound();
                 SceneManager.getInstance().showMainMenu();
             }
 		}
@@ -86,11 +84,6 @@ public class LevelPauseLayer extends ManagedLayer {
 		public void reset() {}
 	};
 
-	private void ActivateSound() {
-
-		if(!howIsTheSound && SFXManager.isSoundMuted())
-			SFXManager.setSoundMuted(false);
-	}
 
 	// ====================================================
 	// METHODS

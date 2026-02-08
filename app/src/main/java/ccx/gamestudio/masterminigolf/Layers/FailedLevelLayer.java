@@ -81,12 +81,10 @@ public class FailedLevelLayer extends ManagedLayer {
 
                 if (FailedLevelLayer.this.mIsGoingBackToLevel) {
                     mCurrentLevel.restartLevel();
-                    ActivateSound();
                     return;
                 }
 
                 FailedLevelLayer.this.mCurrentLevel.disposeLevel();
-                ActivateSound();
                 SceneManager.getInstance().showMainMenu();
             }
 		}
@@ -95,11 +93,6 @@ public class FailedLevelLayer extends ManagedLayer {
 		public void reset() {}
 	};
 
-	private void ActivateSound() {
-
-		if(!howIsTheSound && SFXManager.isSoundMuted())
-			SFXManager.setSoundMuted(false);
-	}
 
 	// ====================================================
 	// METHODS
