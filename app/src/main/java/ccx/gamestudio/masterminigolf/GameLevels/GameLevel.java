@@ -1,6 +1,8 @@
 package ccx.gamestudio.masterminigolf.GameLevels;
 
 
+import static ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDef.ObjectsType.CactusDesert;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -30,6 +32,11 @@ import android.hardware.SensorManager;
 import com.badlogic.gdx.math.Vector2;
 
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Coin;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.DesertGround.BushesDesert;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.DesertGround.CactusDesert;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.DesertGround.GrassDesert;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.DesertGround.SkeletonDesert;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.DesertGround.TreeDesert;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Bushes;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Mushroom;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Sign;
@@ -533,6 +540,24 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                     break;
                 case MushroomOne:
                     new Mushroom(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+                case GrassDesertOne:
+                    new GrassDesert(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+                case TreeDesert:
+                    new TreeDesert(curBeam.mX, curBeam.mY, GameLevel.this);
+                    break;
+                case SkeletonDesert:
+                    new SkeletonDesert(curBeam.mX, curBeam.mY, GameLevel.this);
+                    break;
+                case CactusDesert:
+                    new CactusDesert(curBeam.mX, curBeam.mY, GameLevel.this, 0);
+                    break;
+                case CactusDesertOne:
+                    new CactusDesert(curBeam.mX, curBeam.mY, GameLevel.this, 1);
+                    break;
+                case CactusDesertTwo:
+                    new CactusDesert(curBeam.mX, curBeam.mY, GameLevel.this, 2);
                     break;
 
             }

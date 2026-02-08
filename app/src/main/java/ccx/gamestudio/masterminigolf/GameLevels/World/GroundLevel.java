@@ -64,9 +64,7 @@ public class GroundLevel extends PhysObject<Sprite> {
                 new Vector2(+0.46216f * width, -0.39537f * height),
                 new Vector2(+0.48147f * width, +0.45456f * height),
                 new Vector2(-0.48405f * width, +0.45456f * height),
-
         };
-
         mGroundBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGround, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mGround, mGroundBody));
 

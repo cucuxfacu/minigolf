@@ -16,7 +16,17 @@ public class ObjectsInLevelDef {
         SignOne,
         Mushroom,
         MushroomOne,
-        Ground
+        Ground,
+        TreeDesert,
+        BushDesert,
+        BushesDesertOne,
+        CarteDesert,
+        SkeletonDesert,
+        CactusDesert,
+        CactusDesertOne,
+        CactusDesertTwo,
+        GrassDesert,
+        GrassDesertOne
     }
     public final float mX;
     public final float mY;
