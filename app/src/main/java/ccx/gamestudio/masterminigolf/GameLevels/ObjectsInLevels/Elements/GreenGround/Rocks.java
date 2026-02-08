@@ -1,4 +1,4 @@
-package ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround;
+package ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround;
 
 import org.andengine.entity.sprite.Sprite;
 

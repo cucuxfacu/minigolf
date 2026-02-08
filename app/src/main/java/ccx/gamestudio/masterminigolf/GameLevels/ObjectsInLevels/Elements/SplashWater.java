@@ -38,10 +38,8 @@ public class SplashWater {
             public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
 
             }
-
             @Override
             public void onAnimationFrameChanged(final AnimatedSprite pAnimatedSprite, final int pOldFrameIndex, final int pNewFrameIndex) {}
-
             @Override
             public void onAnimationLoopFinished(final AnimatedSprite pAnimatedSprite, final int pRemainingLoopCount, final int pInitialLoopCount) {
                 pAnimatedSprite.stopAnimation();
@@ -51,7 +49,7 @@ public class SplashWater {
                         SplashWater.getInstance().waterContact = true;
                         ((MasterMiniGolfSmoothCamera) ResourceManager.getEngine().getCamera()).goToPlayer();
                         if(!mGameLevel.mIsPractice) {
-                            SceneManager.getInstance().showLayer(FailedLevelLayer.getInstance(mGameLevel), false, true, true);
+                            mGameLevel.LevelFailed();
                             return;
                         }
                         mGameLevel.mPlayer.mTurretMagnetOn = true;
@@ -60,7 +58,6 @@ public class SplashWater {
                     }
                 });
             }
-
             @Override
             public void onAnimationStarted(final AnimatedSprite pAnimatedSprite, final int pInitialLoopCount) {
                 SFXManager.playWaterSplash(1f, 0.1f);

@@ -30,10 +30,10 @@ import android.hardware.SensorManager;
 import com.badlogic.gdx.math.Vector2;
 
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Coin;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Bushes;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Mushroom;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Sign;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Trees;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Bushes;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Mushroom;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Sign;
+import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GreenGround.Trees;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.SplashWater;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Water;
@@ -41,13 +41,14 @@ import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDe
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.Players.Players;
-import ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld.GreenLevelOne;
-import ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld.GroundLevelOne;
+import ccx.gamestudio.masterminigolf.GameLevels.World.GreenLevel;
+import ccx.gamestudio.masterminigolf.GameLevels.World.GroundLevel;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.GrowButton;
 import ccx.gamestudio.masterminigolf.Input.GrowButtonControls;
+import ccx.gamestudio.masterminigolf.Layers.FailedLevelLayer;
 import ccx.gamestudio.masterminigolf.Layers.LevelPauseLayer;
 import ccx.gamestudio.masterminigolf.Manager.GameManager;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
@@ -109,7 +110,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
 	private Sprite[] mTrailingDotSprites = null;
 	private Text ScoreText;
     private TextureRegion mBackGroundTR;
-	private GroundLevelOne mGroundLevelOne;
+	private GroundLevel mGroundLevelOne;
     private boolean mTurretMovingUp = false;
     private boolean mTurretMovingDown = false;
     private  GrowButtonControls btnUp;
@@ -117,7 +118,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
     public GrowButtonControls btnShoot;
     public ArrayList<MagneticPhysObject<?>> mMagneticObjects = new ArrayList<>();
     public Water mWater;
-    public GreenLevelOne currentGreen;
+    public GreenLevel currentGreen;
     public Hole currentHole;
     public Coin mCoins;
     float margin = 400f;
@@ -332,10 +333,18 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
         }
     }
 
+    public void LevelFailed()
+    {
+        if(!mIsPractice) {
+            SceneManager.getInstance().showLayer(FailedLevelLayer.getInstance(GameLevel.this), false, true, true);
+        }
+    }
+
+
     public void spawnGreenAndHole() {
         float randomX = MathUtils.random(margin, 2400f - margin);
         float randomY = MathUtils.random(margin, 1080f -margin);
-        currentGreen = new GreenLevelOne(randomX, randomY, this);
+        currentGreen = new GreenLevel(randomX, randomY, this);
         currentHole = new Hole(randomX, randomY, this);
         if(!mIsPractice)
             if (shouldSpawnCoin()) {
@@ -389,7 +398,7 @@ public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener
                 for (final GroundInLevelDef curGround : GameLevel.this.mLevelDef.mGround) {
                     switch (curGround.mGroundType) {
                         case One:
-                            mGroundLevelOne = new GroundLevelOne(curGround.mX, curGround.mY, GameLevel.this);
+                            mGroundLevelOne = new GroundLevel(curGround.mX, curGround.mY, GameLevel.this);
                             break;
                     }
                 }

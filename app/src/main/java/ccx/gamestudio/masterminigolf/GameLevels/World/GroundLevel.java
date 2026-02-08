@@ -1,6 +1,8 @@
-package ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld;
+package ccx.gamestudio.masterminigolf.GameLevels.World;
 
 import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+
+import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -19,7 +21,7 @@ import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
 
-public class GroundLevelOne extends PhysObject<Sprite> {
+public class GroundLevel extends PhysObject<Sprite> {
 
     // ===============================================================================================
     // CONSTANT
@@ -35,7 +37,7 @@ public class GroundLevelOne extends PhysObject<Sprite> {
     // ===============================================================================================
     // CONSTRUCTOR
     // ===============================================================================================
-    public GroundLevelOne(float pX, float pY, final GameLevel pGameLevel) {
+    public GroundLevel(float pX, float pY, final GameLevel pGameLevel) {
 
         mGround02 = new Sprite(pX-200, pY + 150, GameObjectsGreenGround.mGround02, ResourceManager.getActivity().getVertexBufferObjectManager());
         pGameLevel.attachChild(mGround02);
@@ -56,6 +58,8 @@ public class GroundLevelOne extends PhysObject<Sprite> {
 
         mGroundBody = PhysicsFactory.createPolygonBody(pGameLevel.mPhysicsWorld, mGround, verticeGroundLeft, BodyDef.BodyType.StaticBody, mGROUND_FIXTURE_DEF);
         pGameLevel.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(mGround, mGroundBody));
+
+        this.set(mGroundBody, mGround, new PhysicsConnector(mGround, mGroundBody), pGameLevel);
     }
 
     @Override

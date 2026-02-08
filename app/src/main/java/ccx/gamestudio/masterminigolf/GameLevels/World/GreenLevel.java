@@ -1,4 +1,4 @@
-package ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld;
+package ccx.gamestudio.masterminigolf.GameLevels.World;
 
 import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
@@ -18,7 +18,7 @@ import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 
-public class GreenLevelOne extends PhysObject<Sprite> {
+public class GreenLevel extends PhysObject<Sprite> {
 
     private static final float mGROUND_DENSITY = 0;
     private static final float mGROUND_ELASTICITY = 0f;
@@ -33,7 +33,7 @@ public class GreenLevelOne extends PhysObject<Sprite> {
     private PhysicsConnector physConnectorGroundBodyCenter;
 
 
-    public GreenLevelOne(float pX, float pY, final GameLevel pGameLevel) {
+    public GreenLevel(float pX, float pY, final GameLevel pGameLevel) {
         mGroundBodyLeft = null;
         mGroundBodyRight = null;
         mGroundBodycenter= null;

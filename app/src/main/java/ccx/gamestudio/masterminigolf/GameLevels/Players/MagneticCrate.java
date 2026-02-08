@@ -53,8 +53,8 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     private float secondsSinceLastSound = 0.5f;
     private final Sprite mBallSprite;
     private Body crateBody;
-
     private boolean mOnPostSolve;
+    private boolean mBeginContact;
 
     // ====================================================
     // CONSTRUCTOR
@@ -94,6 +94,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         this.mEntity.setScale(mScaleBall);
         this.mIsGrabbed = true;
         this.mBody.setActive(false);
+        mBeginContact = false;
     }
 
 
@@ -128,7 +129,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
                 SplashWater.getInstance().SplashWaterAnimation(this.mEntity.getX(), this.mEntity.getY(), true, mGameLevel);
                 this.destroy();
             }else {
-                getACtivateBall();
+                getActivateBall();
                 this.destroy();
                 ((MasterMiniGolfSmoothCamera)ResourceManager.getEngine().getCamera()).goToPlayer();
             }
@@ -163,21 +164,30 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
 
     @Override
     public void onBeginContact(Contact pContact) {
-        Log.v("Ball", "onBeginContact:" + pContact.getFixtureA().getBody().getUserData().toString());
         if (pContact.getFixtureA().getBody().getUserData() != null) {
             if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.HoleInOne.Hole")) {
-                getACtivateBall();
                 SFXManager.playBallCup(1,0.5f);
                 DestroyBall();
+                getActivateBall();
             }
-            if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GroundLevelOne")) {
-                getACtivateBall();
+            if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.World.GroundLevel")) {
+                if(!mGameLevel.mIsPractice) {
+                    mGameLevel.LevelFailed();
+                }
                 DestroyBall();
+                getActivateBall();
+            }
+            if (pContact.getFixtureA().getBody().getUserData().toString().split("@")[0].contains("ccx.gamestudio.masterminigolf.GameLevels.Players.Players")) {
+                if(!mGameLevel.mIsPractice) {
+                    mGameLevel.LevelFailed();
+                }
+                DestroyBall();
+                getActivateBall();
             }
         }
     }
 
-    private void getACtivateBall() {
+    private void getActivateBall() {
         mGameLevel.mPlayer.mTurretMagnetOn = true;
         mGameLevel.mPlayer.mBall.setVisible(true);
         mGameLevel.btnShoot.mIsEnabled = true;
@@ -190,7 +200,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         this.mGameLevel.registerUpdateHandler(this.onCompleteTimeBallInhole);
     }
     private final IUpdateHandler onCompleteTimeBallInhole = new IUpdateHandler() {
-        private float mTotalElapsedTime = 1.9f;
+        private float mTotalElapsedTime = 1f;
         @Override
         public void onUpdate(float pSecondsElapsed) {
             this.mTotalElapsedTime -= pSecondsElapsed;

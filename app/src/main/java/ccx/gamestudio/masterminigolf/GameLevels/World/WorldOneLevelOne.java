@@ -1,4 +1,4 @@
-package ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld;
+package ccx.gamestudio.masterminigolf.GameLevels.World;
 
 
 import ccx.gamestudio.masterminigolf.GameLevels.GroundInLevelDef;
