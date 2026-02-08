@@ -28,4 +28,8 @@
     <string name="app_frog">RANA</string>
     <string name="app_bolaocho">Billar</string>
     <string name="app_astronauta">ASTRONAUTA</string>
+    <string name="app_daynormal">DÍA NORMAL</string>
+    <string name="app_night">NOCHE TENEBROSA</string>
+    <string name="app_desert">DESIERTO</string>
+    <string name="app_winter">INVIERNO</string>
 </resources>

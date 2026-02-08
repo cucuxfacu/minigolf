@@ -2,7 +2,6 @@ package ccx.gamestudio.masterminigolf.GameLevels;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
 
 import org.andengine.engine.camera.hud.HUD;
@@ -12,8 +11,6 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 
 import org.andengine.entity.modifier.MoveModifier;
-import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -22,7 +19,6 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -30,11 +26,8 @@ import org.andengine.util.adt.pool.GenericPool;
 import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.Coin;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.Elements.GrennGround.Bushes;
@@ -48,24 +41,21 @@ import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDe
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.Players.Players;
-import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GreenLevelOne;
-import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.GroundLevelOne;
+import ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld.GreenLevelOne;
+import ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld.GroundLevelOne;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsBackGround;
 import ccx.gamestudio.masterminigolf.GameObjects.GamePlayers;
 import ccx.gamestudio.masterminigolf.Helpers.SharedResources;
 import ccx.gamestudio.masterminigolf.Input.GrowButton;
 import ccx.gamestudio.masterminigolf.Input.GrowButtonControls;
-import ccx.gamestudio.masterminigolf.Input.GrowToggleButton;
 import ccx.gamestudio.masterminigolf.Layers.LevelPauseLayer;
 import ccx.gamestudio.masterminigolf.Manager.GameManager;
 import ccx.gamestudio.masterminigolf.Manager.MenuResourceManager;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
-import ccx.gamestudio.masterminigolf.Manager.SFXManager;
 import ccx.gamestudio.masterminigolf.Manager.SceneManager;
 import ccx.gamestudio.masterminigolf.MasterMiniGolfSmoothCamera;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ParallaxLayer.ParallaxEntity;
 import ccx.gamestudio.masterminigolf.R;
-import ccx.gamestudio.masterminigolf.SwitchableFixedStepEngine;
 
 public class GameLevel extends ManagedGameScene implements IOnSceneTouchListener, GameManager.GameLevelGoal {
 	

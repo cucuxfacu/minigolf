@@ -19,4 +19,8 @@
     <string name="app_frog">FROG</string>
     <string name="app_bolaocho">Billiard</string>
     <string name="app_astronauta">ASTRONAUT</string>
+    <string name="app_daynormal">DAY NORMAL</string>
+    <string name="app_night">DARK NIGHT</string>
+    <string name="app_desert">DESERT</string>
+    <string name="app_winter">WINTER</string>
 </resources>

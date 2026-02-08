@@ -1,4 +1,4 @@
-package ccx.gamestudio.masterminigolf.GameLevels.WorldOne;
+package ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld;
 
 import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 
@@ -21,7 +21,7 @@ import ccx.gamestudio.masterminigolf.Manager.ResourceManager;
 public class GreenLevelOne extends PhysObject<Sprite> {
 
     private static final float mGROUND_DENSITY = 0;
-    private static final float mGROUND_ELASTICITY = 0.01f;
+    private static final float mGROUND_ELASTICITY = 0f;
     private static final float mGROUND_FRICTION = 0.5f;
     private static final FixtureDef mGROUND_FIXTURE_DEF = PhysicsFactory.createFixtureDef(mGROUND_DENSITY, mGROUND_ELASTICITY, mGROUND_FRICTION);
     public Body mGroundBodyLeft;

@@ -1,8 +1,6 @@
-package ccx.gamestudio.masterminigolf.GameLevels.WorldOne;
+package ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld;
 
 import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
-
-import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,7 +14,6 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 import ccx.gamestudio.masterminigolf.GameLevels.GameLevel;
-import ccx.gamestudio.masterminigolf.GameLevels.MagneticPhysObject;
 import ccx.gamestudio.masterminigolf.GameLevels.PhysObject;
 import ccx.gamestudio.masterminigolf.GameObjects.GameObjectsGreenGround;
 import ccx.gamestudio.masterminigolf.Manager.ResourceManager;

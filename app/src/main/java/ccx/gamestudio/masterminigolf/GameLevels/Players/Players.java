@@ -14,7 +14,6 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.debugdraw.DebugRenderer;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
@@ -133,7 +132,7 @@ public class Players implements IUpdateHandler  {
                 super.setPosition(pX, pY);
             }
         };
-
+        this.mPlayer.setZIndex(997);
         mSensorShoot = new Sprite(this.mPlayer.getX() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_X, this.mPlayer.getY() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_Y, GamePlayers.mSensorShoot, ResourceManager.getActivity().getVertexBufferObjectManager());
         mSensorShoot.setWidth(0.05f);
         mSensorShoot.setAlpha(0f);
@@ -229,7 +228,7 @@ public class Players implements IUpdateHandler  {
     }
 	private void AnimationSwing() {
         AnimatedSprite animPlayer = new AnimatedSprite(this.mCHARACTER_START_X - 10f, this.mCHARACTER_START_Y + 23f, GamePlayers.mLisPlayer.get(mPlayerSelected), ResourceManager.getActivity().getVertexBufferObjectManager());
-        animPlayer.setZIndex(999);
+        animPlayer.setZIndex(998);
         animPlayer.animate(new long[]{200,200,200}, 1,3,true, new AnimatedSprite.IAnimationListener() {
             @Override
             public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
@@ -306,6 +305,7 @@ public class Players implements IUpdateHandler  {
     public void createBall() {
         this.mBall = new Sprite(0, 0, MenuResourceManager.mListBall.get(SharedResources.getSelectedBall()), ResourceManager.getActivity().getVertexBufferObjectManager());
         mBall.setScale(0.25f);
+        mBall.setZIndex(999);
         mBall.setPosition(  this.mPlayer.getX() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_X - 10f, this.mPlayer.getY() + mTURRET_SPRITE_OFFSET_FROM_VEHICLE_CENTER_Y);
         this.mGameLevel.attachChild(mBall);
     }

@@ -35,7 +35,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
     // ====================================================;
     private static final float mCRATE_ANGULAR_DAMPING = 0.05f;
     public static float mCRATE_DENSITY = 100;
-    private static final float mCRATE_ELASTICITY = 0.2f;
+    private static final float mCRATE_ELASTICITY = 0.12f;
     private static final float mCRATE_FRICTION = 0f;
     private static final int mMAX_SOUNDS_PER_SECOND = 5;
     private static final float mMINIMUM_SECONDS_BETWEEN_SOUNDS = 1f / mMAX_SOUNDS_PER_SECOND;
@@ -90,7 +90,7 @@ public class MagneticCrate extends MagneticPhysObject<Sprite> {
         this.mGameLevel.mMagneticObjects.add(this);
 
         this.mGameLevel.mCrateLayer.attachChild(mBallSprite);
-        this.mGameLevel.mCrateLayer.setZIndex(998);
+        this.mGameLevel.mCrateLayer.setZIndex(999);
         this.mEntity.setScale(mScaleBall);
         this.mIsGrabbed = true;
         this.mBody.setActive(false);

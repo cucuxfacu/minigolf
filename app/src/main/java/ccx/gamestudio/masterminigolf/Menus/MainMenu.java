@@ -52,19 +52,13 @@ public class MainMenu extends ManagedMenuScene {
 		return INSTANCE;
 	}
 	private Entity mHomeMenuScreen;
-	private Entity mPowerTankScreen;
 	private Sprite mMiniGolfBGSprite;
-	private GrowButton mSettingButton;
-	private GrowButton mStore;
-	private static Text mCoinText;
-	private int intChange = 0;
-	private boolean lock = false;
-	private GrowButton btnChangePower;
-	private GrowButton btnChangeFriction;
-	private Sprite mCoinsChengePower;
-	private static Text mTextCoinsChangePower;
-	private Sprite mCoinsChangeFriction;
-	private static Text mTextCoinsChangeFriction;
+    private TextureRegion mPlayerSelect;
+    private TextureRegion mBallSelect;
+    private TextureRegion mSceneSelect;
+    private GrowButton selectPlayerButton;
+    private GrowButton selectBallButton;
+    private GrowButton selectLevelButton;
 	private static float mScaleTextplay= 1.5f;
 	// ====================================================
 	// CONSTRUCTOR
@@ -116,6 +110,10 @@ public class MainMenu extends ManagedMenuScene {
 			}
 		};
 
+        mPlayerSelect = MenuResourceManager.mListHeads.get(SharedResources.getSelectedPlayer());
+        mBallSelect = MenuResourceManager.mListBall.get(SharedResources.getSelectedBall());
+        mSceneSelect = MenuResourceManager.mListIconScene.get(SharedResources.getSelectedScene());
+
 		//=================Buttons Music and Sound=================================
 		GrowToggleButton BtnSoundToggle = new GrowToggleButton(MenuResourceManager.btnSoundTTR.getWidth() / 2 + 50f,ResourceManager.getCamera().getHeight() - (MenuResourceManager.btnSoundTTR.getHeight() / 2f), MenuResourceManager.btnSoundTTR,!SFXManager.isSoundMuted()) {
 			@Override
@@ -152,7 +150,7 @@ public class MainMenu extends ManagedMenuScene {
 		GrowButton challengeButton = new GrowButton(mCameraWidth / 2f, mCameraHeight / 2f + 250f, MenuResourceManager.btnGeneric) {
 			@Override
 			public void onClick() {
-                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(1, 1), false, false));
+                SceneManager.getInstance().showScene(new GameLevel(Level.getLevelDef(SharedResources.getSelectedScene() + 1, 1), false, false));
 			}
 
 		};
@@ -192,32 +190,33 @@ public class MainMenu extends ManagedMenuScene {
 
 
 		//====================================== BUTTONS OPTIONS======================================//
-        GrowButton selectPlayerButton = getGrowButton(challengeButton.getX() + 350f, challengeButton.getY(), MenuResourceManager.mListHeads.get(SharedResources.getSelectedPlayer()), new SelectPlayerMenu());
+
+        selectPlayerButton = getGrowButton(challengeButton.getX() + 350f, challengeButton.getY(), mPlayerSelect, new SelectPlayerMenu());
         this.registerTouchArea(selectPlayerButton);
 
-        GrowButton selectBallButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, MenuResourceManager.mListBall.get(SharedResources.getSelectedBall()), new SelectBallMenu());
+        selectBallButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, mBallSelect, new SelectBallMenu());
         this.registerTouchArea(selectBallButton);
 
-//		GrowButton selectLevelButton = getGrowButton(selectPlayerButton.getX() , selectPlayerButton.getY() - 200f, MenuResourceManager.mListScene.get(SharedResources.getSelectedScene()), new SelectBallMenu());
-//		this.registerTouchArea(selectLevelButton);
+        selectLevelButton = getGrowButton(selectBallButton.getX() , selectBallButton.getY() - 200f, mSceneSelect, new SelectSceneMenu());
+		this.registerTouchArea(selectLevelButton);
 
 		///About button
-//		GrowButton mAbout = new GrowButton(selectLevelButton.getX(), selectLevelButton.getY() - 200f, MenuResourceManager.btnInformacion) {
-//			@Override
-//			public void onClick() {
-//				ResourceManager.getActivity().runOnUiThread(() -> {
-//					final AlertDialog.Builder builder = new AlertDialog.Builder(ResourceManager.getActivity())
-//							.setIcon(R.mipmap.ic_launcher)
-//							.setTitle(ResourceManager.getContext().getString(R.string.app_name))
-//							.setMessage(SharedResources.getSpanned()).setPositiveButton(ResourceManager.getContext().getText(R.string.app_back), (dialog, id) -> {
-//							});
-//					final AlertDialog alert = builder.create();
-//					alert.show();
-//					((TextView) alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-//				});
-//			}
-//		};
-//		this.registerTouchArea(mAbout);
+		GrowButton mAbout = new GrowButton(selectLevelButton.getX(), selectLevelButton.getY() - 200f, MenuResourceManager.btnInformacion) {
+			@Override
+			public void onClick() {
+				ResourceManager.getActivity().runOnUiThread(() -> {
+					final AlertDialog.Builder builder = new AlertDialog.Builder(ResourceManager.getActivity())
+							.setIcon(R.mipmap.ic_launcher)
+							.setTitle(ResourceManager.getContext().getString(R.string.app_name))
+							.setMessage(SharedResources.getSpanned()).setPositiveButton(ResourceManager.getContext().getText(R.string.app_back), (dialog, id) -> {
+							});
+					final AlertDialog alert = builder.create();
+					alert.show();
+					((TextView) alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+				});
+			}
+		};
+		this.registerTouchArea(mAbout);
 
 //		GrowButton mUserLeaderBoard = new GrowButton(mUser.getX(), mUser.getY() - 200f, ResourceManager.btnOrangeCircleTTR.getTextureRegion(1)) {
 //			@Override
@@ -365,6 +364,8 @@ public class MainMenu extends ManagedMenuScene {
 		this.mHomeMenuScreen.attachChild(exitButton);
 		this.mHomeMenuScreen.attachChild(selectBallButton);
 		this.mHomeMenuScreen.attachChild(selectPlayerButton);
+        this.mHomeMenuScreen.attachChild(selectLevelButton);
+        this.mHomeMenuScreen.attachChild(mAbout);
 		this.attachChild(this.mHomeMenuScreen);
 
 	}
@@ -394,31 +395,48 @@ public class MainMenu extends ManagedMenuScene {
 	@Override
 	public void onShowScene() {
 		MasterMiniGolfSmoothCamera.setupForMenus();
-		if(!this.mMiniGolfBGSprite.hasParent()) {
+
+        mPlayerSelect = MenuResourceManager.mListHeads.get(SharedResources.getSelectedPlayer());
+        mBallSelect = MenuResourceManager.mListBall.get(SharedResources.getSelectedBall());
+        mSceneSelect = MenuResourceManager.mListIconScene.get(SharedResources.getSelectedScene());
+
+        updateSelectionIcons();
+
+        if(!this.mMiniGolfBGSprite.hasParent()) {
 			this.attachChild(this.mMiniGolfBGSprite);
 			this.sortChildren();
 		}
 		ShowAdBanner();
 	}
+    private void updateSelectionIcons() {
+        selectPlayerButton.detachChildren();
+        Sprite newPlayerIcon = new Sprite(selectPlayerButton.getWidth() / 2f, selectPlayerButton.getHeight() / 2f, mPlayerSelect, ResourceManager.getActivity().getVertexBufferObjectManager());
+        selectPlayerButton.attachChild(newPlayerIcon);
+
+        selectBallButton.detachChildren();
+        Sprite newBallIcon = new Sprite(selectBallButton.getWidth() / 2f, selectBallButton.getHeight() / 2f, mBallSelect, ResourceManager.getActivity().getVertexBufferObjectManager());
+        selectBallButton.attachChild(newBallIcon);
+
+        selectLevelButton.detachChildren();
+        Sprite newLevelIcon = new Sprite(selectLevelButton.getWidth() / 2f, selectLevelButton.getHeight() / 2f, mSceneSelect, ResourceManager.getActivity().getVertexBufferObjectManager());
+        selectLevelButton.attachChild(newLevelIcon);
+    }
+
 
 	@Override
 	public void onUnloadScene() {}
 
 	public static void RefreshCoins() {
-		mCoinText.setText(String.valueOf(SharedResources.getTotalsCoins()));
+
 	}
 
 
 	public void RefreshTextCoinsPower(CharSequence text) {
-		if(mTextCoinsChangePower !=null) {
-			mTextCoinsChangePower.setText(text);
-		}
+
 	}
 
 	public void RefreshTextCoinsFriction(CharSequence text) {
-		if(mTextCoinsChangeFriction !=null) {
-			mTextCoinsChangeFriction.setText(text);
-		}
+
 	}
 
 

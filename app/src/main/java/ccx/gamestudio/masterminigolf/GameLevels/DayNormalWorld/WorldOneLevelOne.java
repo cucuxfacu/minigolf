@@ -1,12 +1,10 @@
-package ccx.gamestudio.masterminigolf.GameLevels.WorldOne;
+package ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld;
 
 
 import ccx.gamestudio.masterminigolf.GameLevels.GroundInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.LevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.CoinInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.ObjectsInLevelDef;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.RocksInLevelDef;
-import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.TreeInLevelDef;
 import ccx.gamestudio.masterminigolf.GameLevels.ObjectsInLevels.WaterInLevelDef;
 
 public class WorldOneLevelOne {

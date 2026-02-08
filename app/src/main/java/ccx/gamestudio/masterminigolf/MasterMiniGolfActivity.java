@@ -26,7 +26,7 @@ import ccx.gamestudio.masterminigolf.Menus.SplashScreens;
 
 public class MasterMiniGolfActivity extends BaseGameActivity {
 
-    static float MAX_WIDTH_PIXELS = 2400, MAX_HEIGHT_PIXELS = 1080;
+    static float MAX_WIDTH_PIXELS = 2560, MAX_HEIGHT_PIXELS = 1600;
     static float MIN_WIDTH_PIXELS = 1920, MIN_HEIGHT_PIXELS = 1080;
     static float DESIGN_WINDOW_WIDTH_PIXELS = 2400;
     static float DESIGN_WINDOW_HEIGHT_PIXELS = 1080;
@@ -97,7 +97,7 @@ public class MasterMiniGolfActivity extends BaseGameActivity {
         };
 
         // Create the Camera and EngineOptions.
-        mCamera = new MasterMiniGolfSmoothCamera(0, 0, 2400, 1080, 4000f, 2000f, 0.1f);
+        mCamera = new MasterMiniGolfSmoothCamera(0, 0, 2560, 1600, 4000f, 2000f, 0.1f);
         EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, EngineFillResolutionPolicy, mCamera);
 
         engineOptions.getTouchOptions().setNeedsMultiTouch(true);

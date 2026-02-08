@@ -1,6 +1,6 @@
 package ccx.gamestudio.masterminigolf.GameLevels;
 
-import ccx.gamestudio.masterminigolf.GameLevels.WorldOne.WorldOneLevelOne;
+import ccx.gamestudio.masterminigolf.GameLevels.DayNormalWorld.WorldOneLevelOne;
 
 public class Level {
 	private static final LevelDef[] AvailableLevels =

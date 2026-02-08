@@ -18,6 +18,8 @@ public class MenuResourceManager {
     private static final String mPathPlayer ="MasterGolf/GUI/Players/";
     private static final String mPathBalls ="MasterGolf/Balls/";
     private static final String mPathHeads ="MasterGolf/GUI/Heads/";
+    private static final String mPathScenes ="MasterGolf/GUI/Scenes/";
+    private static final String mPathIconsScenes ="MasterGolf/GUI/IconsScenes/";
 
     //====================================================
     // CONSTRUCTOR
@@ -65,6 +67,7 @@ public class MenuResourceManager {
     public static List<TextureRegion> mListBall;
     public static List<TextureRegion> mListHeads;
     public static List<TextureRegion> mListScene;
+    public static List<TextureRegion> mListIconScene;
     // ======================== END ================= //
 
     public void LoadImgMenu() {
@@ -95,7 +98,8 @@ public class MenuResourceManager {
         LoadHeadsMenu();
         LoadSelectablePlayers();
         LoadSelectableBalls();
-
+        LoadSelectableScene();
+        LoadSelectableIconsScene();
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath(mPreviousAssetBasePath);
     }
 
@@ -120,6 +124,24 @@ public class MenuResourceManager {
     public void LoadSelectableBalls() {
         mListBall = AssetTextureLoader.loadTexturesFromFolder(
                 mPathBalls,
+                98,
+                98,
+                mTransparentTextureOption
+        );
+    }
+
+    public void LoadSelectableScene() {
+        mListScene = AssetTextureLoader.loadTexturesFromFolder(
+                mPathScenes,
+                270,
+                480,
+                mTransparentTextureOption
+        );
+    }
+
+    public void LoadSelectableIconsScene() {
+        mListIconScene = AssetTextureLoader.loadTexturesFromFolder(
+                mPathIconsScenes,
                 98,
                 98,
                 mTransparentTextureOption
